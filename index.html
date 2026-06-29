@@ -15,6 +15,18 @@
       --text: #e8e8f0;
       --muted: #7a7a9a;
       --radius: 16px;
+      --nav-bg: rgba(13,13,18,0.75);
+      --transition-theme: background 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+    html.light {
+      --bg: #f8f7ff;
+      --surface: #ffffff;
+      --surface2: #ede9fe;
+      --border: rgba(0,0,0,0.08);
+      --text: #1a1a2e;
+      --muted: #6b6b8a;
+      --nav-bg: rgba(248,247,255,0.85);
     }
 
     html { scroll-behavior: smooth; }
@@ -25,6 +37,29 @@
       font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
       line-height: 1.6;
       overflow-x: hidden;
+      transition: var(--transition-theme);
+    }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover {
+      background: var(--surface2);
+      border-color: rgba(167,139,250,0.3);
+      transform: rotate(15deg);
     }
 
     /* ── NAV ── */
@@ -36,9 +71,10 @@
       align-items: center;
       justify-content: space-between;
       padding: 18px 48px;
-      background: rgba(13,13,18,0.75);
+      background: var(--nav-bg);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
+      transition: var(--transition-theme);
     }
 
     .logo {
@@ -413,6 +449,7 @@
       background: var(--surface);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
+      transition: var(--transition-theme);
     }
 
     .harmony-grid {
@@ -749,7 +786,10 @@
       <li><a href="#search">색 검색</a></li>
       <li><a href="#tips">팁</a></li>
     </ul>
-    <a href="#cta" class="nav-cta">무료로 시작하기</a>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="theme-toggle" id="themeToggle" aria-label="테마 전환" title="다크/라이트 모드 전환">🌙</button>
+      <a href="#cta" class="nav-cta">무료로 시작하기</a>
+    </div>
   </nav>
 
   <!-- HERO -->
@@ -1051,6 +1091,23 @@
       { threshold: 0.12 }
     );
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Theme toggle
+    const html = document.documentElement;
+    const btn = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('color-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (saved === 'light' || (!saved && !prefersDark)) {
+      html.classList.add('light');
+      btn.textContent = '☀️';
+    }
+
+    btn.addEventListener('click', () => {
+      const isLight = html.classList.toggle('light');
+      btn.textContent = isLight ? '☀️' : '🌙';
+      localStorage.setItem('color-theme', isLight ? 'light' : 'dark');
+    });
   </script>
 
 </body>
