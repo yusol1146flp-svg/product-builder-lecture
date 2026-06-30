@@ -1106,6 +1106,158 @@
 
     .paste-toast.show { transform: translateX(-50%) translateY(0); }
 
+    /* ── PALETTE GALLERY ── */
+    .palette-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .ptab {
+      padding: 9px 20px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .ptab:hover { color: var(--text); border-color: rgba(167,139,250,0.35); }
+
+    .ptab.active {
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .palette-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+      gap: 16px;
+    }
+
+    .pal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+    }
+
+    .pal-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.18);
+      border-color: rgba(167,139,250,0.22);
+    }
+
+    .pal-card[data-hidden] { display: none; }
+
+    .pal-swatches {
+      display: flex;
+      height: 108px;
+    }
+
+    .pal-swatch {
+      flex: 1;
+      position: relative;
+      cursor: pointer;
+      transition: flex 0.25s ease;
+      overflow: hidden;
+    }
+
+    .pal-swatch:hover { flex: 2.2; }
+
+    .pal-hex-tip {
+      position: absolute;
+      bottom: 7px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.58rem;
+      font-weight: 800;
+      white-space: nowrap;
+      color: rgba(255,255,255,0.92);
+      text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+      letter-spacing: 0.03em;
+      opacity: 0;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+
+    .pal-swatch:hover .pal-hex-tip { opacity: 1; }
+
+    .pal-swatch.swatch-flash {
+      animation: swatchFlash 0.45s ease;
+    }
+
+    @keyframes swatchFlash {
+      0%   { filter: brightness(1); }
+      40%  { filter: brightness(1.5) saturate(1.2); }
+      100% { filter: brightness(1); }
+    }
+
+    .pal-info {
+      padding: 14px 16px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .pal-meta { display: flex; flex-direction: column; gap: 3px; }
+
+    .pal-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+    }
+
+    .pal-mood {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .pal-badge {
+      padding: 4px 11px;
+      border-radius: 100px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .pb-comp { background: rgba(255,107,174,0.12); color: #FF6BAE; border: 1px solid rgba(255,107,174,0.28); }
+    .pb-ana  { background: rgba(52,211,153,0.12);  color: #34D399; border: 1px solid rgba(52,211,153,0.28); }
+    .pb-tri  { background: rgba(251,191,36,0.12);  color: #FBBF24; border: 1px solid rgba(251,191,36,0.28); }
+    .pb-mono { background: rgba(167,139,250,0.12); color: #A78BFA; border: 1px solid rgba(167,139,250,0.28); }
+    .pb-spl  { background: rgba(96,165,250,0.12);  color: #60A5FA; border: 1px solid rgba(96,165,250,0.28); }
+
+    .pal-copy-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #34d399;
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      z-index: 9998;
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+      pointer-events: none;
+    }
+
+    .pal-copy-toast.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 600px) {
+      .palette-gallery { grid-template-columns: 1fr; }
+    }
+
     /* ── FADE IN ── */
     .fade-in {
       opacity: 0;
@@ -1254,71 +1406,304 @@
     </section>
   </div>
 
-  <!-- COLOR HARMONY -->
+  <!-- COLOR HARMONY PALETTE GALLERY -->
   <div class="harmony-section">
     <section class="section" id="harmony">
-      <div class="section-label">색 조합 유형</div>
-      <h2 class="section-title">어떤 조합이든 찾아드려요</h2>
-      <p class="section-desc">색채 이론을 몰라도 괜찮아요. Color이 자동으로 최적의 배색을 제안합니다.</p>
+      <div class="section-label">색 조합 추천</div>
+      <h2 class="section-title">바로 쓸 수 있는<br /><span class="gradient-text">팔레트 라이브러리</span></h2>
+      <p class="section-desc">보색·유사색·삼각 배색 등 색채 이론으로 큐레이션한 팔레트 모음. 색 칸을 클릭하면 HEX 코드가 복사됩니다.</p>
 
-      <div class="harmony-grid">
-        <div class="harmony-card fade-in">
-          <div class="harmony-swatches">
-            <div class="h-swatch" style="background:#6366f1"></div>
-            <div class="h-swatch" style="background:#f97316"></div>
-          </div>
-          <h4>보색 (Complementary)</h4>
-          <p>색상환 정반대 색. 강렬한 대비와 생동감을 만들어요.</p>
-        </div>
-        <div class="harmony-card fade-in">
-          <div class="harmony-swatches">
-            <div class="h-swatch" style="background:#a78bfa"></div>
-            <div class="h-swatch" style="background:#818cf8"></div>
-            <div class="h-swatch" style="background:#60a5fa"></div>
-          </div>
-          <h4>유사색 (Analogous)</h4>
-          <p>인접한 색들의 조합. 부드럽고 자연스러운 느낌을 줍니다.</p>
-        </div>
-        <div class="harmony-card fade-in">
-          <div class="harmony-swatches">
-            <div class="h-swatch" style="background:#f87171"></div>
-            <div class="h-swatch" style="background:#34d399"></div>
-            <div class="h-swatch" style="background:#60a5fa"></div>
-          </div>
-          <h4>삼각 배색 (Triadic)</h4>
-          <p>120° 간격의 세 색. 균형 잡히고 다채로운 팔레트예요.</p>
-        </div>
-        <div class="harmony-card fade-in">
-          <div class="harmony-swatches">
-            <div class="h-swatch" style="background:#fbbf24"></div>
-            <div class="h-swatch" style="background:#f97316"></div>
-            <div class="h-swatch" style="background:#6366f1"></div>
-            <div class="h-swatch" style="background:#818cf8"></div>
-          </div>
-          <h4>분열 보색 (Split)</h4>
-          <p>보색의 양쪽 색을 사용해 보색보다 부드럽게 대비됩니다.</p>
-        </div>
-        <div class="harmony-card fade-in">
-          <div class="harmony-swatches">
-            <div class="h-swatch" style="background:#f3f4f6"></div>
-            <div class="h-swatch" style="background:#9ca3af"></div>
-            <div class="h-swatch" style="background:#374151"></div>
-            <div class="h-swatch" style="background:#111827"></div>
-          </div>
-          <h4>모노크롬 (Monochromatic)</h4>
-          <p>한 색상의 명도·채도 변화. 세련되고 통일감 있는 배색이에요.</p>
-        </div>
-        <div class="harmony-card fade-in">
-          <div class="harmony-swatches">
-            <div class="h-swatch" style="background:#f87171"></div>
-            <div class="h-swatch" style="background:#fbbf24"></div>
-            <div class="h-swatch" style="background:#34d399"></div>
-            <div class="h-swatch" style="background:#60a5fa"></div>
-          </div>
-          <h4>사각 배색 (Tetradic)</h4>
-          <p>90° 간격 네 색. 풍부하고 화려한 색감을 표현할 수 있어요.</p>
-        </div>
+      <div class="palette-tabs">
+        <button class="ptab active" data-filter="all">전체 20</button>
+        <button class="ptab" data-filter="complementary">보색 5</button>
+        <button class="ptab" data-filter="analogous">유사색 5</button>
+        <button class="ptab" data-filter="triadic">삼각 배색 4</button>
+        <button class="ptab" data-filter="monochromatic">모노크롬 4</button>
+        <button class="ptab" data-filter="split">분열 보색 2</button>
       </div>
+
+      <div class="palette-gallery fade-in" id="paletteGallery">
+
+        <!-- ── 보색 (Complementary) ── -->
+        <div class="pal-card" data-type="complementary">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#264653" data-hex="#264653"><span class="pal-hex-tip">#264653</span></div>
+            <div class="pal-swatch" style="background:#2A9D8F" data-hex="#2A9D8F"><span class="pal-hex-tip">#2A9D8F</span></div>
+            <div class="pal-swatch" style="background:#E9C46A" data-hex="#E9C46A"><span class="pal-hex-tip">#E9C46A</span></div>
+            <div class="pal-swatch" style="background:#F4A261" data-hex="#F4A261"><span class="pal-hex-tip">#F4A261</span></div>
+            <div class="pal-swatch" style="background:#E76F51" data-hex="#E76F51"><span class="pal-hex-tip">#E76F51</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">오션 & 선셋</span><span class="pal-mood">자연·역동</span></div>
+            <span class="pal-badge pb-comp">보색</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="complementary">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#10002B" data-hex="#10002B"><span class="pal-hex-tip">#10002B</span></div>
+            <div class="pal-swatch" style="background:#7B2FBE" data-hex="#7B2FBE"><span class="pal-hex-tip">#7B2FBE</span></div>
+            <div class="pal-swatch" style="background:#C77DFF" data-hex="#C77DFF"><span class="pal-hex-tip">#C77DFF</span></div>
+            <div class="pal-swatch" style="background:#FFD60A" data-hex="#FFD60A"><span class="pal-hex-tip">#FFD60A</span></div>
+            <div class="pal-swatch" style="background:#FFAA00" data-hex="#FFAA00"><span class="pal-hex-tip">#FFAA00</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">퍼플 & 골드</span><span class="pal-mood">고급·신비</span></div>
+            <span class="pal-badge pb-comp">보색</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="complementary">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#B7E4C7" data-hex="#B7E4C7"><span class="pal-hex-tip">#B7E4C7</span></div>
+            <div class="pal-swatch" style="background:#52B788" data-hex="#52B788"><span class="pal-hex-tip">#52B788</span></div>
+            <div class="pal-swatch" style="background:#2D6A4F" data-hex="#2D6A4F"><span class="pal-hex-tip">#2D6A4F</span></div>
+            <div class="pal-swatch" style="background:#FF4D6D" data-hex="#FF4D6D"><span class="pal-hex-tip">#FF4D6D</span></div>
+            <div class="pal-swatch" style="background:#C9184A" data-hex="#C9184A"><span class="pal-hex-tip">#C9184A</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">민트 & 코랄</span><span class="pal-mood">청량·발랄</span></div>
+            <span class="pal-badge pb-comp">보색</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="complementary">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#03045E" data-hex="#03045E"><span class="pal-hex-tip">#03045E</span></div>
+            <div class="pal-swatch" style="background:#0077B6" data-hex="#0077B6"><span class="pal-hex-tip">#0077B6</span></div>
+            <div class="pal-swatch" style="background:#48CAE4" data-hex="#48CAE4"><span class="pal-hex-tip">#48CAE4</span></div>
+            <div class="pal-swatch" style="background:#FFB703" data-hex="#FFB703"><span class="pal-hex-tip">#FFB703</span></div>
+            <div class="pal-swatch" style="background:#FB8500" data-hex="#FB8500"><span class="pal-hex-tip">#FB8500</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">네이비 & 앰버</span><span class="pal-mood">강렬·모던</span></div>
+            <span class="pal-badge pb-comp">보색</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="complementary">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#FFCCD5" data-hex="#FFCCD5"><span class="pal-hex-tip">#FFCCD5</span></div>
+            <div class="pal-swatch" style="background:#FF85A1" data-hex="#FF85A1"><span class="pal-hex-tip">#FF85A1</span></div>
+            <div class="pal-swatch" style="background:#C9184A" data-hex="#C9184A"><span class="pal-hex-tip">#C9184A</span></div>
+            <div class="pal-swatch" style="background:#2DC653" data-hex="#2DC653"><span class="pal-hex-tip">#2DC653</span></div>
+            <div class="pal-swatch" style="background:#1A7431" data-hex="#1A7431"><span class="pal-hex-tip">#1A7431</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">로즈 & 포레스트</span><span class="pal-mood">생동·활기</span></div>
+            <span class="pal-badge pb-comp">보색</span>
+          </div>
+        </div>
+
+        <!-- ── 유사색 (Analogous) ── -->
+        <div class="pal-card" data-type="analogous">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#FFCCD5" data-hex="#FFCCD5"><span class="pal-hex-tip">#FFCCD5</span></div>
+            <div class="pal-swatch" style="background:#FFB3C6" data-hex="#FFB3C6"><span class="pal-hex-tip">#FFB3C6</span></div>
+            <div class="pal-swatch" style="background:#FF85A1" data-hex="#FF85A1"><span class="pal-hex-tip">#FF85A1</span></div>
+            <div class="pal-swatch" style="background:#FF4D6D" data-hex="#FF4D6D"><span class="pal-hex-tip">#FF4D6D</span></div>
+            <div class="pal-swatch" style="background:#C9184A" data-hex="#C9184A"><span class="pal-hex-tip">#C9184A</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">봄 벚꽃</span><span class="pal-mood">로맨틱·봄</span></div>
+            <span class="pal-badge pb-ana">유사색</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="analogous">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#CAF0F8" data-hex="#CAF0F8"><span class="pal-hex-tip">#CAF0F8</span></div>
+            <div class="pal-swatch" style="background:#90E0EF" data-hex="#90E0EF"><span class="pal-hex-tip">#90E0EF</span></div>
+            <div class="pal-swatch" style="background:#48CAE4" data-hex="#48CAE4"><span class="pal-hex-tip">#48CAE4</span></div>
+            <div class="pal-swatch" style="background:#00B4D8" data-hex="#00B4D8"><span class="pal-hex-tip">#00B4D8</span></div>
+            <div class="pal-swatch" style="background:#0077B6" data-hex="#0077B6"><span class="pal-hex-tip">#0077B6</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">오션 브리즈</span><span class="pal-mood">청량·투명</span></div>
+            <span class="pal-badge pb-ana">유사색</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="analogous">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#FFBE0B" data-hex="#FFBE0B"><span class="pal-hex-tip">#FFBE0B</span></div>
+            <div class="pal-swatch" style="background:#FB5607" data-hex="#FB5607"><span class="pal-hex-tip">#FB5607</span></div>
+            <div class="pal-swatch" style="background:#FF006E" data-hex="#FF006E"><span class="pal-hex-tip">#FF006E</span></div>
+            <div class="pal-swatch" style="background:#8338EC" data-hex="#8338EC"><span class="pal-hex-tip">#8338EC</span></div>
+            <div class="pal-swatch" style="background:#3A86FF" data-hex="#3A86FF"><span class="pal-hex-tip">#3A86FF</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">선셋 글로우</span><span class="pal-mood">에너지·비비드</span></div>
+            <span class="pal-badge pb-ana">유사색</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="analogous">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#D8F3DC" data-hex="#D8F3DC"><span class="pal-hex-tip">#D8F3DC</span></div>
+            <div class="pal-swatch" style="background:#95D5B2" data-hex="#95D5B2"><span class="pal-hex-tip">#95D5B2</span></div>
+            <div class="pal-swatch" style="background:#52B788" data-hex="#52B788"><span class="pal-hex-tip">#52B788</span></div>
+            <div class="pal-swatch" style="background:#2D6A4F" data-hex="#2D6A4F"><span class="pal-hex-tip">#2D6A4F</span></div>
+            <div class="pal-swatch" style="background:#1B4332" data-hex="#1B4332"><span class="pal-hex-tip">#1B4332</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">딥 포레스트</span><span class="pal-mood">자연·안정</span></div>
+            <span class="pal-badge pb-ana">유사색</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="analogous">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#F3E8FF" data-hex="#F3E8FF"><span class="pal-hex-tip">#F3E8FF</span></div>
+            <div class="pal-swatch" style="background:#E0AAFF" data-hex="#E0AAFF"><span class="pal-hex-tip">#E0AAFF</span></div>
+            <div class="pal-swatch" style="background:#C77DFF" data-hex="#C77DFF"><span class="pal-hex-tip">#C77DFF</span></div>
+            <div class="pal-swatch" style="background:#9D4EDD" data-hex="#9D4EDD"><span class="pal-hex-tip">#9D4EDD</span></div>
+            <div class="pal-swatch" style="background:#7B2FBE" data-hex="#7B2FBE"><span class="pal-hex-tip">#7B2FBE</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">라벤더 드림</span><span class="pal-mood">몽환·우아</span></div>
+            <span class="pal-badge pb-ana">유사색</span>
+          </div>
+        </div>
+
+        <!-- ── 삼각 배색 (Triadic) ── -->
+        <div class="pal-card" data-type="triadic">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#FF595E" data-hex="#FF595E"><span class="pal-hex-tip">#FF595E</span></div>
+            <div class="pal-swatch" style="background:#FFCA3A" data-hex="#FFCA3A"><span class="pal-hex-tip">#FFCA3A</span></div>
+            <div class="pal-swatch" style="background:#6A4C93" data-hex="#6A4C93"><span class="pal-hex-tip">#6A4C93</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">비비드 트리오</span><span class="pal-mood">팝·생동감</span></div>
+            <span class="pal-badge pb-tri">삼각 배색</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="triadic">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#FFB3C1" data-hex="#FFB3C1"><span class="pal-hex-tip">#FFB3C1</span></div>
+            <div class="pal-swatch" style="background:#B5EAD7" data-hex="#B5EAD7"><span class="pal-hex-tip">#B5EAD7</span></div>
+            <div class="pal-swatch" style="background:#C7CEEA" data-hex="#C7CEEA"><span class="pal-hex-tip">#C7CEEA</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">파스텔 트리오</span><span class="pal-mood">부드러움·동화</span></div>
+            <span class="pal-badge pb-tri">삼각 배색</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="triadic">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#FF0054" data-hex="#FF0054"><span class="pal-hex-tip">#FF0054</span></div>
+            <div class="pal-swatch" style="background:#FFBD00" data-hex="#FFBD00"><span class="pal-hex-tip">#FFBD00</span></div>
+            <div class="pal-swatch" style="background:#00B4D8" data-hex="#00B4D8"><span class="pal-hex-tip">#00B4D8</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">팝 아트</span><span class="pal-mood">강렬·대담</span></div>
+            <span class="pal-badge pb-tri">삼각 배색</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="triadic">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#8AC926" data-hex="#8AC926"><span class="pal-hex-tip">#8AC926</span></div>
+            <div class="pal-swatch" style="background:#FF595E" data-hex="#FF595E"><span class="pal-hex-tip">#FF595E</span></div>
+            <div class="pal-swatch" style="background:#1982C4" data-hex="#1982C4"><span class="pal-hex-tip">#1982C4</span></div>
+            <div class="pal-swatch" style="background:#FFCA3A" data-hex="#FFCA3A"><span class="pal-hex-tip">#FFCA3A</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">프라이머리</span><span class="pal-mood">균형·활력</span></div>
+            <span class="pal-badge pb-tri">삼각 배색</span>
+          </div>
+        </div>
+
+        <!-- ── 모노크롬 (Monochromatic) ── -->
+        <div class="pal-card" data-type="monochromatic">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#10002B" data-hex="#10002B"><span class="pal-hex-tip">#10002B</span></div>
+            <div class="pal-swatch" style="background:#3C096C" data-hex="#3C096C"><span class="pal-hex-tip">#3C096C</span></div>
+            <div class="pal-swatch" style="background:#7B2FBE" data-hex="#7B2FBE"><span class="pal-hex-tip">#7B2FBE</span></div>
+            <div class="pal-swatch" style="background:#C77DFF" data-hex="#C77DFF"><span class="pal-hex-tip">#C77DFF</span></div>
+            <div class="pal-swatch" style="background:#E0AAFF" data-hex="#E0AAFF"><span class="pal-hex-tip">#E0AAFF</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">딥 퍼플</span><span class="pal-mood">신비·깊이</span></div>
+            <span class="pal-badge pb-mono">모노크롬</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="monochromatic">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#03045E" data-hex="#03045E"><span class="pal-hex-tip">#03045E</span></div>
+            <div class="pal-swatch" style="background:#0077B6" data-hex="#0077B6"><span class="pal-hex-tip">#0077B6</span></div>
+            <div class="pal-swatch" style="background:#00B4D8" data-hex="#00B4D8"><span class="pal-hex-tip">#00B4D8</span></div>
+            <div class="pal-swatch" style="background:#90E0EF" data-hex="#90E0EF"><span class="pal-hex-tip">#90E0EF</span></div>
+            <div class="pal-swatch" style="background:#CAF0F8" data-hex="#CAF0F8"><span class="pal-hex-tip">#CAF0F8</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">미드나잇 블루</span><span class="pal-mood">차분·집중</span></div>
+            <span class="pal-badge pb-mono">모노크롬</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="monochromatic">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#1B4332" data-hex="#1B4332"><span class="pal-hex-tip">#1B4332</span></div>
+            <div class="pal-swatch" style="background:#2D6A4F" data-hex="#2D6A4F"><span class="pal-hex-tip">#2D6A4F</span></div>
+            <div class="pal-swatch" style="background:#52B788" data-hex="#52B788"><span class="pal-hex-tip">#52B788</span></div>
+            <div class="pal-swatch" style="background:#95D5B2" data-hex="#95D5B2"><span class="pal-hex-tip">#95D5B2</span></div>
+            <div class="pal-swatch" style="background:#D8F3DC" data-hex="#D8F3DC"><span class="pal-hex-tip">#D8F3DC</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">에메랄드 숲</span><span class="pal-mood">자연·편안</span></div>
+            <span class="pal-badge pb-mono">모노크롬</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="monochromatic">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#370617" data-hex="#370617"><span class="pal-hex-tip">#370617</span></div>
+            <div class="pal-swatch" style="background:#6A040F" data-hex="#6A040F"><span class="pal-hex-tip">#6A040F</span></div>
+            <div class="pal-swatch" style="background:#D00000" data-hex="#D00000"><span class="pal-hex-tip">#D00000</span></div>
+            <div class="pal-swatch" style="background:#F48C06" data-hex="#F48C06"><span class="pal-hex-tip">#F48C06</span></div>
+            <div class="pal-swatch" style="background:#FFD166" data-hex="#FFD166"><span class="pal-hex-tip">#FFD166</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">불꽃 & 로즈우드</span><span class="pal-mood">열정·따뜻함</span></div>
+            <span class="pal-badge pb-mono">모노크롬</span>
+          </div>
+        </div>
+
+        <!-- ── 분열 보색 (Split-Complementary) ── -->
+        <div class="pal-card" data-type="split">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#0D3B66" data-hex="#0D3B66"><span class="pal-hex-tip">#0D3B66</span></div>
+            <div class="pal-swatch" style="background:#48CAE4" data-hex="#48CAE4"><span class="pal-hex-tip">#48CAE4</span></div>
+            <div class="pal-swatch" style="background:#F4D35E" data-hex="#F4D35E"><span class="pal-hex-tip">#F4D35E</span></div>
+            <div class="pal-swatch" style="background:#EE964B" data-hex="#EE964B"><span class="pal-hex-tip">#EE964B</span></div>
+            <div class="pal-swatch" style="background:#F95738" data-hex="#F95738"><span class="pal-hex-tip">#F95738</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">트로피컬 선셋</span><span class="pal-mood">이국적·활기</span></div>
+            <span class="pal-badge pb-spl">분열 보색</span>
+          </div>
+        </div>
+
+        <div class="pal-card" data-type="split">
+          <div class="pal-swatches">
+            <div class="pal-swatch" style="background:#4361EE" data-hex="#4361EE"><span class="pal-hex-tip">#4361EE</span></div>
+            <div class="pal-swatch" style="background:#4CC9F0" data-hex="#4CC9F0"><span class="pal-hex-tip">#4CC9F0</span></div>
+            <div class="pal-swatch" style="background:#F72585" data-hex="#F72585"><span class="pal-hex-tip">#F72585</span></div>
+            <div class="pal-swatch" style="background:#FFBE0B" data-hex="#FFBE0B"><span class="pal-hex-tip">#FFBE0B</span></div>
+          </div>
+          <div class="pal-info">
+            <div class="pal-meta"><span class="pal-name">매직아워</span><span class="pal-mood">도시·몽환</span></div>
+            <span class="pal-badge pb-spl">분열 보색</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pal-copy-toast" id="palCopyToast">복사됨 ✓</div>
     </section>
   </div>
 
@@ -1562,6 +1947,37 @@
         submitBtn.disabled = false;
         submitBtn.textContent = '문의 보내기';
       }
+    });
+
+    // ── PALETTE GALLERY ──
+    document.querySelectorAll('.ptab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.dataset.filter;
+        document.querySelectorAll('.pal-card').forEach(card => {
+          if (filter === 'all' || card.dataset.type === filter) {
+            delete card.dataset.hidden;
+          } else {
+            card.dataset.hidden = '1';
+          }
+        });
+      });
+    });
+
+    document.getElementById('paletteGallery').addEventListener('click', e => {
+      const swatch = e.target.closest('.pal-swatch');
+      if (!swatch) return;
+      const hex = swatch.dataset.hex;
+      navigator.clipboard.writeText(hex).catch(() => {});
+      swatch.classList.remove('swatch-flash');
+      void swatch.offsetWidth;
+      swatch.classList.add('swatch-flash');
+      const toast = document.getElementById('palCopyToast');
+      toast.textContent = `${hex} 복사됨 ✓`;
+      toast.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => toast.classList.remove('show'), 1800);
     });
 
     // ── IMAGE COLOR EXTRACTOR ──
