@@ -887,6 +887,225 @@
 
     .footer-links a:hover { color: var(--text); }
 
+    /* ── IMAGE COLOR EXTRACTOR ── */
+    .extractor-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition-theme);
+    }
+
+    .drop-zone {
+      border: 2px dashed rgba(167,139,250,0.35);
+      border-radius: 20px;
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.25s, background 0.25s;
+      position: relative;
+      background: rgba(167,139,250,0.03);
+    }
+
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: #a78bfa;
+      background: rgba(167,139,250,0.08);
+    }
+
+    .drop-zone-icon { font-size: 2.4rem; margin-bottom: 12px; }
+    .drop-zone h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+    .drop-zone p { font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; }
+
+    .drop-zone-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .dz-btn {
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      border: none;
+    }
+
+    .dz-btn-primary {
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      color: #fff;
+    }
+
+    .dz-btn-secondary {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .dz-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    #imageFileInput { display: none; }
+
+    .extractor-preview {
+      display: none;
+      margin-top: 24px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .extractor-preview.visible { display: block; }
+
+    .preview-img-wrap {
+      position: relative;
+      background: repeating-conic-gradient(#aaa 0% 25%, transparent 0% 50%) 0 0 / 16px 16px;
+    }
+
+    #previewImg {
+      display: block;
+      max-width: 100%;
+      max-height: 320px;
+      object-fit: contain;
+      margin: 0 auto;
+    }
+
+    .color-count-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .color-count-bar span { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+
+    .count-btns { display: flex; gap: 6px; }
+
+    .count-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .count-btn.active {
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .extracted-colors {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .color-chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+
+    .color-chip:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .chip-swatch {
+      height: 80px;
+      position: relative;
+    }
+
+    .chip-copy-hint {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+      opacity: 0;
+      transition: opacity 0.2s;
+      border-radius: 0;
+    }
+
+    .color-chip:hover .chip-copy-hint { opacity: 1; }
+
+    .chip-info {
+      padding: 10px 12px;
+    }
+
+    .chip-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chip-hex {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: monospace;
+      letter-spacing: 0.04em;
+    }
+
+    .chip-rgb {
+      font-size: 0.68rem;
+      color: var(--muted);
+      font-family: monospace;
+    }
+
+    .chip-copied {
+      animation: chipCopied 1s ease forwards;
+    }
+
+    @keyframes chipCopied {
+      0% { transform: translateY(-3px) scale(1); }
+      30% { transform: translateY(-3px) scale(1.05); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    .extractor-empty {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .paste-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #a78bfa;
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      z-index: 9999;
+      transition: transform 0.3s ease;
+      pointer-events: none;
+    }
+
+    .paste-toast.show { transform: translateX(-50%) translateY(0); }
+
     /* ── FADE IN ── */
     .fade-in {
       opacity: 0;
@@ -901,6 +1120,7 @@
       .nav-links { display: none; }
       .cta-box { padding: 44px 22px; }
       footer { flex-direction: column; text-align: center; }
+      .extracted-colors { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
     }
   </style>
 </head>
@@ -911,6 +1131,7 @@
     <span class="logo">Color</span>
     <ul class="nav-links">
       <li><a href="#features">기능</a></li>
+      <li><a href="#extractor">이미지 색 추출</a></li>
       <li><a href="#harmony">색 조합</a></li>
       <li><a href="#search">색 검색</a></li>
       <li><a href="#tips">팁</a></li>
@@ -992,6 +1213,46 @@
       </div>
     </div>
   </section>
+
+  <!-- IMAGE COLOR EXTRACTOR -->
+  <div class="extractor-section" id="extractor">
+    <section class="section">
+      <div class="section-label">이미지 색상 추출</div>
+      <h2 class="section-title">이미지에서 색을<br /><span class="gradient-text">바로 뽑아보세요</span></h2>
+      <p class="section-desc">사진을 업로드하거나 붙여넣으면 주요 색상과 이름·코드를 자동으로 알려드립니다.</p>
+
+      <div class="drop-zone fade-in" id="dropZone">
+        <div class="drop-zone-icon">🖼️</div>
+        <h3>이미지를 여기에 끌어다 놓으세요</h3>
+        <p>JPG, PNG, WebP, GIF 등 — 또는 Ctrl+V 로 클립보드에서 붙여넣기</p>
+        <div class="drop-zone-actions">
+          <button class="dz-btn dz-btn-primary" id="uploadBtn">파일 선택</button>
+          <button class="dz-btn dz-btn-secondary" id="pasteBtn">📋 클립보드에서 붙여넣기</button>
+        </div>
+        <input type="file" id="imageFileInput" accept="image/*" />
+      </div>
+
+      <canvas id="extractCanvas" style="display:none"></canvas>
+
+      <div class="extractor-preview" id="extractorPreview">
+        <div class="preview-img-wrap">
+          <img id="previewImg" alt="업로드된 이미지" />
+        </div>
+        <div class="color-count-bar">
+          <span id="colorCountLabel">추출할 색상 수</span>
+          <div class="count-btns">
+            <button class="count-btn" data-n="6">6</button>
+            <button class="count-btn active" data-n="8">8</button>
+            <button class="count-btn" data-n="12">12</button>
+            <button class="count-btn" data-n="16">16</button>
+          </div>
+        </div>
+        <div class="extracted-colors" id="extractedColors"></div>
+      </div>
+
+      <div class="paste-toast" id="pasteToast">클립보드 이미지가 붙여넣어졌습니다 ✓</div>
+    </section>
+  </div>
 
   <!-- COLOR HARMONY -->
   <div class="harmony-section">
@@ -1301,6 +1562,238 @@
         submitBtn.disabled = false;
         submitBtn.textContent = '문의 보내기';
       }
+    });
+
+    // ── IMAGE COLOR EXTRACTOR ──
+    const COLOR_NAMES = [
+      ['검정','#000000'],['흰색','#FFFFFF'],['빨강','#FF0000'],['초록','#008000'],['파랑','#0000FF'],
+      ['노랑','#FFFF00'],['시안','#00FFFF'],['마젠타','#FF00FF'],['은색','#C0C0C0'],['회색','#808080'],
+      ['진홍','#800000'],['올리브','#808000'],['진녹','#006400'],['청록','#008080'],['진파랑','#000080'],
+      ['보라','#800080'],['주황','#FFA500'],['산호','#FF7F50'],['연어색','#FA8072'],['토마토','#FF6347'],
+      ['금색','#FFD700'],['카키','#F0E68C'],['라임','#00FF00'],['민트','#98FF98'],['하늘','#87CEEB'],
+      ['파우더블루','#B0E0E6'],['로열블루','#4169E1'],['인디고','#4B0082'],['슬레이트','#708090'],
+      ['라벤더','#E6E6FA'],['핫핑크','#FF69B4'],['딥핑크','#FF1493'],['버건디','#800020'],
+      ['로즈','#FF007F'],['살구','#FFDAB9'],['황토','#D2691E'],['갈색','#A52A2A'],['크림','#FFFDD0'],
+      ['아이보리','#FFFFF0'],['베이지','#F5F5DC'],['탄','#D2B48C'],['카멜','#C19A6B'],['머스터드','#FFDB58'],
+      ['라임그린','#32CD32'],['포레스트그린','#228B22'],['세이지','#8FBC8F'],['아쿠아마린','#7FFFD4'],
+      ['터쿼이즈','#40E0D0'],['스틸블루','#4682B4'],['코발트','#0047AB'],['네이비','#000080'],
+      ['미드나잇','#191970'],['플럼','#DDA0DD'],['오키드','#DA70D6'],['바이올렛','#EE82EE'],
+      ['퍼플','#9B59B6'],['와인','#722F37'],['머룬','#6D2932'],['피치','#FFCBA4'],['마룬','#800000'],
+      ['스카이블루','#87CEEB'],['딥스카이','#00BFFF'],['도저블루','#1E90FF'],['콘플라워','#6495ED'],
+      ['투명블루','#5B9BD5'],['에메랄드','#50C878'],['올리브그린','#6B8E23'],['파파야','#FFEFD5'],
+      ['레몬','#FFF44F'],['샴페인','#F7E7CE'],['로즈골드','#B76E79'],['버밀리온','#E34234'],
+      ['스카렛','#FF2400'],['시에나','#A0522D'],['토프','#483C32'],['차콜','#36454F'],
+      ['오프화이트','#F8F8FF'],['스노우','#FFFAFA'],['문스톤','#3AA8C1'],['코퍼','#B87333'],
+      ['브론즈','#CD7F32'],['틸','#367588'],['인디언레드','#CD5C5C'],['초콜릿','#7B3F00'],
+      ['호박','#FFBF00'],['네온그린','#39FF14'],['네온핑크','#FF6EC7'],['시어민트','#98DDCA'],
+      ['더스티로즈','#DCAE96'],['모브','#E0B0FF'],['테라코타','#E2725B'],['더스티블루','#8FD3F4'],
+      ['카나리','#FFFF99'],['셀라돈','#ACE1AF'],['퍼시먼','#EC5800'],['피스타치오','#93C572'],
+      ['라즈베리','#E30B5D'],['스트로베리','#FC5A8D'],['블루베리','#4F86C6'],['피그','#FD7C6E'],
+      ['멜론','#FDBCB4'],['코코아','#D2691E'],['바닐라','#F3E5AB'],['스페이스그레이','#717378'],
+      ['슬레이트블루','#6A5ACD'],['레드우드','#A45A52'],['에크루','#C2B280'],['린넨','#FAF0E6'],
+    ];
+
+    function hexToRgb(hex) {
+      const v = parseInt(hex.slice(1), 16);
+      return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+    }
+
+    function rgbDist([r1,g1,b1], [r2,g2,b2]) {
+      return (r1-r2)**2 + (g1-g2)**2 + (b1-b2)**2;
+    }
+
+    function nearestColorName(r, g, b) {
+      let best = COLOR_NAMES[0], bestD = Infinity;
+      for (const [name, hex] of COLOR_NAMES) {
+        const d = rgbDist([r,g,b], hexToRgb(hex));
+        if (d < bestD) { bestD = d; best = [name, hex]; }
+      }
+      return best[0];
+    }
+
+    function rgbToHex(r, g, b) {
+      return '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0').toUpperCase()).join('');
+    }
+
+    function quantize(pixels, k) {
+      // Simple k-means color clustering
+      let centers = [];
+      const step = Math.max(1, Math.floor(pixels.length / k));
+      for (let i = 0; i < k; i++) centers.push([...pixels[i * step]]);
+
+      for (let iter = 0; iter < 12; iter++) {
+        const sums = Array.from({length: k}, () => [0,0,0,0]);
+        for (const [r,g,b] of pixels) {
+          let best = 0, bestD = Infinity;
+          for (let j = 0; j < k; j++) {
+            const d = rgbDist([r,g,b], centers[j]);
+            if (d < bestD) { bestD = d; best = j; }
+          }
+          sums[best][0] += r; sums[best][1] += g; sums[best][2] += b; sums[best][3]++;
+        }
+        let changed = false;
+        for (let j = 0; j < k; j++) {
+          if (sums[j][3] === 0) continue;
+          const nr = Math.round(sums[j][0]/sums[j][3]);
+          const ng = Math.round(sums[j][1]/sums[j][3]);
+          const nb = Math.round(sums[j][2]/sums[j][3]);
+          if (nr !== centers[j][0] || ng !== centers[j][1] || nb !== centers[j][2]) changed = true;
+          centers[j] = [nr, ng, nb];
+        }
+        if (!changed) break;
+      }
+
+      // Sort by luminance (darkest to brightest looks good)
+      return centers.sort((a,b) => (0.299*a[0]+0.587*a[1]+0.114*a[2]) - (0.299*b[0]+0.587*b[1]+0.114*b[2]));
+    }
+
+    function extractColors(imgEl, k) {
+      const canvas = document.getElementById('extractCanvas');
+      const MAX = 200;
+      let w = imgEl.naturalWidth, h = imgEl.naturalHeight;
+      const scale = Math.min(1, MAX / Math.max(w, h));
+      w = Math.floor(w * scale); h = Math.floor(h * scale);
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(imgEl, 0, 0, w, h);
+      const data = ctx.getImageData(0, 0, w, h).data;
+      const pixels = [];
+      for (let i = 0; i < data.length; i += 4) {
+        if (data[i+3] < 128) continue; // skip transparent
+        pixels.push([data[i], data[i+1], data[i+2]]);
+      }
+      // Sub-sample for speed
+      const sample = pixels.filter((_, i) => i % 3 === 0);
+      return quantize(sample, k);
+    }
+
+    function isLight(r, g, b) {
+      return (0.299*r + 0.587*g + 0.114*b) > 160;
+    }
+
+    function renderColors(colors) {
+      const container = document.getElementById('extractedColors');
+      container.innerHTML = '';
+      for (const [r,g,b] of colors) {
+        const hex = rgbToHex(r,g,b);
+        const name = nearestColorName(r,g,b);
+        const textColor = isLight(r,g,b) ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)';
+        const chip = document.createElement('div');
+        chip.className = 'color-chip';
+        chip.innerHTML = `
+          <div class="chip-swatch" style="background:${hex}">
+            <div class="chip-copy-hint" style="color:${textColor}">클릭하여 복사</div>
+          </div>
+          <div class="chip-info">
+            <div class="chip-name">${name}</div>
+            <div class="chip-hex">${hex}</div>
+            <div class="chip-rgb">rgb(${r}, ${g}, ${b})</div>
+          </div>
+        `;
+        chip.addEventListener('click', () => {
+          navigator.clipboard.writeText(hex).catch(() => {});
+          chip.classList.remove('chip-copied');
+          void chip.offsetWidth;
+          chip.classList.add('chip-copied');
+        });
+        container.appendChild(chip);
+      }
+    }
+
+    let currentImg = null;
+    let currentK = 8;
+
+    function processImage(img) {
+      currentImg = img;
+      document.getElementById('previewImg').src = img.src;
+      document.getElementById('extractorPreview').classList.add('visible');
+      const colors = extractColors(img, currentK);
+      renderColors(colors);
+      document.getElementById('extractorPreview').scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+
+    function loadFile(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => processImage(img);
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Drop zone
+    const dropZone = document.getElementById('dropZone');
+
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      loadFile(file);
+    });
+
+    document.getElementById('uploadBtn').addEventListener('click', e => {
+      e.stopPropagation();
+      document.getElementById('imageFileInput').click();
+    });
+
+    document.getElementById('imageFileInput').addEventListener('change', e => {
+      loadFile(e.target.files[0]);
+    });
+
+    // Paste button
+    document.getElementById('pasteBtn').addEventListener('click', async e => {
+      e.stopPropagation();
+      try {
+        const items = await navigator.clipboard.read();
+        for (const item of items) {
+          for (const type of item.types) {
+            if (type.startsWith('image/')) {
+              const blob = await item.getType(type);
+              loadFile(new File([blob], 'paste.png', {type}));
+              showToast();
+              return;
+            }
+          }
+        }
+      } catch {
+        alert('클립보드 접근 권한이 필요합니다. Ctrl+V 로도 붙여넣기 가능합니다.');
+      }
+    });
+
+    // Global Ctrl+V paste
+    document.addEventListener('paste', e => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (const item of items) {
+        if (item.type.startsWith('image/')) {
+          loadFile(item.getAsFile());
+          showToast();
+          break;
+        }
+      }
+    });
+
+    function showToast() {
+      const toast = document.getElementById('pasteToast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // Color count buttons
+    document.querySelectorAll('.count-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentK = parseInt(btn.dataset.n);
+        if (currentImg) {
+          const colors = extractColors(currentImg, currentK);
+          renderColors(colors);
+        }
+      });
     });
 
     // Theme toggle
