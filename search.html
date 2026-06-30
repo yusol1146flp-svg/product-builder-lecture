@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>색 검색 — Color</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── SEARCH PAGE HERO ── */
+    .search-hero {
+      min-height: 56vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 140px 24px 56px; text-align: center; position: relative; overflow: hidden;
+    }
+    .search-hero-glow {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 360px;
+      background: conic-gradient(from 180deg at 50% 0%,
+        rgba(167,139,250,0.18), rgba(96,165,250,0.12), rgba(255,107,174,0.14), rgba(167,139,250,0.18));
+      border-radius: 0 0 50% 50%; filter: blur(70px); pointer-events: none;
+    }
+    .search-hero h1 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 14px; }
+    .search-hero > p { font-size: 1rem; color: var(--muted); margin-bottom: 40px; max-width: 480px; line-height: 1.75; }
+
+    .search-bar-big {
+      display: flex; align-items: center; gap: 0;
+      background: var(--surface); border: 1.5px solid rgba(167,139,250,0.35);
+      border-radius: 100px; width: 100%; max-width: 680px; padding: 6px 6px 6px 24px;
+      box-shadow: 0 8px 40px rgba(167,139,250,0.15); transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-bar-big:focus-within { border-color: #a78bfa; box-shadow: 0 8px 40px rgba(167,139,250,0.28); }
+    .search-bar-big span { font-size: 1.2rem; margin-right: 12px; flex-shrink: 0; }
+    .search-bar-big input {
+      flex: 1; background: none; border: none; outline: none;
+      font-size: 1.05rem; color: var(--text); font-family: inherit;
+      min-width: 0;
+    }
+    .search-bar-big input::placeholder { color: var(--muted); }
+    .search-bar-big button {
+      padding: 12px 28px; background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      border: none; border-radius: 100px; color: #fff; font-size: 0.95rem; font-weight: 700;
+      cursor: pointer; transition: opacity 0.2s; white-space: nowrap; flex-shrink: 0;
+    }
+    .search-bar-big button:hover { opacity: 0.88; }
+
+    .search-tags { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 22px; max-width: 680px; }
+    .stag {
+      padding: 7px 16px; border-radius: 100px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--muted); font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: all 0.18s; white-space: nowrap;
+    }
+    .stag:hover { border-color: rgba(167,139,250,0.4); color: #a78bfa; background: rgba(167,139,250,0.07); }
+
+    /* ── RESULT AREA ── */
+    .result-wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px 96px; }
+    .result-section-title {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+    }
+    .result-section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ── MAIN COLOR CARDS ── */
+    .color-result-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 48px; }
+    .color-result-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+      overflow: hidden; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .color-result-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.15); border-color: rgba(167,139,250,0.22); }
+    .crc-swatch { height: 140px; position: relative; cursor: pointer; }
+    .crc-copy-hint {
+      position: absolute; inset: 0; background: rgba(0,0,0,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem; font-weight: 700; color: #fff; opacity: 0; transition: opacity 0.2s;
+    }
+    .color-result-card:hover .crc-copy-hint { opacity: 1; }
+    .crc-body { padding: 14px; }
+    .crc-name { font-size: 0.92rem; font-weight: 800; margin-bottom: 5px; letter-spacing: -0.015em; }
+    .crc-hex { font-size: 0.78rem; font-family: monospace; font-weight: 700; color: var(--muted); margin-bottom: 3px; letter-spacing: 0.04em; cursor: pointer; transition: color 0.15s; }
+    .crc-hex:hover { color: #a78bfa; }
+    .crc-rgb { font-size: 0.7rem; color: var(--muted); font-family: monospace; cursor: pointer; transition: color 0.15s; }
+    .crc-rgb:hover { color: #60a5fa; }
+    .crc-harmony { display: flex; gap: 4px; margin-top: 10px; flex-wrap: wrap; }
+    .crc-h-swatch { width: 22px; height: 22px; border-radius: 6px; cursor: pointer; transition: transform 0.15s; flex-shrink: 0; }
+    .crc-h-swatch:hover { transform: scale(1.2); }
+    .crc-h-label { font-size: 0.6rem; color: var(--muted); width: 100%; margin-top: 4px; }
+
+    /* ── HARMONY DETAIL ── */
+    .harmony-detail {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 28px; margin-bottom: 48px;
+    }
+    .hd-title { font-size: 1rem; font-weight: 800; margin-bottom: 20px; letter-spacing: -0.02em; }
+    .hd-row { display: flex; gap: 10px; margin-bottom: 18px; align-items: center; flex-wrap: wrap; }
+    .hd-row-label { font-size: 0.72rem; font-weight: 700; color: var(--muted); width: 70px; flex-shrink: 0; }
+    .hd-swatch {
+      height: 52px; border-radius: 10px; flex: 1; min-width: 50px; max-width: 100px;
+      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; position: relative;
+    }
+    .hd-swatch:hover { transform: scaleY(1.08); box-shadow: 0 4px 14px rgba(0,0,0,0.2); }
+    .hd-hex-label {
+      font-size: 0.6rem; font-family: monospace; font-weight: 700;
+      color: var(--muted); margin-top: 4px; text-align: center; cursor: pointer;
+      transition: color 0.15s;
+    }
+    .hd-hex-label:hover { color: #a78bfa; }
+    .hd-swatch-wrap { display: flex; flex-direction: column; align-items: center; }
+
+    /* ── RELATED PALETTES ── */
+    .related-palette-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 48px; }
+    .related-pal-item {
+      display: flex; align-items: center; gap: 16px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden; text-decoration: none; color: var(--text);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .related-pal-item:hover { border-color: rgba(167,139,250,0.25); transform: translateX(4px); }
+    .related-pal-swatches { display: flex; height: 60px; width: 200px; flex-shrink: 0; }
+    .related-pal-sw { flex: 1; }
+    .related-pal-info { padding: 14px 16px; flex: 1; }
+    .related-pal-name { font-size: 0.9rem; font-weight: 700; margin-bottom: 3px; }
+    .related-pal-meta { font-size: 0.75rem; color: var(--muted); }
+    .related-pal-arrow { margin-right: 16px; color: var(--muted); font-size: 1rem; flex-shrink: 0; }
+
+    /* ── GRADIENT RESULT ── */
+    .grad-result-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-bottom: 48px; }
+    .grad-result-item {
+      border-radius: 14px; overflow: hidden; border: 1px solid var(--border);
+      background: var(--surface); transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .grad-result-item:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.14); }
+    .grad-result-bar { height: 80px; }
+    .grad-result-body { padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; }
+    .grad-result-name { font-size: 0.85rem; font-weight: 700; }
+    .grad-result-mood { font-size: 0.72rem; color: var(--muted); }
+    .grad-result-copy { padding: 5px 12px; border-radius: 100px; border: 1px solid var(--border); background: var(--bg); color: var(--muted); font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .grad-result-copy:hover { background: linear-gradient(135deg,#a78bfa,#60a5fa); border-color:transparent; color:#fff; }
+    .grad-result-copy.copied { background: linear-gradient(135deg,#34d399,#059669); border-color:transparent; color:#fff; }
+
+    /* ── EMPTY STATE ── */
+    .search-empty-state { text-align: center; padding: 60px 24px; color: var(--muted); }
+    .search-empty-state h3 { font-size: 1.15rem; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+
+    /* ── TOAST ── */
+    .copy-toast-small { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: #a78bfa; color: #fff; padding: 9px 20px; border-radius: 100px; font-size: 0.82rem; font-weight: 700; z-index: 9999; transition: transform 0.3s; pointer-events: none; }
+    .copy-toast-small.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 600px) {
+      .color-result-grid { grid-template-columns: repeat(2, 1fr); }
+      .related-pal-swatches { width: 120px; }
+      .hd-row-label { width: 55px; }
+      .search-bar-big button { padding: 10px 18px; font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Color</a>
+  <ul class="nav-links">
+    <li><a href="index.html">홈</a></li>
+    <li><a href="extractor.html">이미지 색 추출</a></li>
+    <li><a href="palettes.html">색 조합</a></li>
+    <li><a href="gradients.html">그라데이션</a></li>
+    <li><a href="search.html">색 검색</a></li>
+    <li><a href="tips.html">배색 팁</a></li>
+    <li><a href="favorites.html" id="navFavorites" style="display:none;">저장함</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)">🔍</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
+    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인">👤</button>
+    <a href="index.html#contact" class="nav-cta">문의하기</a>
+  </div>
+</nav>
+
+<div class="search-hero">
+  <div class="search-hero-glow"></div>
+  <h1>색을 느낌으로 <span class="gradient-text">검색하세요</span></h1>
+  <p>분위기, 계절, 감정을 자유롭게 입력하면 어울리는 색상과 추천 조합을 바로 알려드립니다.</p>
+
+  <div class="search-bar-big" id="mainSearchBar">
+    <span>🔍</span>
+    <input type="text" id="mainSearchInput" placeholder="봄날 느낌, 차가운 바다, 따뜻한 카페, 파랑…" autocomplete="off" />
+    <button id="searchSubmitBtn">검색</button>
+  </div>
+
+  <div class="search-tags" id="searchTags">
+    <button class="stag">봄날 벚꽃</button>
+    <button class="stag">따뜻한 느낌</button>
+    <button class="stag">차가운 바다</button>
+    <button class="stag">가을 단풍</button>
+    <button class="stag">신비로운</button>
+    <button class="stag">파스텔</button>
+    <button class="stag">레트로 빈티지</button>
+    <button class="stag">네온</button>
+    <button class="stag">자연 숲</button>
+    <button class="stag">노을</button>
+    <button class="stag">하늘색</button>
+    <button class="stag">로맨틱</button>
+  </div>
+</div>
+
+<div class="result-wrap" id="resultWrap" style="display:none;"></div>
+
+<div id="initialGrid" class="result-wrap">
+  <p class="result-section-title">인기 검색 무드</p>
+  <div class="color-result-grid" id="initialGrid2"></div>
+</div>
+
+<div class="copy-toast-small" id="copyToast">복사됨 ✓</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">Color</a>
+  <p>© 2026 Color. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="#">이용약관</a></li>
+    <li><a href="#">개인정보처리방침</a></li>
+    <li><a href="index.html#contact">문의하기</a></li>
+  </ul>
+</footer>
+
+<script src="script.js"></script>
+<script>
+// ── COLOR UTILITY ──
+function hexToRgb(hex) {
+  const v = parseInt(hex.replace('#',''), 16);
+  return [(v>>16)&255, (v>>8)&255, v&255];
+}
+function rgbToHex(r,g,b) {
+  return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('').toUpperCase();
+}
+function hexToHsl(hex) {
+  let [r,g,b] = hexToRgb(hex).map(x=>x/255);
+  const max=Math.max(r,g,b), min=Math.min(r,g,b);
+  let h,s,l=(max+min)/2;
+  if(max===min){h=s=0;}
+  else{
+    const d=max-min;
+    s=l>0.5?d/(2-max-min):d/(max+min);
+    switch(max){
+      case r:h=((g-b)/d+(g<b?6:0))/6;break;
+      case g:h=((b-r)/d+2)/6;break;
+      case b:h=((r-g)/d+4)/6;break;
+    }
+  }
+  return [h*360, s*100, l*100];
+}
+function hslToHex(h,s,l) {
+  s/=100;l/=100;
+  const k=n=>(n+h/30)%12;
+  const a=s*Math.min(l,1-l);
+  const f=n=>Math.round((l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1))))*255);
+  return rgbToHex(f(0),f(8),f(4));
+}
+function cl(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
+function genHarmony(hex) {
+  const [h,s,l] = hexToHsl(hex);
+  return {
+    analogous:   [hslToHex((h+30)%360,s,l), hslToHex((h-30+360)%360,s,l)],
+    complementary: hslToHex((h+180)%360,s,l),
+    triadic:     [hslToHex((h+120)%360,s,l), hslToHex((h+240)%360,s,l)],
+    tints:       [hslToHex(h,s,cl(l+18,5,92)), hslToHex(h,s,cl(l+34,5,92))],
+    shades:      [hslToHex(h,s,cl(l-18,5,92)), hslToHex(h,s,cl(l-34,5,92))],
+    saturated:   hslToHex(h,cl(s+20,0,100),l),
+    desaturated: hslToHex(h,cl(s-20,0,100),l),
+  };
+}
+function isLight(hex) {
+  const [r,g,b]=hexToRgb(hex);
+  return (0.299*r+0.587*g+0.114*b)>140;
+}
+
+// ── KOREAN COLOR DB ──
+const COLOR_NAME_DB = [
+  {name:'빨강',    aliases:['레드','붉은','빨간'],               hex:'#E63946'},
+  {name:'진빨강',  aliases:['딥레드','다크레드'],                 hex:'#9B1B1B'},
+  {name:'주홍',    aliases:['버밀리온'],                          hex:'#FF4500'},
+  {name:'주황',    aliases:['오렌지','등황','귤'],                hex:'#FF8C00'},
+  {name:'연주황',  aliases:['피치오렌지','연오렌지'],             hex:'#FFB347'},
+  {name:'노랑',    aliases:['옐로우','노란','샛노랑'],            hex:'#FFD700'},
+  {name:'레몬',    aliases:['레몬색','레몬옐로','연노랑'],        hex:'#FFF44F'},
+  {name:'황금',    aliases:['골드','금색','금빛'],               hex:'#FFC300'},
+  {name:'크림',    aliases:['아이보리','크림색','베이지화이트'],  hex:'#FFFDD0'},
+  {name:'베이지',  aliases:['샌드','모래색'],                    hex:'#F5F5DC'},
+  {name:'살구',    aliases:['복숭아','피치','살색'],             hex:'#FFDAB9'},
+  {name:'연분홍',  aliases:['베이비핑크','라이트핑크'],          hex:'#FFD1DC'},
+  {name:'핑크',    aliases:['분홍','핑크색'],                   hex:'#FF85A1'},
+  {name:'진분홍',  aliases:['딥핑크','핫핑크'],                 hex:'#FF1493'},
+  {name:'장미',    aliases:['로즈','장미색'],                   hex:'#FF007F'},
+  {name:'벚꽃',    aliases:['체리블라썸','벚꽃색'],              hex:'#FFB7C5'},
+  {name:'빨간분홍',aliases:['코럴레드'],                         hex:'#FF6B81'},
+  {name:'산호',    aliases:['코랄','코럴'],                     hex:'#FF7F50'},
+  {name:'마젠타',  aliases:['자홍'],                            hex:'#FF00FF'},
+  {name:'자주',    aliases:['퍼플레드','포도주'],                hex:'#8B0057'},
+  {name:'보라',    aliases:['퍼플','바이올렛'],                  hex:'#800080'},
+  {name:'연보라',  aliases:['라벤더','라일락','라벤더색'],        hex:'#C77DFF'},
+  {name:'라벤더',  aliases:['연라벤더'],                         hex:'#E0AAFF'},
+  {name:'인디고',  aliases:['인디고블루'],                       hex:'#4B0082'},
+  {name:'파랑',    aliases:['블루','파란','청색'],               hex:'#1E90FF'},
+  {name:'진파랑',  aliases:['딥블루','다크블루'],                hex:'#00008B'},
+  {name:'남색',    aliases:['네이비','남청색'],                  hex:'#000080'},
+  {name:'코발트',  aliases:['코발트블루'],                       hex:'#0047AB'},
+  {name:'하늘색',  aliases:['스카이블루','하늘','연파랑'],        hex:'#87CEEB'},
+  {name:'파우더블루',aliases:['파우더'],                         hex:'#B0E0E6'},
+  {name:'청록',    aliases:['틸','틸색','시안'],                 hex:'#008080'},
+  {name:'민트',    aliases:['민트색','민트그린'],                hex:'#3EB489'},
+  {name:'초록',    aliases:['그린','녹색','초록색'],             hex:'#008000'},
+  {name:'연두',    aliases:['라임그린','라임','연녹색'],          hex:'#7CFC00'},
+  {name:'에메랄드',aliases:['에메랄드그린'],                      hex:'#50C878'},
+  {name:'숲초록',  aliases:['포레스트그린','딥그린','진초록'],    hex:'#228B22'},
+  {name:'올리브',  aliases:['올리브그린','올리브색'],            hex:'#808000'},
+  {name:'카키',    aliases:['카키색','어스그린'],                hex:'#8B864E'},
+  {name:'갈색',    aliases:['브라운','갈색'],                   hex:'#8B4513'},
+  {name:'초콜릿',  aliases:['초코'],                            hex:'#7B3F00'},
+  {name:'황토',    aliases:['황토색','카멜'],                   hex:'#C19A6B'},
+  {name:'커피',    aliases:['커피색','모카'],                   hex:'#6F4E37'},
+  {name:'테라코타',aliases:['테라코타색'],                       hex:'#E2725B'},
+  {name:'버건디',  aliases:['와인','와인레드','버건디색'],        hex:'#800020'},
+  {name:'마룬',    aliases:['마룬색','딥마룬'],                  hex:'#800000'},
+  {name:'흰색',    aliases:['화이트','순백'],                   hex:'#FFFFFF'},
+  {name:'연회색',  aliases:['라이트그레이','밝은회색'],          hex:'#D3D3D3'},
+  {name:'회색',    aliases:['그레이','회색'],                   hex:'#808080'},
+  {name:'진회색',  aliases:['다크그레이','어두운회색'],          hex:'#4A4A4A'},
+  {name:'숯색',    aliases:['차콜','차콜그레이'],               hex:'#36454F'},
+  {name:'검정',    aliases:['블랙','검은색'],                   hex:'#1A1A1A'},
+  {name:'은색',    aliases:['실버'],                            hex:'#C0C0C0'},
+  {name:'로즈골드',aliases:['핑크골드'],                         hex:'#B76E79'},
+];
+
+// ── MOOD DB ──
+const MOOD_DB = [
+  {tags:['따뜻','온기','포근','아늑','훈훈','따스','따뜻한','포근한'],
+   colors:['#FF6B35','#F7931E','#FFA07A','#FFDAB9','#FF8C61'],
+   name:'따뜻한 온기', desc:'오렌지와 살구빛이 감싸는 포근한 온기'},
+
+  {tags:['차가운','시원','청량','쿨','쌀쌀','서늘','시원한','청량한'],
+   colors:['#00C9FF','#48CAE4','#90E0EF','#ADE8F4','#0096C7'],
+   name:'시원한 청량감', desc:'투명한 하늘빛 청량한 느낌'},
+
+  {tags:['봄','벚꽃','봄날','봄비','새싹','싱그러운','봄기운','봄꽃'],
+   colors:['#FFB7C5','#FFD1DC','#A8D8A8','#FFC0D0','#FFEBEF'],
+   name:'봄날 벚꽃', desc:'연핑크와 연두의 봄날 감성'},
+
+  {tags:['여름','바캉스','휴가','열대','트로피컬','뜨거운','여름날'],
+   colors:['#00B4D8','#FF6B6B','#FFD166','#06D6A0','#0096C7'],
+   name:'여름 바캉스', desc:'선명한 바다색과 비비드 컬러'},
+
+  {tags:['가을','단풍','추수','낙엽','황금빛','풍요','가을날'],
+   colors:['#D62828','#F77F00','#FCBF49','#EAE2B7','#8B4513'],
+   name:'가을 단풍', desc:'빨강과 황금빛의 풍요로운 가을'},
+
+  {tags:['겨울','눈','눈송이','한겨울','설경','차갑고','겨울날','눈꽃'],
+   colors:['#E8F4FD','#BFD7EA','#ACCCE4','#8AB4C9','#CAF0F8'],
+   name:'겨울 눈송이', desc:'하얗고 차분한 겨울의 정적'},
+
+  {tags:['바다','오션','파도','서핑','해변','수평선','심해','해양'],
+   colors:['#03045E','#0077B6','#00B4D8','#48CAE4','#90E0EF'],
+   name:'깊은 바다', desc:'심해에서 얕은 바다까지'},
+
+  {tags:['숲','자연','나무','정글','초원','신선','삼림','숲속'],
+   colors:['#1B4332','#2D6A4F','#52B788','#95D5B2','#D8F3DC'],
+   name:'깊은 숲', desc:'울창한 숲의 다양한 초록'},
+
+  {tags:['하늘','맑은','구름','파란하늘','청명','맑은하늘'],
+   colors:['#87CEEB','#B0E0E6','#E0F7FF','#1E90FF','#4CC9F0'],
+   name:'맑은 하늘', desc:'파란 하늘과 흰 구름'},
+
+  {tags:['노을','일몰','석양','황혼','선셋','붉은노을'],
+   colors:['#FF6B6B','#FE8C00','#F83600','#FFD320','#C9184A'],
+   name:'붉은 노을', desc:'석양빛 오렌지와 핑크'},
+
+  {tags:['로맨틱','사랑','설렘','연인','달달한','달콤','로맨스'],
+   colors:['#FF6B9D','#FF8FAB','#FFC2D4','#FFE0EA','#C9184A'],
+   name:'로맨틱 핑크', desc:'달콤하고 설레는 핑크 계열'},
+
+  {tags:['신비','몽환','마법','꿈','환상','신비로운','몽환적','신비감'],
+   colors:['#7B2FBE','#9D4EDD','#C77DFF','#E0AAFF','#240046'],
+   name:'신비로운 보라', desc:'깊고 신비한 보랏빛 마법'},
+
+  {tags:['고급','럭셔리','프리미엄','우아한','품위','명품'],
+   colors:['#1A0A2E','#7B2FBE','#FFD700','#C0A060','#2C1654'],
+   name:'럭셔리 퍼플 & 골드', desc:'보라와 황금의 프리미엄 조합'},
+
+  {tags:['파스텔','부드러운','귀여운','사탕','캔디','파스텔톤'],
+   colors:['#FFD1DC','#FFDAB9','#FFFACD','#B5EAD7','#C7CEEA'],
+   name:'파스텔 캔디', desc:'달콤하고 부드러운 파스텔'},
+
+  {tags:['비비드','강렬','선명한','팝','화려','에너제틱','비비드한'],
+   colors:['#FF0054','#FFBD00','#00B4D8','#8338EC','#FB5607'],
+   name:'비비드 팝', desc:'강렬하고 선명한 컬러 폭발'},
+
+  {tags:['레트로','빈티지','복고','70년대','아날로그','레트로감성'],
+   colors:['#C9A96E','#8B6914','#D4A96A','#F2D49B','#6B3A2A'],
+   name:'레트로 빈티지', desc:'따뜻하고 바랜 빈티지 색감'},
+
+  {tags:['모던','미니멀','심플','깔끔','세련된','정제된','미니멀리즘'],
+   colors:['#2C3E50','#7F8C8D','#BDC3C7','#ECF0F1','#95A5A6'],
+   name:'모던 그레이', desc:'세련되고 깔끔한 그레이 계열'},
+
+  {tags:['네온','사이버','미래','sf','사이버펑크','형광','네온컬러'],
+   colors:['#FF00FF','#00FFFF','#39FF14','#FF1493','#BF00FF'],
+   name:'네온 사이버펑크', desc:'형광빛 네온의 미래적 감성'},
+
+  {tags:['카페','커피','브런치','코코아','카페분위기'],
+   colors:['#6F4E37','#C4A882','#DEB887','#F5DEB3','#8B6543'],
+   name:'카페 브라운', desc:'진한 커피와 밀크 크림'},
+
+  {tags:['웨딩','결혼','신부','웨딩홀','순백','웨딩색'],
+   colors:['#FFFFFF','#FFF5F7','#FFE0E6','#F8E1F4','#E8D5F5'],
+   name:'웨딩 화이트', desc:'순결하고 우아한 웨딩 팔레트'},
+
+  {tags:['비즈니스','공식','전문','기업','신뢰','회사'],
+   colors:['#003366','#336699','#6699CC','#CCE5FF','#E8F4F8'],
+   name:'비즈니스 블루', desc:'신뢰감 있는 딥 블루 계열'},
+
+  {tags:['파티','축제','생일','신나는','페스티벌','즐거운'],
+   colors:['#FF595E','#FFCA3A','#6A4C93','#1982C4','#8AC926'],
+   name:'페스티벌 컬러', desc:'신나고 다채로운 파티 색감'},
+
+  {tags:['명상','힐링','평화','안정','이완','zen','치유'],
+   colors:['#B5CDA3','#7CB9A8','#A8C3B5','#D6E8D4','#4A7B6F'],
+   name:'힐링 그린', desc:'마음을 치유하는 편안한 녹색'},
+
+  {tags:['밤','야경','별','밤하늘','새벽','밤하늘색','달빛'],
+   colors:['#0F0C29','#302B63','#24243E','#4A4580','#8B87C4'],
+   name:'밤하늘 인디고', desc:'별이 빛나는 깊은 밤하늘'},
+
+  {tags:['새벽','해돋이','일출','아침','여명','동트는'],
+   colors:['#FF9A8B','#FF6A88','#FFAA70','#FFD4A8','#FFECD2'],
+   name:'새벽 여명', desc:'동트는 새벽빛 그라데이션'},
+
+  {tags:['사막','모래','건조','어스','어스톤','어스컬러'],
+   colors:['#C2956C','#8B6543','#D4A96A','#F2C98A','#6B4423'],
+   name:'사막 어스톤', desc:'모래바람 사막의 따뜻한 어스 컬러'},
+
+  {tags:['북유럽','스칸디나비아','노르딕','피오르드','nordik'],
+   colors:['#DDEEFF','#B3D4E8','#87BCDA','#4A90D9','#2C5F8A'],
+   name:'노르딕 블루', desc:'피오르드의 차갑고 맑은 블루'},
+
+  {tags:['일본','와비사비','사쿠라','젠','화과자','일본감성'],
+   colors:['#F4A7B9','#F7D4D4','#E8C5A5','#C5B8A0','#89736B'],
+   name:'일본 전통', desc:'사쿠라와 와비사비의 섬세한 색감'},
+
+  {tags:['트로피컬','야자수','망고','코코넛','열대과일'],
+   colors:['#00C49A','#FF9F45','#FFCC5C','#009F6B','#FF6F59'],
+   name:'트로피컬 선셋', desc:'열대 과일빛 선명한 컬러'},
+
+  {tags:['행복','기쁨','밝은','즐거운','유쾌','즐거움'],
+   colors:['#FFD700','#FF8C00','#FF6347','#32CD32','#FF69B4'],
+   name:'행복한 선샤인', desc:'밝고 생기 넘치는 행복의 색'},
+
+  {tags:['슬픔','우울','쓸쓸','외로운','비','우수'],
+   colors:['#708090','#B0C4DE','#778899','#6A7F8A','#4A5568'],
+   name:'흐린 날 블루그레이', desc:'비 오는 날의 차분한 회청색'},
+
+  {tags:['인테리어','홈','집꾸미기','아늑한','집'],
+   colors:['#E8DDD0','#D4C4B0','#C0A882','#8B7355','#5C4A32'],
+   name:'내추럴 홈', desc:'집을 따뜻하게 꾸미는 내추럴 어스톤'},
+
+  {tags:['y2k','2000년대','키치','팝아트'],
+   colors:['#FF71CE','#01CDFE','#05FFA1','#B967FF','#FFFB96'],
+   name:'Y2K 레인보우', desc:'2000년대 감성의 알록달록 Y2K'},
+
+  {tags:['골드','황금','금빛','금색','샴페인'],
+   colors:['#FFD700','#FFC300','#FFB347','#FFCC02','#DAA520'],
+   name:'황금빛 골드', desc:'빛나는 황금과 샴페인 골드'},
+
+  {tags:['모노크롬','흑백','무채색','그레이스케일','흑백의'],
+   colors:['#1A1A1A','#444444','#888888','#CCCCCC','#F5F5F5'],
+   name:'모노크롬', desc:'무채색의 깊이 있는 대비'},
+
+  {tags:['청춘','젊음','활기찬','생기','활기','생동'],
+   colors:['#FF6B35','#FFD320','#00C49A','#4CC9F0','#F72585'],
+   name:'청춘의 활기', desc:'에너지 넘치는 생동감 있는 색'},
+
+  {tags:['우아','클래식','고전','격조','기품'],
+   colors:['#2F2F4F','#6B6B8A','#B8B8D4','#E8E8F0','#D4AF37'],
+   name:'우아한 클래식', desc:'깊이 있는 클래식한 우아함'},
+
+  {tags:['바다수영','아쿠아','물빛','수중','물'],
+   colors:['#00CED1','#20B2AA','#48D1CC','#7FFFD4','#40E0D0'],
+   name:'아쿠아 마린', desc:'맑고 투명한 아쿠아색'},
+
+  {tags:['핑크','분홍','핑크색','핑크톤'],
+   colors:['#FF69B4','#FF85A1','#FFB6C1','#FF1493','#C9184A'],
+   name:'핑크 그라데이션', desc:'연분홍부터 딥 핑크까지'},
+
+  {tags:['초록','그린','녹색','초록색'],
+   colors:['#00FF00','#32CD32','#228B22','#006400','#90EE90'],
+   name:'그린 계열', desc:'밝은 연두부터 짙은 숲 초록까지'},
+
+  {tags:['파랑','블루','청색','파란색'],
+   colors:['#1E90FF','#4169E1','#0000CD','#87CEEB','#00BFFF'],
+   name:'블루 계열', desc:'하늘빛부터 딥 네이비까지'},
+
+  {tags:['보라','퍼플','바이올렛','보라색'],
+   colors:['#800080','#9400D3','#8B00FF','#DA70D6','#EE82EE'],
+   name:'퍼플 계열', desc:'연보라부터 깊은 자주까지'},
+
+  {tags:['빨강','레드','붉은','빨간색'],
+   colors:['#FF0000','#DC143C','#B22222','#FF4500','#FF6347'],
+   name:'레드 계열', desc:'선명한 빨강부터 딥 레드까지'},
+
+  {tags:['노랑','옐로우','노란색','노란'],
+   colors:['#FFD700','#FFFF00','#FFA500','#FFFACD','#F0E68C'],
+   name:'옐로우 계열', desc:'레몬빛부터 골든 옐로우까지'},
+];
+
+// ── SEARCH LOGIC ──
+function normalize(str) {
+  return str.toLowerCase().replace(/\s+/g, '');
+}
+
+function searchMoods(query) {
+  const q = normalize(query);
+  const results = [];
+  for (const mood of MOOD_DB) {
+    let score = 0;
+    for (const tag of mood.tags) {
+      if (normalize(tag) === q) { score += 10; break; }
+      if (q.includes(normalize(tag)) || normalize(tag).includes(q)) { score += 3; }
+      // partial word match
+      const words = query.toLowerCase().split(/\s+/);
+      for (const w of words) {
+        if (w.length >= 2 && normalize(tag).includes(normalize(w))) score += 1;
+      }
+    }
+    if (score > 0) results.push({...mood, score});
+  }
+  return results.sort((a,b) => b.score - a.score).slice(0, 5);
+}
+
+function searchColorNames(query) {
+  const q = normalize(query);
+  const results = [];
+  for (const c of COLOR_NAME_DB) {
+    const allNames = [c.name, ...(c.aliases || [])];
+    let score = 0;
+    for (const n of allNames) {
+      const nn = normalize(n);
+      if (nn === q) { score += 10; break; }
+      if (nn.includes(q) || q.includes(nn)) { score += 5; }
+    }
+    if (score > 0) results.push({...c, score});
+  }
+  return results.sort((a,b)=>b.score-a.score).slice(0, 4);
+}
+
+// ── RENDER HELPERS ──
+function copyText(text) {
+  navigator.clipboard.writeText(text).catch(()=>{});
+  const t = document.getElementById('copyToast');
+  t.textContent = `${text} 복사됨 ✓`;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+function swatchHtml(hex, size='normal') {
+  const [r,g,b] = hexToRgb(hex);
+  return hex.toUpperCase();
+}
+
+function renderColorCards(colors, names=[]) {
+  return colors.map((hex, i) => {
+    const [r,g,b] = hexToRgb(hex.startsWith('#') ? hex : '#'+hex);
+    const h = hex.toUpperCase().startsWith('#') ? hex.toUpperCase() : '#'+hex.toUpperCase();
+    const name = names[i] || '';
+    const textColor = isLight(h) ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.85)';
+    return `
+      <div class="color-result-card">
+        <div class="crc-swatch" style="background:${h}" data-hex="${h}">
+          <div class="crc-copy-hint" style="color:${textColor}">클릭해서 복사</div>
+        </div>
+        <div class="crc-body">
+          ${name ? `<div class="crc-name">${name}</div>` : ''}
+          <div class="crc-hex" data-hex="${h}">${h}</div>
+          <div class="crc-rgb" data-rgb="rgb(${r}, ${g}, ${b})">rgb(${r}, ${g}, ${b})</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderHarmonyDetail(baseHex, baseLabel='기준 색상') {
+  const h = genHarmony(baseHex);
+  const [r,g,b] = hexToRgb(baseHex);
+  function sw(hex, label='') {
+    return `<div class="hd-swatch-wrap">
+      <div class="hd-swatch" style="background:${hex}" data-hex="${hex}" title="${hex}"></div>
+      <div class="hd-hex-label" data-hex="${hex}">${hex.toUpperCase()}</div>
+    </div>`;
+  }
+  return `
+    <div class="harmony-detail">
+      <div class="hd-title">🎨 <span style="background:${baseHex};padding:2px 10px;border-radius:6px;color:${isLight(baseHex)?'#000':'#fff'};font-size:0.85rem;">${baseHex.toUpperCase()}</span> 추천 색 조합</div>
+      <div class="hd-row">
+        <span class="hd-row-label">기준</span>
+        ${sw(baseHex)}
+        <div class="hd-swatch-wrap" style="margin-left:4px;font-size:0.72rem;color:var(--muted);align-self:flex-start;padding-top:6px;">rgb(${r},${g},${b})</div>
+      </div>
+      <div class="hd-row">
+        <span class="hd-row-label">유사색</span>
+        ${h.analogous.map(sw).join('')}
+      </div>
+      <div class="hd-row">
+        <span class="hd-row-label">보색</span>
+        ${sw(h.complementary)}
+      </div>
+      <div class="hd-row">
+        <span class="hd-row-label">삼각 배색</span>
+        ${h.triadic.map(sw).join('')}
+      </div>
+      <div class="hd-row">
+        <span class="hd-row-label">밝은 톤</span>
+        ${h.tints.map(sw).join('')}
+      </div>
+      <div class="hd-row">
+        <span class="hd-row-label">어두운 톤</span>
+        ${h.shades.map(sw).join('')}
+      </div>
+    </div>`;
+}
+
+function relatedFromSearchData(query) {
+  if (typeof SEARCH_DATA === 'undefined') return {palettes:[], gradients:[]};
+  const q = normalize(query);
+  const palettes = SEARCH_DATA.filter(d => d.type==='palette' && (
+    normalize(d.name).includes(q) || normalize(d.mood).includes(q) ||
+    query.split(' ').some(w=>w.length>=2 && (normalize(d.name).includes(normalize(w))||normalize(d.mood).includes(normalize(w))))
+  )).slice(0,4);
+  const gradients = SEARCH_DATA.filter(d => d.type==='gradient' && (
+    normalize(d.name).includes(q) || normalize(d.mood).includes(q) ||
+    query.split(' ').some(w=>w.length>=2 && (normalize(d.name).includes(normalize(w))||normalize(d.mood).includes(normalize(w))))
+  )).slice(0,3);
+  return {palettes, gradients};
+}
+
+// ── RENDER RESULTS ──
+function renderResults(query) {
+  const moods = searchMoods(query);
+  const colorMatches = searchColorNames(query);
+  const related = relatedFromSearchData(query);
+
+  if (!moods.length && !colorMatches.length && !related.palettes.length && !related.gradients.length) {
+    return `<div class="search-empty-state">
+      <div style="font-size:2.5rem;margin-bottom:16px;">🔍</div>
+      <h3>"${query}"에 대한 결과를 찾지 못했어요</h3>
+      <p>다른 단어로 검색해 보세요. (예: 따뜻한, 봄날, 바다, 레트로, 핑크)</p>
+    </div>`;
+  }
+
+  let html = '';
+
+  // ── COLOR NAME MATCHES ──
+  if (colorMatches.length) {
+    html += `<p class="result-section-title">색상 직접 검색</p>`;
+    html += `<div class="color-result-grid">`;
+    html += colorMatches.map(c => {
+      const [r,g,b] = hexToRgb(c.hex);
+      const textColor = isLight(c.hex) ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.85)';
+      return `
+        <div class="color-result-card">
+          <div class="crc-swatch" style="background:${c.hex}" data-hex="${c.hex}">
+            <div class="crc-copy-hint" style="color:${textColor}">클릭해서 복사</div>
+          </div>
+          <div class="crc-body">
+            <div class="crc-name">${c.name}</div>
+            <div class="crc-hex" data-hex="${c.hex}">${c.hex.toUpperCase()}</div>
+            <div class="crc-rgb" data-rgb="rgb(${r},${g},${b})">rgb(${r}, ${g}, ${b})</div>
+          </div>
+        </div>`;
+    }).join('');
+    html += `</div>`;
+    // Harmony for first color match
+    html += renderHarmonyDetail(colorMatches[0].hex, colorMatches[0].name);
+  }
+
+  // ── MOOD MATCHES ──
+  moods.forEach((mood, mi) => {
+    html += `<p class="result-section-title">${mi===0 && !colorMatches.length ? '무드 색상 결과' : '관련 무드'}</p>`;
+    html += `<div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:28px;">`;
+    html += `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <span style="font-size:1rem;font-weight:800;">${mood.name}</span>
+      <span style="font-size:0.78rem;color:var(--muted);">${mood.desc}</span>
+    </div>`;
+    // 5 swatches horizontal
+    html += `<div style="display:flex;gap:8px;margin-bottom:20px;">`;
+    mood.colors.forEach(hex => {
+      const [r,g,b] = hexToRgb(hex);
+      const tc = isLight(hex)?'rgba(0,0,0,0.6)':'rgba(255,255,255,0.9)';
+      html += `<div style="flex:1;height:80px;border-radius:12px;background:${hex};cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;transition:transform 0.15s;"
+                    data-hex="${hex}"
+                    onmouseover="this.style.transform='scaleY(1.06)'"
+                    onmouseleave="this.style.transform='scaleY(1)'"
+                    class="mood-main-swatch">
+        <span style="font-size:0.6rem;font-weight:700;color:${tc};letter-spacing:0.04em;">${hex.toUpperCase()}</span>
+      </div>`;
+    });
+    html += `</div>`;
+    // individual color info row
+    html += `<div class="color-result-grid" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:0;">`;
+    mood.colors.forEach(hex => {
+      const [r,g,b] = hexToRgb(hex);
+      const tc = isLight(hex)?'rgba(0,0,0,0.55)':'rgba(255,255,255,0.85)';
+      html += `<div class="color-result-card">
+        <div class="crc-swatch" style="background:${hex};height:60px;" data-hex="${hex}">
+          <div class="crc-copy-hint" style="color:${tc}">복사</div>
+        </div>
+        <div class="crc-body" style="padding:8px 10px;">
+          <div class="crc-hex" style="font-size:0.75rem;" data-hex="${hex}">${hex.toUpperCase()}</div>
+          <div class="crc-rgb" style="font-size:0.65rem;" data-rgb="rgb(${r},${g},${b})">rgb(${r},${g},${b})</div>
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+    // Harmony for first mood color
+    if (mi === 0) html += renderHarmonyDetail(mood.colors[0]);
+  });
+
+  // ── RELATED PALETTES ──
+  if (related.palettes.length) {
+    html += `<p class="result-section-title">연관 팔레트</p>`;
+    html += `<div class="related-palette-list">`;
+    related.palettes.forEach(d => {
+      const swatches = d.colors.map(c=>`<div class="related-pal-sw" style="background:${c}"></div>`).join('');
+      html += `<a href="palettes.html" class="related-pal-item">
+        <div class="related-pal-swatches">${swatches}</div>
+        <div class="related-pal-info">
+          <div class="related-pal-name">${d.name}</div>
+          <div class="related-pal-meta">${d.mood}</div>
+        </div>
+        <span class="related-pal-arrow">→</span>
+      </a>`;
+    });
+    html += `</div>`;
+  }
+
+  // ── RELATED GRADIENTS ──
+  if (related.gradients.length) {
+    html += `<p class="result-section-title">연관 그라데이션</p>`;
+    html += `<div class="grad-result-grid">`;
+    related.gradients.forEach(d => {
+      html += `<div class="grad-result-item">
+        <div class="grad-result-bar" style="background:${d.css}"></div>
+        <div class="grad-result-body">
+          <div>
+            <div class="grad-result-name">${d.name}</div>
+            <div class="grad-result-mood">${d.mood}</div>
+          </div>
+          <button class="grad-result-copy" data-css="${d.css}">CSS 복사</button>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  return html;
+}
+
+// ── EVENT BINDING after render ──
+function bindResultEvents() {
+  // Swatch / hex copy
+  document.querySelectorAll('[data-hex]').forEach(el => {
+    el.addEventListener('click', () => copyText(el.dataset.hex));
+  });
+  document.querySelectorAll('[data-rgb]').forEach(el => {
+    el.addEventListener('click', () => copyText(el.dataset.rgb));
+  });
+  document.querySelectorAll('.mood-main-swatch').forEach(el => {
+    el.addEventListener('click', () => copyText(el.dataset.hex));
+  });
+  // Grad CSS copy
+  document.querySelectorAll('.grad-result-copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+      copyText(`background: ${btn.dataset.css};`);
+      btn.textContent='복사됨 ✓'; btn.classList.add('copied');
+      setTimeout(()=>{btn.textContent='CSS 복사';btn.classList.remove('copied');},1800);
+    });
+  });
+  // Harmony swatches
+  document.querySelectorAll('.hd-swatch').forEach(el => {
+    el.addEventListener('click', () => copyText(el.dataset.hex));
+  });
+  document.querySelectorAll('.hd-hex-label').forEach(el => {
+    el.addEventListener('click', () => copyText(el.dataset.hex));
+  });
+}
+
+// ── MAIN SEARCH ──
+let lastQuery = '';
+function doSearch(q) {
+  if (!q.trim()) return;
+  lastQuery = q.trim();
+  addHistory(lastQuery);
+  document.getElementById('mainSearchInput').value = lastQuery;
+
+  const rWrap = document.getElementById('resultWrap');
+  const initGrid = document.getElementById('initialGrid');
+  rWrap.style.display = 'block';
+  initGrid.style.display = 'none';
+  rWrap.innerHTML = renderResults(lastQuery);
+  bindResultEvents();
+  rWrap.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+document.getElementById('searchSubmitBtn').addEventListener('click', () => {
+  doSearch(document.getElementById('mainSearchInput').value);
+});
+document.getElementById('mainSearchInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doSearch(document.getElementById('mainSearchInput').value);
+});
+document.querySelectorAll('.stag').forEach(btn => {
+  btn.addEventListener('click', () => doSearch(btn.textContent));
+});
+
+// ── INITIAL SHOWCASE (popular moods before search) ──
+function renderInitialGrid() {
+  const featured = ['봄날 벚꽃', '따뜻한 온기', '깊은 바다', '신비로운 보라', '레트로 빈티지', '비비드 팝'];
+  const moods = featured.map(name => MOOD_DB.find(m => m.name === name)).filter(Boolean);
+  const el = document.getElementById('initialGrid2');
+  if (!el) return;
+  el.innerHTML = moods.map(m => {
+    const hex = m.colors[Math.floor(m.colors.length/2)];
+    const [r,g,b] = hexToRgb(hex);
+    const tc = isLight(hex)?'rgba(0,0,0,0.55)':'rgba(255,255,255,0.85)';
+    return `
+      <div class="color-result-card" style="cursor:pointer;" onclick="doSearch('${m.name}')">
+        <div style="height:100px;background:linear-gradient(135deg,${m.colors.join(',')});"></div>
+        <div class="crc-body">
+          <div class="crc-name">${m.name}</div>
+          <div style="font-size:0.72rem;color:var(--muted);">${m.desc}</div>
+          <div style="display:flex;gap:4px;margin-top:10px;">
+            ${m.colors.slice(0,5).map(c=>`<div style="width:20px;height:20px;border-radius:5px;background:${c};"></div>`).join('')}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ── URL PARAM ──
+const urlQ = new URLSearchParams(location.search).get('q');
+if (urlQ) {
+  doSearch(urlQ);
+} else {
+  renderInitialGrid();
+}
+</script>
+</body>
+</html>
