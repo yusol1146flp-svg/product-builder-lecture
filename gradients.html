@@ -15,9 +15,12 @@
     <li><a href="palettes.html">색 조합</a></li>
     <li><a href="gradients.html">그라데이션</a></li>
     <li><a href="tips.html">배색 팁</a></li>
+    <li><a href="favorites.html" id="navFavorites" style="display:none;">저장함</a></li>
   </ul>
-  <div style="display:flex;align-items:center;gap:12px;">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)">🔍</button>
     <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
+    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인">👤</button>
     <a href="index.html#contact" class="nav-cta">문의하기</a>
   </div>
 </nav>
@@ -340,6 +343,22 @@
 
 <script src="script.js"></script>
 <script>
+// Inject fav buttons into gradient items
+const GRAD_IDS = ['g01','g02','g03','g04','g05','g06','g07','g08','g09','g10','g11','g12','g13','g14','g15','g16','g17','g18'];
+document.querySelectorAll('.grad-item').forEach((item, i) => {
+  const id = GRAD_IDS[i] || ('g' + String(i+1).padStart(2,'0'));
+  const top = item.querySelector('.grad-top');
+  if (top) {
+    const favBtn = document.createElement('button');
+    favBtn.className = 'fav-btn';
+    favBtn.dataset.favType = 'gradient';
+    favBtn.dataset.favId = id;
+    favBtn.textContent = '🤍';
+    favBtn.title = '저장하기';
+    top.appendChild(favBtn);
+  }
+});
+
 document.querySelectorAll('.grad-copy-btn').forEach(btn => {
   btn.addEventListener('click', e => {
     e.stopPropagation();
