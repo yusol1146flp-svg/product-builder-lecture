@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>배색 팁 — Color</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Color</a>
+  <ul class="nav-links">
+    <li><a href="index.html">홈</a></li>
+    <li><a href="extractor.html">이미지 색 추출</a></li>
+    <li><a href="palettes.html">색 조합</a></li>
+    <li><a href="gradients.html">그라데이션</a></li>
+    <li><a href="tips.html">배색 팁</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
+    <a href="index.html#contact" class="nav-cta">문의하기</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-glow"></div>
+  <p class="breadcrumb"><a href="index.html">홈</a><span>›</span>배색 팁</p>
+  <h1>알면 달라지는 <span class="gradient-text">색 활용법</span></h1>
+  <p>실전 배색 노하우와 색채 이론으로 작업의 퀄리티를 한 단계 올려보세요.</p>
+</div>
+
+<div class="section" style="padding-top:0;">
+  <div class="section-label">실전 배색 팁</div>
+  <h2 class="section-title" style="margin-bottom:14px;">바로 적용하는 배색 노하우</h2>
+  <p class="section-desc">Color이 제공하는 실전 배색 팁으로 그림, 디자인, 인테리어에 바로 활용하세요.</p>
+
+  <div class="tips-grid">
+    <div class="tip-card fade-in">
+      <span class="tip-tag" style="background:rgba(255,107,174,0.12);color:#ff6bae;border:1px solid rgba(255,107,174,0.2);">기초</span>
+      <h4>60-30-10 법칙</h4>
+      <p>메인 색 60%, 서브 색 30%, 포인트 색 10%로 구성하면 어떤 배색도 안정적으로 보입니다. 가장 기본적인 황금 비율이에요.</p>
+      <div class="tip-palette">
+        <div class="tp" style="background:#f0e6ff;flex:6"></div>
+        <div class="tp" style="background:#a78bfa;flex:3"></div>
+        <div class="tp" style="background:#f97316;flex:1"></div>
+      </div>
+    </div>
+    <div class="tip-card fade-in">
+      <span class="tip-tag" style="background:rgba(96,165,250,0.12);color:#60a5fa;border:1px solid rgba(96,165,250,0.2);">중급</span>
+      <h4>채도를 낮춰 통일감 주기</h4>
+      <p>여러 색을 쓸 때 채도를 비슷하게 맞추면 색이 달라도 세련되게 어울립니다. 파스텔 팔레트가 통일감 있어 보이는 이유예요.</p>
+      <div class="tip-palette">
+        <div class="tp" style="background:#c4b5fd"></div>
+        <div class="tp" style="background:#93c5fd"></div>
+        <div class="tp" style="background:#86efac"></div>
+        <div class="tp" style="background:#fde68a"></div>
+        <div class="tp" style="background:#fca5a5"></div>
+      </div>
+    </div>
+    <div class="tip-card fade-in">
+      <span class="tip-tag" style="background:rgba(52,211,153,0.12);color:#34d399;border:1px solid rgba(52,211,153,0.2);">심화</span>
+      <h4>따뜻한 색 & 차가운 색의 균형</h4>
+      <p>붉은·노란 계열(warm)과 파란·초록 계열(cool)을 균형 있게 배치하면 색감에 깊이가 생기고 시각적 긴장감이 살아납니다.</p>
+      <div class="tip-palette">
+        <div class="tp" style="background:#fb923c"></div>
+        <div class="tp" style="background:#fbbf24"></div>
+        <div class="tp" style="background:#d1d5db"></div>
+        <div class="tp" style="background:#60a5fa"></div>
+        <div class="tp" style="background:#818cf8"></div>
+      </div>
+    </div>
+    <div class="tip-card fade-in">
+      <span class="tip-tag" style="background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.2);">실전</span>
+      <h4>검정·흰색 없이 명도 대비 만들기</h4>
+      <p>순수 흰색·검정 대신 아주 밝은 색조와 아주 어두운 색조를 사용하면 더 풍부하고 따뜻한 느낌의 대비를 만들 수 있어요.</p>
+      <div class="tip-palette">
+        <div class="tp" style="background:#fdf4ff"></div>
+        <div class="tp" style="background:#c4b5fd"></div>
+        <div class="tp" style="background:#7c3aed"></div>
+        <div class="tp" style="background:#3b0764"></div>
+      </div>
+    </div>
+    <div class="tip-card fade-in">
+      <span class="tip-tag" style="background:rgba(248,113,113,0.12);color:#f87171;border:1px solid rgba(248,113,113,0.2);">주의</span>
+      <h4>보색 사용 시 채도 조절</h4>
+      <p>선명한 보색을 그대로 나란히 쓰면 눈이 피로해집니다. 한쪽의 채도를 낮추거나 면적을 줄이면 훨씬 세련된 결과를 얻을 수 있어요.</p>
+      <div class="tip-palette">
+        <div class="tp" style="background:#4f46e5;flex:3"></div>
+        <div class="tp" style="background:#fed7aa;flex:2"></div>
+        <div class="tp" style="background:#92400e;flex:1"></div>
+      </div>
+    </div>
+    <div class="tip-card fade-in">
+      <span class="tip-tag" style="background:rgba(129,140,248,0.12);color:#818cf8;border:1px solid rgba(129,140,248,0.2);">트렌드</span>
+      <h4>그레이 대신 컬러 뉴트럴</h4>
+      <p>회색 대신 살짝 색조가 섞인 '컬러 뉴트럴'을 배경으로 쓰면 차분하면서도 개성 있는 분위기를 연출할 수 있습니다.</p>
+      <div class="tip-palette">
+        <div class="tp" style="background:#f5f0ff"></div>
+        <div class="tp" style="background:#e5dff0"></div>
+        <div class="tp" style="background:#c8bcd8"></div>
+        <div class="tp" style="background:#7c6f8e"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<div class="harmony-bg">
+  <div class="section">
+    <div class="section-label">색채 이론</div>
+    <h2 class="section-title" style="margin-bottom:14px;">색의 조화, 원리부터 이해하기</h2>
+    <p class="section-desc">색채 이론을 알면 배색의 이유를 설명할 수 있습니다.</p>
+
+    <div class="harmony-grid">
+      <div class="harmony-card fade-in">
+        <div class="harmony-swatches">
+          <div class="h-swatch" style="background:#e74c3c"></div>
+          <div class="h-swatch" style="background:#2ecc71"></div>
+        </div>
+        <h4>보색 배색</h4>
+        <p>색상환 반대편의 색을 조합해 강렬한 대비와 생동감을 만듭니다. 포인트 강조에 효과적입니다.</p>
+      </div>
+      <div class="harmony-card fade-in">
+        <div class="harmony-swatches">
+          <div class="h-swatch" style="background:#3498db"></div>
+          <div class="h-swatch" style="background:#2ecc71"></div>
+          <div class="h-swatch" style="background:#1abc9c"></div>
+        </div>
+        <h4>유사색 배색</h4>
+        <p>색상환에서 인접한 색들을 조합해 자연스럽고 편안한 조화를 만듭니다. 통일감 있는 분위기에 적합합니다.</p>
+      </div>
+      <div class="harmony-card fade-in">
+        <div class="harmony-swatches">
+          <div class="h-swatch" style="background:#e74c3c"></div>
+          <div class="h-swatch" style="background:#3498db"></div>
+          <div class="h-swatch" style="background:#f1c40f"></div>
+        </div>
+        <h4>삼각 배색</h4>
+        <p>색상환에서 120° 간격의 세 색을 사용합니다. 균형감 있으면서도 풍부한 색감을 표현할 수 있습니다.</p>
+      </div>
+      <div class="harmony-card fade-in">
+        <div class="harmony-swatches">
+          <div class="h-swatch" style="background:#6c3483"></div>
+          <div class="h-swatch" style="background:#9b59b6"></div>
+          <div class="h-swatch" style="background:#d7bde2"></div>
+          <div class="h-swatch" style="background:#f4ecf7"></div>
+        </div>
+        <h4>모노크로매틱</h4>
+        <p>단일 색상의 명도와 채도를 변화시켜 통일감 있는 배색을 만듭니다. 세련되고 깔끔한 느낌에 적합합니다.</p>
+      </div>
+      <div class="harmony-card fade-in">
+        <div class="harmony-swatches">
+          <div class="h-swatch" style="background:#e74c3c"></div>
+          <div class="h-swatch" style="background:#1abc9c"></div>
+          <div class="h-swatch" style="background:#3498db"></div>
+        </div>
+        <h4>분열 보색</h4>
+        <p>한 색의 보색 양쪽 인접색을 사용합니다. 보색보다 부드럽지만 여전히 강한 대비를 유지합니다.</p>
+      </div>
+      <div class="harmony-card fade-in">
+        <div class="harmony-swatches">
+          <div class="h-swatch" style="background:#e74c3c"></div>
+          <div class="h-swatch" style="background:#f39c12"></div>
+          <div class="h-swatch" style="background:#2ecc71"></div>
+          <div class="h-swatch" style="background:#3498db"></div>
+        </div>
+        <h4>사각형 배색</h4>
+        <p>색상환에서 90° 간격의 네 색을 사용합니다. 풍부하고 다채로운 색감을 표현하지만 균형 유지가 중요합니다.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="cta-section">
+  <div class="cta-box">
+    <h2>더 많은 색 도구를<br /><span class="gradient-text">Color에서 탐색하세요</span></h2>
+    <p>이미지 색 추출, 팔레트 라이브러리, 그라데이션까지 모두 무료로 사용하세요.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
+      <a href="extractor.html" class="btn-primary">이미지 색 추출하기</a>
+      <a href="palettes.html" class="btn-secondary">팔레트 보러 가기</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a href="index.html" class="footer-logo">Color</a>
+  <p>© 2026 Color. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="#">이용약관</a></li>
+    <li><a href="#">개인정보처리방침</a></li>
+    <li><a href="index.html#contact">문의하기</a></li>
+  </ul>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,2679 +1,364 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Color — 색 조합을 쉽게, 더 아름답게</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color — 색의 모든 것</title>
+  <link rel="stylesheet" href="style.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #0d0d12;
-      --surface: #13131a;
-      --surface2: #1c1c28;
-      --border: rgba(255,255,255,0.07);
-      --text: #e8e8f0;
-      --muted: #7a7a9a;
-      --radius: 16px;
-      --nav-bg: rgba(13,13,18,0.75);
-      --transition-theme: background 0.3s, color 0.3s, border-color 0.3s;
-    }
-
-    html.light {
-      --bg: #f8f7ff;
-      --surface: #ffffff;
-      --surface2: #ede9fe;
-      --border: rgba(0,0,0,0.08);
-      --text: #1a1a2e;
-      --muted: #6b6b8a;
-      --nav-bg: rgba(248,247,255,0.85);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-      line-height: 1.6;
-      overflow-x: hidden;
-      transition: var(--transition-theme);
-    }
-
-    /* ── THEME TOGGLE ── */
-    .theme-toggle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s, border-color 0.2s, transform 0.2s;
-      flex-shrink: 0;
-    }
-    .theme-toggle:hover {
-      background: var(--surface2);
-      border-color: rgba(167,139,250,0.3);
-      transform: rotate(15deg);
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 48px;
-      background: var(--nav-bg);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      transition: var(--transition-theme);
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      background: linear-gradient(90deg, #ff6bae, #a78bfa, #60a5fa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .nav-links { display: flex; gap: 32px; list-style: none; }
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--text); }
-
-    .nav-cta {
-      padding: 9px 22px;
-      background: linear-gradient(135deg, #a78bfa, #60a5fa);
-      border: none;
-      border-radius: 100px;
-      color: #fff;
-      font-size: 0.875rem;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
-      transition: opacity 0.2s, transform 0.2s;
-    }
-    .nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 120px 24px 80px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-glow {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -60%);
-      width: 900px; height: 600px;
-      background: conic-gradient(from 180deg at 50% 50%,
-        rgba(167,139,250,0.18) 0deg,
-        rgba(96,165,250,0.14) 90deg,
-        rgba(52,211,153,0.12) 180deg,
-        rgba(251,191,36,0.12) 270deg,
-        rgba(255,107,174,0.18) 360deg
-      );
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 5px 14px;
-      border: 1px solid rgba(167,139,250,0.3);
-      border-radius: 100px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: #a78bfa;
-      margin-bottom: 28px;
-      background: rgba(167,139,250,0.07);
-      letter-spacing: 0.05em;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.6rem, 7vw, 5.2rem);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 1.06;
-      margin-bottom: 20px;
-    }
-
-    .gradient-text {
-      background: linear-gradient(90deg, #ff6bae 0%, #a78bfa 40%, #60a5fa 70%, #34d399 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-size: 200%;
-      animation: shimmer 4s linear infinite;
-    }
-
-    @keyframes shimmer {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
-    }
-
-    .hero p {
-      font-size: clamp(1rem, 2.2vw, 1.2rem);
-      color: var(--muted);
-      max-width: 560px;
-      margin-bottom: 44px;
-      line-height: 1.75;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 72px;
-    }
-
-    .btn-primary {
-      padding: 15px 34px;
-      background: linear-gradient(135deg, #a78bfa, #60a5fa);
-      border: none;
-      border-radius: 100px;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 8px 32px rgba(167,139,250,0.35);
-    }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(167,139,250,0.45);
-    }
-
-    .btn-secondary {
-      padding: 15px 34px;
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      color: var(--text);
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .btn-secondary:hover {
-      background: var(--surface2);
-      border-color: rgba(255,255,255,0.15);
-    }
-
-    /* ── PALETTE PREVIEW ── */
-    .palette-preview {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      width: 100%;
-      max-width: 640px;
-    }
-
-    .palette-row {
-      display: flex;
-      gap: 8px;
-      border-radius: 14px;
-      overflow: hidden;
-    }
-
-    .swatch {
-      flex: 1;
-      height: 72px;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      padding-bottom: 8px;
-      cursor: pointer;
-      transition: transform 0.2s, filter 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .swatch:hover { transform: scaleY(1.06); filter: brightness(1.1); }
-
-    .swatch-code {
-      font-size: 0.68rem;
-      font-weight: 700;
-      color: rgba(255,255,255,0.85);
-      letter-spacing: 0.04em;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-    }
-
-    /* ── SEARCH MOCKUP ── */
-    .search-mockup {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 24px;
-      width: 100%;
-      max-width: 640px;
-      margin-top: 24px;
-    }
-
-    .mock-search-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--bg);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 100px;
-      padding: 12px 20px;
-      margin-bottom: 20px;
-    }
-
-    .mock-search-icon { font-size: 0.9rem; color: var(--muted); }
-
-    .mock-search-text {
-      font-size: 0.9rem;
-      color: var(--text);
-      flex: 1;
-    }
-
-    .mock-search-badge {
-      padding: 3px 10px;
-      border-radius: 100px;
-      font-size: 0.72rem;
-      font-weight: 700;
-    }
-
-    .mock-tags {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-
-    .mock-tag {
-      padding: 5px 12px;
-      border-radius: 100px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      border: 1px solid;
-      cursor: pointer;
-    }
-
-    .mock-result {
-      display: flex;
-      gap: 8px;
-    }
-
-    .mock-swatch {
-      flex: 1;
-      height: 56px;
-      border-radius: 10px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding-bottom: 6px;
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: rgba(255,255,255,0.85);
-      letter-spacing: 0.03em;
-    }
-
-    /* ── SECTION BASE ── */
-    .section {
-      padding: 96px 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #a78bfa;
-      margin-bottom: 14px;
-    }
-
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 900;
-      letter-spacing: -0.035em;
-      line-height: 1.15;
-      margin-bottom: 14px;
-    }
-
-    .section-desc {
-      color: var(--muted);
-      font-size: 1.05rem;
-      max-width: 500px;
-      line-height: 1.75;
-      margin-bottom: 60px;
-    }
-
-    .divider {
-      border: none;
-      border-top: 1px solid var(--border);
-    }
-
-    /* ── FEATURES ── */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .feature-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px;
-      transition: border-color 0.3s, transform 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .feature-card::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      border-radius: 2px 2px 0 0;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .feature-card:hover { transform: translateY(-4px); border-color: rgba(167,139,250,0.2); }
-    .feature-card:hover::after { opacity: 1; }
-
-    .fc-purple::after { background: linear-gradient(90deg, #a78bfa, #60a5fa); }
-    .fc-pink::after   { background: linear-gradient(90deg, #ff6bae, #fb923c); }
-    .fc-teal::after   { background: linear-gradient(90deg, #34d399, #60a5fa); }
-    .fc-amber::after  { background: linear-gradient(90deg, #fbbf24, #f97316); }
-    .fc-red::after    { background: linear-gradient(90deg, #f87171, #a78bfa); }
-    .fc-indigo::after { background: linear-gradient(90deg, #818cf8, #34d399); }
-
-    .feature-icon {
-      width: 48px; height: 48px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 18px;
-    }
-
-    .fi-purple { background: rgba(167,139,250,0.12); }
-    .fi-pink   { background: rgba(255,107,174,0.12); }
-    .fi-teal   { background: rgba(52,211,153,0.12);  }
-    .fi-amber  { background: rgba(251,191,36,0.12);  }
-    .fi-red    { background: rgba(248,113,113,0.12); }
-    .fi-indigo { background: rgba(129,140,248,0.12); }
-
-    .feature-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      letter-spacing: -0.02em;
-    }
-
-    .feature-card p {
-      color: var(--muted);
-      font-size: 0.88rem;
-      line-height: 1.7;
-    }
-
-    /* ── COLOR WHEEL SECTION ── */
-    .harmony-section {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      transition: var(--transition-theme);
-    }
-
-    .harmony-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-    }
-
-    .harmony-card {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px 20px;
-      text-align: center;
-      transition: border-color 0.3s, transform 0.3s;
-    }
-
-    .harmony-card:hover {
-      border-color: rgba(167,139,250,0.2);
-      transform: translateY(-4px);
-    }
-
-    .harmony-swatches {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 16px;
-      justify-content: center;
-    }
-
-    .h-swatch {
-      width: 36px; height: 52px;
-      border-radius: 8px;
-    }
-
-    .harmony-card h4 {
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .harmony-card p {
-      font-size: 0.78rem;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    /* ── SEARCH FEATURE ── */
-    .search-feature {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      align-items: center;
-    }
-
-    @media (max-width: 768px) {
-      .search-feature { grid-template-columns: 1fr; }
-    }
-
-    .search-demo {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px;
-    }
-
-    .demo-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      margin-bottom: 14px;
-    }
-
-    .demo-input {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--bg);
-      border: 1px solid rgba(167,139,250,0.3);
-      border-radius: 12px;
-      padding: 12px 16px;
-      margin-bottom: 20px;
-    }
-
-    .demo-input span { font-size: 0.9rem; color: var(--text); flex: 1; }
-    .demo-input .cursor {
-      width: 2px; height: 16px;
-      background: #a78bfa;
-      animation: blink 1s ease infinite;
-    }
-
+    /* Search demo styles (home only) */
+    .search-feature { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .search-demo { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; }
+    .demo-label { font-size: 0.72rem; font-weight: 700; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
+    .demo-input { display: flex; align-items: center; gap: 10px; background: var(--bg); border: 1px solid rgba(167,139,250,0.3); border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.95rem; color: var(--text); }
+    .cursor { width: 2px; height: 18px; background: #a78bfa; animation: blink 1s step-end infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-    .demo-chips {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-
-    .chip {
-      padding: 5px 12px;
-      border-radius: 100px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      border: 1px solid;
-      cursor: pointer;
-      transition: transform 0.15s;
-    }
-    .chip:hover { transform: scale(1.05); }
-
-    .demo-results {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
-    }
-
-    .demo-result-swatch {
-      height: 64px;
-      border-radius: 8px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding-bottom: 5px;
-      font-size: 0.58rem;
-      font-weight: 700;
-      color: rgba(255,255,255,0.8);
-    }
-
-    .demo-tip {
-      margin-top: 14px;
-      background: rgba(167,139,250,0.07);
-      border: 1px solid rgba(167,139,250,0.15);
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 0.8rem;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    .demo-tip strong { color: #a78bfa; }
-
-    /* ── TIPS ── */
-    .tips-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
-    .tip-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px;
-      transition: transform 0.3s, border-color 0.3s;
-    }
-
-    .tip-card:hover { transform: translateY(-3px); border-color: rgba(167,139,250,0.2); }
-
-    .tip-tag {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 100px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-
-    .tip-card h4 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      letter-spacing: -0.02em;
-    }
-
-    .tip-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
-
-    .tip-palette {
-      display: flex;
-      gap: 6px;
-      margin-top: 16px;
-    }
-
-    .tp { height: 28px; border-radius: 6px; flex: 1; }
-
-    /* ── CTA ── */
-    .cta-section {
-      padding: 100px 24px;
-      text-align: center;
-    }
-
-    .cta-box {
-      max-width: 720px;
-      margin: 0 auto;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 72px 48px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-box::before {
-      content: '';
-      position: absolute;
-      top: -150px; left: 50%;
-      transform: translateX(-50%);
-      width: 600px; height: 400px;
-      background: conic-gradient(from 0deg at 50% 100%,
-        rgba(167,139,250,0.12), rgba(96,165,250,0.1),
-        rgba(52,211,153,0.08), rgba(251,191,36,0.08),
-        rgba(255,107,174,0.12), rgba(167,139,250,0.12)
-      );
-      border-radius: 50%;
-      filter: blur(60px);
-      pointer-events: none;
-    }
-
-    .cta-box h2 {
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      margin-bottom: 14px;
-    }
-
-    .cta-box p {
-      color: var(--muted);
-      margin-bottom: 40px;
-      font-size: 1.05rem;
-    }
-
-    .email-form {
-      display: flex;
-      gap: 10px;
-      max-width: 420px;
-      margin: 0 auto;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .email-form input {
-      flex: 1;
-      min-width: 200px;
-      padding: 13px 20px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      color: var(--text);
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .email-form input:focus { border-color: rgba(167,139,250,0.4); }
-    .email-form input::placeholder { color: var(--muted); }
-
-    .email-form button {
-      padding: 13px 26px;
-      background: linear-gradient(135deg, #a78bfa, #60a5fa);
-      border: none;
-      border-radius: 100px;
-      color: #fff;
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: opacity 0.2s;
-      white-space: nowrap;
-    }
-
-    .email-form button:hover { opacity: 0.85; }
-
-    /* ── CONTACT FORM ── */
-    .contact-section {
-      padding: 96px 24px;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-
-    .contact-form {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 48px 44px;
-      position: relative;
-      overflow: hidden;
-      transition: var(--transition-theme);
-    }
-
-    .contact-form::before {
-      content: '';
-      position: absolute;
-      top: -80px; right: -80px;
-      width: 280px; height: 280px;
-      background: radial-gradient(circle, rgba(167,139,250,0.1) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    @media (max-width: 560px) {
-      .form-row { grid-template-columns: 1fr; }
-      .contact-form { padding: 32px 22px; }
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      margin-bottom: 18px;
-    }
-
-    .form-group label {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-    }
-
-    .form-group label .req { color: #a78bfa; margin-left: 2px; }
-
-    .form-control {
-      padding: 12px 16px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      color: var(--text);
-      font-size: 0.9rem;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      width: 100%;
-    }
-
-    .form-control:focus {
-      border-color: rgba(167,139,250,0.5);
-      box-shadow: 0 0 0 3px rgba(167,139,250,0.1);
-    }
-
-    .form-control::placeholder { color: var(--muted); }
-
-    select.form-control {
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7a9a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 36px;
-    }
-
-    textarea.form-control {
-      resize: vertical;
-      min-height: 120px;
-      line-height: 1.65;
-    }
-
-    .form-submit {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #a78bfa, #60a5fa);
-      border: none;
-      border-radius: 12px;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.2s;
-      margin-top: 6px;
-    }
-
-    .form-submit:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
-    .form-submit:disabled { opacity: 0.55; cursor: not-allowed; }
-
-    .form-status {
-      margin-top: 16px;
-      padding: 13px 16px;
-      border-radius: 10px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-align: center;
-      display: none;
-    }
-
-    .form-status.success {
-      display: block;
-      background: rgba(52,211,153,0.12);
-      border: 1px solid rgba(52,211,153,0.25);
-      color: #34d399;
-    }
-
-    .form-status.error {
-      display: block;
-      background: rgba(248,113,113,0.1);
-      border: 1px solid rgba(248,113,113,0.2);
-      color: #f87171;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 36px 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .footer-logo {
-      font-size: 1.25rem;
-      font-weight: 900;
-      background: linear-gradient(90deg, #ff6bae, #a78bfa, #60a5fa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    footer p { color: var(--muted); font-size: 0.82rem; }
-
-    .footer-links {
-      display: flex;
-      gap: 22px;
-      list-style: none;
-    }
-
-    .footer-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.82rem;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover { color: var(--text); }
-
-    /* ── IMAGE COLOR EXTRACTOR ── */
-    .extractor-section {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      transition: var(--transition-theme);
-    }
-
-    .drop-zone {
-      border: 2px dashed rgba(167,139,250,0.35);
-      border-radius: 20px;
-      padding: 48px 24px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.25s, background 0.25s;
-      position: relative;
-      background: rgba(167,139,250,0.03);
-    }
-
-    .drop-zone:hover, .drop-zone.drag-over {
-      border-color: #a78bfa;
-      background: rgba(167,139,250,0.08);
-    }
-
-    .drop-zone-icon { font-size: 2.4rem; margin-bottom: 12px; }
-    .drop-zone h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
-    .drop-zone p { font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; }
-
-    .drop-zone-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .dz-btn {
-      padding: 10px 22px;
-      border-radius: 100px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.2s;
-      border: none;
-    }
-
-    .dz-btn-primary {
-      background: linear-gradient(135deg, #a78bfa, #60a5fa);
-      color: #fff;
-    }
-
-    .dz-btn-secondary {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-
-    .dz-btn:hover { opacity: 0.85; transform: translateY(-1px); }
-
-    #imageFileInput { display: none; }
-
-    .extractor-preview {
-      display: none;
-      margin-top: 24px;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: var(--bg);
-    }
-
-    .extractor-preview.visible { display: block; }
-
-    .preview-img-wrap {
-      position: relative;
-      background: repeating-conic-gradient(#aaa 0% 25%, transparent 0% 50%) 0 0 / 16px 16px;
-    }
-
-    #previewImg {
-      display: block;
-      max-width: 100%;
-      max-height: 320px;
-      object-fit: contain;
-      margin: 0 auto;
-    }
-
-    .color-count-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .color-count-bar span { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
-
-    .count-btns { display: flex; gap: 6px; }
-
-    .count-btn {
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      font-size: 0.85rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .count-btn.active {
-      background: linear-gradient(135deg, #a78bfa, #60a5fa);
-      border-color: transparent;
-      color: #fff;
-    }
-
-    .extracted-colors {
-      padding: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 12px;
-    }
-
-    .color-chip {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
-      cursor: pointer;
-    }
-
-    .color-chip:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-    }
-
-    .chip-swatch {
-      height: 80px;
-      position: relative;
-    }
-
-    .chip-copy-hint {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.35);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #fff;
-      opacity: 0;
-      transition: opacity 0.2s;
-      border-radius: 0;
-    }
-
-    .color-chip:hover .chip-copy-hint { opacity: 1; }
-
-    .chip-info {
-      padding: 10px 12px;
-    }
-
-    .chip-name {
-      font-size: 0.8rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .chip-hex {
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-family: monospace;
-      letter-spacing: 0.04em;
-    }
-
-    .chip-rgb {
-      font-size: 0.68rem;
-      color: var(--muted);
-      font-family: monospace;
-    }
-
-    .chip-copied {
-      animation: chipCopied 1s ease forwards;
-    }
-
-    @keyframes chipCopied {
-      0% { transform: translateY(-3px) scale(1); }
-      30% { transform: translateY(-3px) scale(1.05); }
-      100% { transform: translateY(0) scale(1); }
-    }
-
-    .extractor-empty {
-      text-align: center;
-      padding: 40px;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .paste-toast {
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: #a78bfa;
-      color: #fff;
-      padding: 10px 22px;
-      border-radius: 100px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      z-index: 9999;
-      transition: transform 0.3s ease;
-      pointer-events: none;
-    }
-
-    .paste-toast.show { transform: translateX(-50%) translateY(0); }
-
-    /* ── PALETTE GALLERY ── */
-    .palette-tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 40px;
-    }
-
-    .ptab {
-      padding: 9px 20px;
-      border-radius: 100px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--muted);
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .ptab:hover { color: var(--text); border-color: rgba(167,139,250,0.35); }
-
-    .ptab.active {
-      background: linear-gradient(135deg, #a78bfa, #60a5fa);
-      border-color: transparent;
-      color: #fff;
-    }
-
-    .palette-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
-      gap: 16px;
-    }
-
-    .pal-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      overflow: hidden;
-      transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
-    }
-
-    .pal-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 14px 36px rgba(0,0,0,0.18);
-      border-color: rgba(167,139,250,0.22);
-    }
-
-    .pal-card[data-hidden] { display: none; }
-
-    .pal-swatches {
-      display: flex;
-      height: 108px;
-    }
-
-    .pal-swatch {
-      flex: 1;
-      position: relative;
-      cursor: pointer;
-      transition: flex 0.25s ease;
-      overflow: hidden;
-    }
-
-    .pal-swatch:hover { flex: 2.2; }
-
-    .pal-hex-tip {
-      position: absolute;
-      bottom: 7px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.58rem;
-      font-weight: 800;
-      white-space: nowrap;
-      color: rgba(255,255,255,0.92);
-      text-shadow: 0 1px 4px rgba(0,0,0,0.7);
-      letter-spacing: 0.03em;
-      opacity: 0;
-      transition: opacity 0.15s;
-      pointer-events: none;
-    }
-
-    .pal-swatch:hover .pal-hex-tip { opacity: 1; }
-
-    .pal-swatch.swatch-flash {
-      animation: swatchFlash 0.45s ease;
-    }
-
-    @keyframes swatchFlash {
-      0%   { filter: brightness(1); }
-      40%  { filter: brightness(1.5) saturate(1.2); }
-      100% { filter: brightness(1); }
-    }
-
-    .pal-info {
-      padding: 14px 16px 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .pal-meta { display: flex; flex-direction: column; gap: 3px; }
-
-    .pal-name {
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: -0.015em;
-    }
-
-    .pal-mood {
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
-
-    .pal-badge {
-      padding: 4px 11px;
-      border-radius: 100px;
-      font-size: 0.68rem;
-      font-weight: 700;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .pb-comp { background: rgba(255,107,174,0.12); color: #FF6BAE; border: 1px solid rgba(255,107,174,0.28); }
-    .pb-ana  { background: rgba(52,211,153,0.12);  color: #34D399; border: 1px solid rgba(52,211,153,0.28); }
-    .pb-tri  { background: rgba(251,191,36,0.12);  color: #FBBF24; border: 1px solid rgba(251,191,36,0.28); }
-    .pb-mono { background: rgba(167,139,250,0.12); color: #A78BFA; border: 1px solid rgba(167,139,250,0.28); }
-    .pb-spl  { background: rgba(96,165,250,0.12);  color: #60A5FA; border: 1px solid rgba(96,165,250,0.28); }
-
-    .pal-copy-toast {
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: #34d399;
-      color: #fff;
-      padding: 10px 24px;
-      border-radius: 100px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      z-index: 9998;
-      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
-      pointer-events: none;
-    }
-
-    .pal-copy-toast.show { transform: translateX(-50%) translateY(0); }
-
-    @media (max-width: 600px) {
-      .palette-gallery { grid-template-columns: 1fr; }
-    }
-
-    /* ── GRADIENT LIST ── */
-    .grad-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .grad-item {
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      background: var(--surface);
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-    }
-
-    .grad-item:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 28px rgba(0,0,0,0.14);
-      border-color: rgba(167,139,250,0.22);
-    }
-
-    .grad-bar { min-height: 96px; }
-
-    .grad-body {
-      padding: 18px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .grad-top {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .grad-name {
-      font-size: 0.95rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-
-    .grad-mood {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 100px;
-      background: rgba(167,139,250,0.1);
-      color: #a78bfa;
-      border: 1px solid rgba(167,139,250,0.2);
-      white-space: nowrap;
-    }
-
-    .grad-desc {
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    .grad-stops {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-top: 2px;
-    }
-
-    .grad-hex {
-      font-size: 0.68rem;
-      font-family: monospace;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      padding: 2px 8px;
-      border-radius: 6px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .grad-hex:hover { background: rgba(167,139,250,0.15); color: var(--text); }
-
-    .grad-copy-btn {
-      margin-left: auto;
-      padding: 5px 14px;
-      border-radius: 100px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--muted);
-      font-size: 0.72rem;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s;
-      align-self: flex-start;
-    }
-
-    .grad-copy-btn:hover {
-      background: linear-gradient(135deg, #a78bfa, #60a5fa);
-      border-color: transparent;
-      color: #fff;
-    }
-
-    .grad-copy-btn.copied {
-      background: linear-gradient(135deg, #34d399, #059669);
-      border-color: transparent;
-      color: #fff;
-    }
-
-    @media (max-width: 640px) {
-      .grad-item { grid-template-columns: 1fr; }
-      .grad-bar { min-height: 72px; }
-    }
-
-    /* ── FADE IN ── */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-    @media (max-width: 768px) {
-      nav { padding: 14px 20px; }
-      .nav-links { display: none; }
-      .cta-box { padding: 44px 22px; }
-      footer { flex-direction: column; text-align: center; }
-      .extracted-colors { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
-    }
+    .demo-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .chip { padding: 4px 12px; border-radius: 100px; border: 1px solid; font-size: 0.75rem; font-weight: 700; }
+    .demo-results { display: flex; gap: 6px; margin-bottom: 14px; }
+    .demo-result-swatch { flex: 1; height: 56px; border-radius: 10px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; font-size: 0.58rem; font-weight: 700; color: rgba(0,0,0,0.6); }
+    .demo-tip { font-size: 0.78rem; color: var(--muted); line-height: 1.65; padding: 12px; background: rgba(167,139,250,0.06); border-radius: 10px; border: 1px solid rgba(167,139,250,0.12); }
+    @media (max-width: 768px) { .search-feature { grid-template-columns: 1fr; gap: 32px; } }
+
+    /* Tool card previews */
+    .tc-extractor { background: linear-gradient(135deg, #0d0d12 0%, #1c1c28 100%); }
+    .tc-extractor-inner { display: flex; gap: 6px; padding: 16px; }
+    .tc-swatch { width: 32px; height: 64px; border-radius: 8px; }
+    .tc-palette { background: linear-gradient(135deg, #1a0533 0%, #13131a 100%); }
+    .tc-palette-inner { display: flex; height: 100%; }
+    .tc-pswatch { flex: 1; }
+    .tc-gradient { display: flex; flex-direction: column; gap: 6px; padding: 12px; background: var(--surface2); }
+    .tc-gbar { height: 26px; border-radius: 6px; }
+    .tc-tips { background: var(--surface2); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .tc-tip-row { background: var(--surface); border-radius: 8px; padding: 8px 10px; display: flex; gap: 6px; }
+    .tc-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+    .tc-line { height: 8px; border-radius: 4px; background: var(--border); flex: 1; }
   </style>
 </head>
 <body>
+<nav>
+  <a href="index.html" class="logo">Color</a>
+  <ul class="nav-links">
+    <li><a href="index.html">홈</a></li>
+    <li><a href="extractor.html">이미지 색 추출</a></li>
+    <li><a href="palettes.html">색 조합</a></li>
+    <li><a href="gradients.html">그라데이션</a></li>
+    <li><a href="tips.html">배색 팁</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
+    <a href="#contact" class="nav-cta">문의하기</a>
+  </div>
+</nav>
 
-  <!-- NAV -->
-  <nav>
-    <span class="logo">Color</span>
-    <ul class="nav-links">
-      <li><a href="#features">기능</a></li>
-      <li><a href="#extractor">이미지 색 추출</a></li>
-      <li><a href="#harmony">색 조합</a></li>
-      <li><a href="#gradients">그라데이션</a></li>
-      <li><a href="#search">색 검색</a></li>
-      <li><a href="#tips">팁</a></li>
-    </ul>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <button class="theme-toggle" id="themeToggle" aria-label="테마 전환" title="다크/라이트 모드 전환">🌙</button>
-      <a href="#cta" class="nav-cta">무료로 시작하기</a>
-    </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-glow"></div>
-    <div class="hero-badge">🎨 아티스트와 디자이너를 위한 색 도구</div>
-    <h1>모든 색의 답을<br /><span class="gradient-text">Color에서 찾으세요</span></h1>
-    <p>색 코드 검색부터 보색·유사색 조합까지.<br />원하는 느낌을 검색하면 어울리는 색과 팁을 알려드려요.</p>
-    <div class="hero-actions">
-      <a href="#cta" class="btn-primary">무료로 시작하기</a>
-      <a href="#features" class="btn-secondary">기능 살펴보기</a>
-    </div>
-
-    <!-- 팔레트 미리보기 -->
-    <div class="palette-preview fade-in">
-      <div class="palette-row">
-        <div class="swatch" style="background:#ff6bae"><span class="swatch-code">#FF6BAE</span></div>
-        <div class="swatch" style="background:#ff8fc8"><span class="swatch-code">#FF8FC8</span></div>
-        <div class="swatch" style="background:#fbb3de"><span class="swatch-code">#FBB3DE</span></div>
-        <div class="swatch" style="background:#f0d4ea"><span class="swatch-code">#F0D4EA</span></div>
-        <div class="swatch" style="background:#3b1f5e"><span class="swatch-code">#3B1F5E</span></div>
-      </div>
-      <div class="palette-row">
-        <div class="swatch" style="background:#1e1b4b"><span class="swatch-code">#1E1B4B</span></div>
-        <div class="swatch" style="background:#4338ca"><span class="swatch-code">#4338CA</span></div>
-        <div class="swatch" style="background:#818cf8"><span class="swatch-code">#818CF8</span></div>
-        <div class="swatch" style="background:#34d399"><span class="swatch-code">#34D399</span></div>
-        <div class="swatch" style="background:#fbbf24"><span class="swatch-code">#FBBF24</span></div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider" />
-
-  <!-- FEATURES -->
-  <section class="section" id="features">
-    <div class="section-label">핵심 기능</div>
-    <h2 class="section-title">색에 관한 모든 것</h2>
-    <p class="section-desc">색 코드 하나부터 완성된 팔레트까지, Color 하나로 해결하세요.</p>
-
-    <div class="features-grid">
-      <div class="feature-card fc-purple fade-in">
-        <div class="feature-icon fi-purple">🎯</div>
-        <h3>색 코드 즉시 검색</h3>
-        <p>HEX, RGB, HSL, HSV, CMYK 등 원하는 색의 모든 코드를 한 번에 확인하세요. 클릭 한 번으로 클립보드에 복사됩니다.</p>
-      </div>
-      <div class="feature-card fc-pink fade-in">
-        <div class="feature-icon fi-pink">🔄</div>
-        <h3>보색 자동 추출</h3>
-        <p>색상환 반대편의 보색을 자동으로 찾아드립니다. 강렬한 대비 효과를 원할 때 바로 활용하세요.</p>
-      </div>
-      <div class="feature-card fc-teal fade-in">
-        <div class="feature-icon fi-teal">🌈</div>
-        <h3>유사색 팔레트</h3>
-        <p>선택한 색과 인접한 유사색을 자동 생성합니다. 자연스럽고 조화로운 배색 조합을 손쉽게 만들어 보세요.</p>
-      </div>
-      <div class="feature-card fc-amber fade-in">
-        <div class="feature-icon fi-amber">🔍</div>
-        <h3>느낌으로 색 검색</h3>
-        <p>"따뜻한", "차분한", "봄날", "레트로" 등 원하는 무드를 검색하면 딱 맞는 색 조합을 추천해 드립니다.</p>
-      </div>
-      <div class="feature-card fc-red fade-in">
-        <div class="feature-icon fi-red">💡</div>
-        <h3>배색 팁 제공</h3>
-        <p>각 색 조합마다 활용 예시와 실전 팁을 함께 제공합니다. 그림, 디자인, 인테리어 등 다양한 분야에 바로 적용하세요.</p>
-      </div>
-      <div class="feature-card fc-indigo fade-in">
-        <div class="feature-icon fi-indigo">📋</div>
-        <h3>팔레트 저장 & 공유</h3>
-        <p>마음에 드는 색 조합을 저장하고 링크로 공유하세요. 협업 시 팀원과 색상 기준을 맞추기도 편리합니다.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- IMAGE COLOR EXTRACTOR -->
-  <div class="extractor-section" id="extractor">
-    <section class="section">
-      <div class="section-label">이미지 색상 추출</div>
-      <h2 class="section-title">이미지에서 색을<br /><span class="gradient-text">바로 뽑아보세요</span></h2>
-      <p class="section-desc">사진을 업로드하거나 붙여넣으면 주요 색상과 이름·코드를 자동으로 알려드립니다.</p>
-
-      <div class="drop-zone fade-in" id="dropZone">
-        <div class="drop-zone-icon">🖼️</div>
-        <h3>이미지를 여기에 끌어다 놓으세요</h3>
-        <p>JPG, PNG, WebP, GIF 등 — 또는 Ctrl+V 로 클립보드에서 붙여넣기</p>
-        <div class="drop-zone-actions">
-          <button class="dz-btn dz-btn-primary" id="uploadBtn">파일 선택</button>
-          <button class="dz-btn dz-btn-secondary" id="pasteBtn">📋 클립보드에서 붙여넣기</button>
-        </div>
-        <input type="file" id="imageFileInput" accept="image/*" />
-      </div>
-
-      <canvas id="extractCanvas" style="display:none"></canvas>
-
-      <div class="extractor-preview" id="extractorPreview">
-        <div class="preview-img-wrap">
-          <img id="previewImg" alt="업로드된 이미지" />
-        </div>
-        <div class="color-count-bar">
-          <span id="colorCountLabel">추출할 색상 수</span>
-          <div class="count-btns">
-            <button class="count-btn" data-n="6">6</button>
-            <button class="count-btn active" data-n="8">8</button>
-            <button class="count-btn" data-n="12">12</button>
-            <button class="count-btn" data-n="16">16</button>
-          </div>
-        </div>
-        <div class="extracted-colors" id="extractedColors"></div>
-      </div>
-
-      <div class="paste-toast" id="pasteToast">클립보드 이미지가 붙여넣어졌습니다 ✓</div>
-    </section>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">🎨 아티스트와 디자이너를 위한 색 도구</div>
+  <h1>모든 색의 답을<br /><span class="gradient-text">Color에서 찾으세요</span></h1>
+  <p>이미지 색 추출부터 팔레트, 그라데이션, 배색 팁까지.<br />색에 관한 모든 것을 한 곳에서 해결하세요.</p>
+  <div class="hero-actions">
+    <a href="extractor.html" class="btn-primary">이미지 색 추출하기</a>
+    <a href="palettes.html" class="btn-secondary">팔레트 둘러보기</a>
   </div>
 
-  <!-- COLOR HARMONY PALETTE GALLERY -->
-  <div class="harmony-section">
-    <section class="section" id="harmony">
-      <div class="section-label">색 조합 추천</div>
-      <h2 class="section-title">바로 쓸 수 있는<br /><span class="gradient-text">팔레트 라이브러리</span></h2>
-      <p class="section-desc">보색·유사색·삼각 배색 등 색채 이론으로 큐레이션한 팔레트 모음. 색 칸을 클릭하면 HEX 코드가 복사됩니다.</p>
+  <div class="palette-preview fade-in">
+    <div class="palette-row">
+      <div class="swatch" style="background:#ff6bae"><span class="swatch-code">#FF6BAE</span></div>
+      <div class="swatch" style="background:#ff8fc8"><span class="swatch-code">#FF8FC8</span></div>
+      <div class="swatch" style="background:#fbb3de"><span class="swatch-code">#FBB3DE</span></div>
+      <div class="swatch" style="background:#f0d4ea"><span class="swatch-code">#F0D4EA</span></div>
+      <div class="swatch" style="background:#3b1f5e"><span class="swatch-code">#3B1F5E</span></div>
+    </div>
+    <div class="palette-row">
+      <div class="swatch" style="background:#1e1b4b"><span class="swatch-code">#1E1B4B</span></div>
+      <div class="swatch" style="background:#4338ca"><span class="swatch-code">#4338CA</span></div>
+      <div class="swatch" style="background:#818cf8"><span class="swatch-code">#818CF8</span></div>
+      <div class="swatch" style="background:#34d399"><span class="swatch-code">#34D399</span></div>
+      <div class="swatch" style="background:#fbbf24"><span class="swatch-code">#FBBF24</span></div>
+    </div>
+  </div>
+</section>
 
-      <div class="palette-tabs">
-        <button class="ptab active" data-filter="all">전체 20</button>
-        <button class="ptab" data-filter="complementary">보색 5</button>
-        <button class="ptab" data-filter="analogous">유사색 5</button>
-        <button class="ptab" data-filter="triadic">삼각 배색 4</button>
-        <button class="ptab" data-filter="monochromatic">모노크롬 4</button>
-        <button class="ptab" data-filter="split">분열 보색 2</button>
-      </div>
+<hr class="divider" />
 
-      <div class="palette-gallery fade-in" id="paletteGallery">
-
-        <!-- ── 보색 (Complementary) ── -->
-        <div class="pal-card" data-type="complementary">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#264653" data-hex="#264653"><span class="pal-hex-tip">#264653</span></div>
-            <div class="pal-swatch" style="background:#2A9D8F" data-hex="#2A9D8F"><span class="pal-hex-tip">#2A9D8F</span></div>
-            <div class="pal-swatch" style="background:#E9C46A" data-hex="#E9C46A"><span class="pal-hex-tip">#E9C46A</span></div>
-            <div class="pal-swatch" style="background:#F4A261" data-hex="#F4A261"><span class="pal-hex-tip">#F4A261</span></div>
-            <div class="pal-swatch" style="background:#E76F51" data-hex="#E76F51"><span class="pal-hex-tip">#E76F51</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">오션 & 선셋</span><span class="pal-mood">자연·역동</span></div>
-            <span class="pal-badge pb-comp">보색</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="complementary">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#10002B" data-hex="#10002B"><span class="pal-hex-tip">#10002B</span></div>
-            <div class="pal-swatch" style="background:#7B2FBE" data-hex="#7B2FBE"><span class="pal-hex-tip">#7B2FBE</span></div>
-            <div class="pal-swatch" style="background:#C77DFF" data-hex="#C77DFF"><span class="pal-hex-tip">#C77DFF</span></div>
-            <div class="pal-swatch" style="background:#FFD60A" data-hex="#FFD60A"><span class="pal-hex-tip">#FFD60A</span></div>
-            <div class="pal-swatch" style="background:#FFAA00" data-hex="#FFAA00"><span class="pal-hex-tip">#FFAA00</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">퍼플 & 골드</span><span class="pal-mood">고급·신비</span></div>
-            <span class="pal-badge pb-comp">보색</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="complementary">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#B7E4C7" data-hex="#B7E4C7"><span class="pal-hex-tip">#B7E4C7</span></div>
-            <div class="pal-swatch" style="background:#52B788" data-hex="#52B788"><span class="pal-hex-tip">#52B788</span></div>
-            <div class="pal-swatch" style="background:#2D6A4F" data-hex="#2D6A4F"><span class="pal-hex-tip">#2D6A4F</span></div>
-            <div class="pal-swatch" style="background:#FF4D6D" data-hex="#FF4D6D"><span class="pal-hex-tip">#FF4D6D</span></div>
-            <div class="pal-swatch" style="background:#C9184A" data-hex="#C9184A"><span class="pal-hex-tip">#C9184A</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">민트 & 코랄</span><span class="pal-mood">청량·발랄</span></div>
-            <span class="pal-badge pb-comp">보색</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="complementary">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#03045E" data-hex="#03045E"><span class="pal-hex-tip">#03045E</span></div>
-            <div class="pal-swatch" style="background:#0077B6" data-hex="#0077B6"><span class="pal-hex-tip">#0077B6</span></div>
-            <div class="pal-swatch" style="background:#48CAE4" data-hex="#48CAE4"><span class="pal-hex-tip">#48CAE4</span></div>
-            <div class="pal-swatch" style="background:#FFB703" data-hex="#FFB703"><span class="pal-hex-tip">#FFB703</span></div>
-            <div class="pal-swatch" style="background:#FB8500" data-hex="#FB8500"><span class="pal-hex-tip">#FB8500</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">네이비 & 앰버</span><span class="pal-mood">강렬·모던</span></div>
-            <span class="pal-badge pb-comp">보색</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="complementary">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#FFCCD5" data-hex="#FFCCD5"><span class="pal-hex-tip">#FFCCD5</span></div>
-            <div class="pal-swatch" style="background:#FF85A1" data-hex="#FF85A1"><span class="pal-hex-tip">#FF85A1</span></div>
-            <div class="pal-swatch" style="background:#C9184A" data-hex="#C9184A"><span class="pal-hex-tip">#C9184A</span></div>
-            <div class="pal-swatch" style="background:#2DC653" data-hex="#2DC653"><span class="pal-hex-tip">#2DC653</span></div>
-            <div class="pal-swatch" style="background:#1A7431" data-hex="#1A7431"><span class="pal-hex-tip">#1A7431</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">로즈 & 포레스트</span><span class="pal-mood">생동·활기</span></div>
-            <span class="pal-badge pb-comp">보색</span>
-          </div>
-        </div>
-
-        <!-- ── 유사색 (Analogous) ── -->
-        <div class="pal-card" data-type="analogous">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#FFCCD5" data-hex="#FFCCD5"><span class="pal-hex-tip">#FFCCD5</span></div>
-            <div class="pal-swatch" style="background:#FFB3C6" data-hex="#FFB3C6"><span class="pal-hex-tip">#FFB3C6</span></div>
-            <div class="pal-swatch" style="background:#FF85A1" data-hex="#FF85A1"><span class="pal-hex-tip">#FF85A1</span></div>
-            <div class="pal-swatch" style="background:#FF4D6D" data-hex="#FF4D6D"><span class="pal-hex-tip">#FF4D6D</span></div>
-            <div class="pal-swatch" style="background:#C9184A" data-hex="#C9184A"><span class="pal-hex-tip">#C9184A</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">봄 벚꽃</span><span class="pal-mood">로맨틱·봄</span></div>
-            <span class="pal-badge pb-ana">유사색</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="analogous">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#CAF0F8" data-hex="#CAF0F8"><span class="pal-hex-tip">#CAF0F8</span></div>
-            <div class="pal-swatch" style="background:#90E0EF" data-hex="#90E0EF"><span class="pal-hex-tip">#90E0EF</span></div>
-            <div class="pal-swatch" style="background:#48CAE4" data-hex="#48CAE4"><span class="pal-hex-tip">#48CAE4</span></div>
-            <div class="pal-swatch" style="background:#00B4D8" data-hex="#00B4D8"><span class="pal-hex-tip">#00B4D8</span></div>
-            <div class="pal-swatch" style="background:#0077B6" data-hex="#0077B6"><span class="pal-hex-tip">#0077B6</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">오션 브리즈</span><span class="pal-mood">청량·투명</span></div>
-            <span class="pal-badge pb-ana">유사색</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="analogous">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#FFBE0B" data-hex="#FFBE0B"><span class="pal-hex-tip">#FFBE0B</span></div>
-            <div class="pal-swatch" style="background:#FB5607" data-hex="#FB5607"><span class="pal-hex-tip">#FB5607</span></div>
-            <div class="pal-swatch" style="background:#FF006E" data-hex="#FF006E"><span class="pal-hex-tip">#FF006E</span></div>
-            <div class="pal-swatch" style="background:#8338EC" data-hex="#8338EC"><span class="pal-hex-tip">#8338EC</span></div>
-            <div class="pal-swatch" style="background:#3A86FF" data-hex="#3A86FF"><span class="pal-hex-tip">#3A86FF</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">선셋 글로우</span><span class="pal-mood">에너지·비비드</span></div>
-            <span class="pal-badge pb-ana">유사색</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="analogous">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#D8F3DC" data-hex="#D8F3DC"><span class="pal-hex-tip">#D8F3DC</span></div>
-            <div class="pal-swatch" style="background:#95D5B2" data-hex="#95D5B2"><span class="pal-hex-tip">#95D5B2</span></div>
-            <div class="pal-swatch" style="background:#52B788" data-hex="#52B788"><span class="pal-hex-tip">#52B788</span></div>
-            <div class="pal-swatch" style="background:#2D6A4F" data-hex="#2D6A4F"><span class="pal-hex-tip">#2D6A4F</span></div>
-            <div class="pal-swatch" style="background:#1B4332" data-hex="#1B4332"><span class="pal-hex-tip">#1B4332</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">딥 포레스트</span><span class="pal-mood">자연·안정</span></div>
-            <span class="pal-badge pb-ana">유사색</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="analogous">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#F3E8FF" data-hex="#F3E8FF"><span class="pal-hex-tip">#F3E8FF</span></div>
-            <div class="pal-swatch" style="background:#E0AAFF" data-hex="#E0AAFF"><span class="pal-hex-tip">#E0AAFF</span></div>
-            <div class="pal-swatch" style="background:#C77DFF" data-hex="#C77DFF"><span class="pal-hex-tip">#C77DFF</span></div>
-            <div class="pal-swatch" style="background:#9D4EDD" data-hex="#9D4EDD"><span class="pal-hex-tip">#9D4EDD</span></div>
-            <div class="pal-swatch" style="background:#7B2FBE" data-hex="#7B2FBE"><span class="pal-hex-tip">#7B2FBE</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">라벤더 드림</span><span class="pal-mood">몽환·우아</span></div>
-            <span class="pal-badge pb-ana">유사색</span>
-          </div>
-        </div>
-
-        <!-- ── 삼각 배색 (Triadic) ── -->
-        <div class="pal-card" data-type="triadic">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#FF595E" data-hex="#FF595E"><span class="pal-hex-tip">#FF595E</span></div>
-            <div class="pal-swatch" style="background:#FFCA3A" data-hex="#FFCA3A"><span class="pal-hex-tip">#FFCA3A</span></div>
-            <div class="pal-swatch" style="background:#6A4C93" data-hex="#6A4C93"><span class="pal-hex-tip">#6A4C93</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">비비드 트리오</span><span class="pal-mood">팝·생동감</span></div>
-            <span class="pal-badge pb-tri">삼각 배색</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="triadic">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#FFB3C1" data-hex="#FFB3C1"><span class="pal-hex-tip">#FFB3C1</span></div>
-            <div class="pal-swatch" style="background:#B5EAD7" data-hex="#B5EAD7"><span class="pal-hex-tip">#B5EAD7</span></div>
-            <div class="pal-swatch" style="background:#C7CEEA" data-hex="#C7CEEA"><span class="pal-hex-tip">#C7CEEA</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">파스텔 트리오</span><span class="pal-mood">부드러움·동화</span></div>
-            <span class="pal-badge pb-tri">삼각 배색</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="triadic">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#FF0054" data-hex="#FF0054"><span class="pal-hex-tip">#FF0054</span></div>
-            <div class="pal-swatch" style="background:#FFBD00" data-hex="#FFBD00"><span class="pal-hex-tip">#FFBD00</span></div>
-            <div class="pal-swatch" style="background:#00B4D8" data-hex="#00B4D8"><span class="pal-hex-tip">#00B4D8</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">팝 아트</span><span class="pal-mood">강렬·대담</span></div>
-            <span class="pal-badge pb-tri">삼각 배색</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="triadic">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#8AC926" data-hex="#8AC926"><span class="pal-hex-tip">#8AC926</span></div>
-            <div class="pal-swatch" style="background:#FF595E" data-hex="#FF595E"><span class="pal-hex-tip">#FF595E</span></div>
-            <div class="pal-swatch" style="background:#1982C4" data-hex="#1982C4"><span class="pal-hex-tip">#1982C4</span></div>
-            <div class="pal-swatch" style="background:#FFCA3A" data-hex="#FFCA3A"><span class="pal-hex-tip">#FFCA3A</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">프라이머리</span><span class="pal-mood">균형·활력</span></div>
-            <span class="pal-badge pb-tri">삼각 배색</span>
-          </div>
-        </div>
-
-        <!-- ── 모노크롬 (Monochromatic) ── -->
-        <div class="pal-card" data-type="monochromatic">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#10002B" data-hex="#10002B"><span class="pal-hex-tip">#10002B</span></div>
-            <div class="pal-swatch" style="background:#3C096C" data-hex="#3C096C"><span class="pal-hex-tip">#3C096C</span></div>
-            <div class="pal-swatch" style="background:#7B2FBE" data-hex="#7B2FBE"><span class="pal-hex-tip">#7B2FBE</span></div>
-            <div class="pal-swatch" style="background:#C77DFF" data-hex="#C77DFF"><span class="pal-hex-tip">#C77DFF</span></div>
-            <div class="pal-swatch" style="background:#E0AAFF" data-hex="#E0AAFF"><span class="pal-hex-tip">#E0AAFF</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">딥 퍼플</span><span class="pal-mood">신비·깊이</span></div>
-            <span class="pal-badge pb-mono">모노크롬</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="monochromatic">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#03045E" data-hex="#03045E"><span class="pal-hex-tip">#03045E</span></div>
-            <div class="pal-swatch" style="background:#0077B6" data-hex="#0077B6"><span class="pal-hex-tip">#0077B6</span></div>
-            <div class="pal-swatch" style="background:#00B4D8" data-hex="#00B4D8"><span class="pal-hex-tip">#00B4D8</span></div>
-            <div class="pal-swatch" style="background:#90E0EF" data-hex="#90E0EF"><span class="pal-hex-tip">#90E0EF</span></div>
-            <div class="pal-swatch" style="background:#CAF0F8" data-hex="#CAF0F8"><span class="pal-hex-tip">#CAF0F8</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">미드나잇 블루</span><span class="pal-mood">차분·집중</span></div>
-            <span class="pal-badge pb-mono">모노크롬</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="monochromatic">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#1B4332" data-hex="#1B4332"><span class="pal-hex-tip">#1B4332</span></div>
-            <div class="pal-swatch" style="background:#2D6A4F" data-hex="#2D6A4F"><span class="pal-hex-tip">#2D6A4F</span></div>
-            <div class="pal-swatch" style="background:#52B788" data-hex="#52B788"><span class="pal-hex-tip">#52B788</span></div>
-            <div class="pal-swatch" style="background:#95D5B2" data-hex="#95D5B2"><span class="pal-hex-tip">#95D5B2</span></div>
-            <div class="pal-swatch" style="background:#D8F3DC" data-hex="#D8F3DC"><span class="pal-hex-tip">#D8F3DC</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">에메랄드 숲</span><span class="pal-mood">자연·편안</span></div>
-            <span class="pal-badge pb-mono">모노크롬</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="monochromatic">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#370617" data-hex="#370617"><span class="pal-hex-tip">#370617</span></div>
-            <div class="pal-swatch" style="background:#6A040F" data-hex="#6A040F"><span class="pal-hex-tip">#6A040F</span></div>
-            <div class="pal-swatch" style="background:#D00000" data-hex="#D00000"><span class="pal-hex-tip">#D00000</span></div>
-            <div class="pal-swatch" style="background:#F48C06" data-hex="#F48C06"><span class="pal-hex-tip">#F48C06</span></div>
-            <div class="pal-swatch" style="background:#FFD166" data-hex="#FFD166"><span class="pal-hex-tip">#FFD166</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">불꽃 & 로즈우드</span><span class="pal-mood">열정·따뜻함</span></div>
-            <span class="pal-badge pb-mono">모노크롬</span>
-          </div>
-        </div>
-
-        <!-- ── 분열 보색 (Split-Complementary) ── -->
-        <div class="pal-card" data-type="split">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#0D3B66" data-hex="#0D3B66"><span class="pal-hex-tip">#0D3B66</span></div>
-            <div class="pal-swatch" style="background:#48CAE4" data-hex="#48CAE4"><span class="pal-hex-tip">#48CAE4</span></div>
-            <div class="pal-swatch" style="background:#F4D35E" data-hex="#F4D35E"><span class="pal-hex-tip">#F4D35E</span></div>
-            <div class="pal-swatch" style="background:#EE964B" data-hex="#EE964B"><span class="pal-hex-tip">#EE964B</span></div>
-            <div class="pal-swatch" style="background:#F95738" data-hex="#F95738"><span class="pal-hex-tip">#F95738</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">트로피컬 선셋</span><span class="pal-mood">이국적·활기</span></div>
-            <span class="pal-badge pb-spl">분열 보색</span>
-          </div>
-        </div>
-
-        <div class="pal-card" data-type="split">
-          <div class="pal-swatches">
-            <div class="pal-swatch" style="background:#4361EE" data-hex="#4361EE"><span class="pal-hex-tip">#4361EE</span></div>
-            <div class="pal-swatch" style="background:#4CC9F0" data-hex="#4CC9F0"><span class="pal-hex-tip">#4CC9F0</span></div>
-            <div class="pal-swatch" style="background:#F72585" data-hex="#F72585"><span class="pal-hex-tip">#F72585</span></div>
-            <div class="pal-swatch" style="background:#FFBE0B" data-hex="#FFBE0B"><span class="pal-hex-tip">#FFBE0B</span></div>
-          </div>
-          <div class="pal-info">
-            <div class="pal-meta"><span class="pal-name">매직아워</span><span class="pal-mood">도시·몽환</span></div>
-            <span class="pal-badge pb-spl">분열 보색</span>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="pal-copy-toast" id="palCopyToast">복사됨 ✓</div>
-    </section>
+<!-- TOOL CARDS -->
+<div class="tools-section">
+  <div style="text-align:center;margin-bottom:48px;">
+    <div class="section-label" style="display:inline-block;">도구 모음</div>
+    <h2 class="section-title" style="margin-top:14px;">원하는 도구를 바로 시작하세요</h2>
   </div>
 
-  <!-- GRADIENT LIST -->
-  <hr class="divider" />
-  <section class="section" id="gradients">
-    <div class="section-label">그라데이션 추천</div>
-    <h2 class="section-title">분위기로 고르는<br /><span class="gradient-text">그라데이션 리스트</span></h2>
-    <p class="section-desc">18가지 큐레이션 그라데이션. HEX를 클릭하면 코드가, CSS 복사 버튼을 누르면 바로 쓸 수 있는 CSS가 복사됩니다.</p>
+  <div class="tools-grid">
+    <a href="extractor.html" class="tool-card fade-in">
+      <div class="tool-card-preview tc-extractor">
+        <div class="tc-extractor-inner">
+          <div class="tc-swatch" style="background:#e74c3c"></div>
+          <div class="tc-swatch" style="background:#e67e22"></div>
+          <div class="tc-swatch" style="background:#f1c40f"></div>
+          <div class="tc-swatch" style="background:#2ecc71"></div>
+          <div class="tc-swatch" style="background:#3498db"></div>
+        </div>
+      </div>
+      <div class="tool-card-body">
+        <div class="tool-card-icon">🖼️</div>
+        <h3>이미지 색 추출</h3>
+        <p>사진을 업로드하거나 붙여넣으면 주요 색상과 한국어 색 이름, HEX 코드를 자동으로 분석합니다.</p>
+        <div class="tool-card-cta">추출 시작하기 →</div>
+      </div>
+    </a>
 
-    <div class="grad-list">
+    <a href="palettes.html" class="tool-card fade-in">
+      <div class="tool-card-preview tc-palette">
+        <div class="tc-palette-inner">
+          <div class="tc-pswatch" style="background:#264653"></div>
+          <div class="tc-pswatch" style="background:#2A9D8F"></div>
+          <div class="tc-pswatch" style="background:#E9C46A"></div>
+          <div class="tc-pswatch" style="background:#F4A261"></div>
+          <div class="tc-pswatch" style="background:#E76F51"></div>
+        </div>
+      </div>
+      <div class="tool-card-body">
+        <div class="tool-card-icon">🎨</div>
+        <h3>색 조합 팔레트</h3>
+        <p>보색·유사색·삼각 배색 등 색채 이론으로 큐레이션한 20가지 팔레트. 색 칸 클릭으로 HEX 복사.</p>
+        <div class="tool-card-cta">팔레트 보기 →</div>
+      </div>
+    </a>
 
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#FF6B6B,#FE8C00)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">선셋 드라이브</span>
-            <span class="grad-mood">따뜻함 · 향수</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #FF6B6B, #FE8C00)">CSS 복사</button>
+    <a href="gradients.html" class="tool-card fade-in">
+      <div class="tool-card-preview">
+        <div class="tc-gradient" style="width:100%;">
+          <div class="tc-gbar" style="background:linear-gradient(90deg,#FF6B6B,#FE8C00)"></div>
+          <div class="tc-gbar" style="background:linear-gradient(90deg,#00C9FF,#92FE9D)"></div>
+          <div class="tc-gbar" style="background:linear-gradient(90deg,#E0C3FC,#8EC5FC)"></div>
+          <div class="tc-gbar" style="background:linear-gradient(90deg,#a78bfa,#60a5fa,#34d399)"></div>
+        </div>
+      </div>
+      <div class="tool-card-body">
+        <div class="tool-card-icon">🌈</div>
+        <h3>그라데이션 추천</h3>
+        <p>분위기·무드별로 정리한 18가지 그라데이션. CSS 복사 버튼 한 번으로 바로 프로젝트에 적용하세요.</p>
+        <div class="tool-card-cta">그라데이션 보기 →</div>
+      </div>
+    </a>
+
+    <a href="tips.html" class="tool-card fade-in">
+      <div class="tool-card-preview">
+        <div class="tc-tips" style="width:100%;height:150px;">
+          <div class="tc-tip-row">
+            <div class="tc-dot" style="background:#ff6bae"></div>
+            <div class="tc-line" style="width:60%"></div>
           </div>
-          <p class="grad-desc">노을빛 오렌지와 산호색의 만남. 드라이브, 포스터, 식음료 브랜드에 잘 어울립니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#FF6B6B">#FF6B6B</span>
-            <span class="grad-hex" data-hex="#FE8C00">#FE8C00</span>
+          <div class="tc-tip-row">
+            <div class="tc-dot" style="background:#60a5fa"></div>
+            <div class="tc-line" style="width:80%"></div>
+          </div>
+          <div class="tc-tip-row">
+            <div class="tc-dot" style="background:#34d399"></div>
+            <div class="tc-line" style="width:70%"></div>
           </div>
         </div>
       </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#00C9FF,#92FE9D)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">오로라 보레알리스</span>
-            <span class="grad-mood">신비 · 생동감</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #00C9FF, #92FE9D)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">하늘빛 청록과 연두의 조합. 테크, 웰니스, 앱 UI 배경에 청량하게 사용하세요.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#00C9FF">#00C9FF</span>
-            <span class="grad-hex" data-hex="#92FE9D">#92FE9D</span>
-          </div>
-        </div>
+      <div class="tool-card-body">
+        <div class="tool-card-icon">💡</div>
+        <h3>배색 팁</h3>
+        <p>60-30-10 법칙부터 보색 활용, 색채 이론까지. 실전에서 바로 써먹을 수 있는 배색 노하우를 담았습니다.</p>
+        <div class="tool-card-cta">팁 읽기 →</div>
       </div>
+    </a>
+  </div>
+</div>
 
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#FFB7C5,#FF69B4,#C9184A)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">봄 벚꽃</span>
-            <span class="grad-mood">로맨틱 · 봄</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #FFB7C5, #FF69B4, #C9184A)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">연핑크에서 딥로즈로. 웨딩, 뷰티, 봄 시즌 SNS 콘텐츠에 자주 쓰이는 정석 조합입니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#FFB7C5">#FFB7C5</span>
-            <span class="grad-hex" data-hex="#FF69B4">#FF69B4</span>
-            <span class="grad-hex" data-hex="#C9184A">#C9184A</span>
-          </div>
-        </div>
-      </div>
+<hr class="divider" />
 
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#E0C3FC,#8EC5FC)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">라벤더 안개</span>
-            <span class="grad-mood">몽환 · 우아</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #E0C3FC, #8EC5FC)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">연보라에서 하늘색으로 흐르는 부드러운 전환. 패션, 뷰티, 명상 앱에 자주 활용됩니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#E0C3FC">#E0C3FC</span>
-            <span class="grad-hex" data-hex="#8EC5FC">#8EC5FC</span>
-          </div>
-        </div>
-      </div>
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="section-label">핵심 기능</div>
+  <h2 class="section-title">색에 관한 모든 것</h2>
+  <p class="section-desc">색 코드 하나부터 완성된 팔레트까지, Color 하나로 해결하세요.</p>
 
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#1CB5E0,#000851)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">딥 오션</span>
-            <span class="grad-mood">깊이 · 신뢰</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #1CB5E0, #000851)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">밝은 스카이블루에서 심해 네이비로. 금융, IT, 항공 브랜드의 신뢰감 있는 배경으로 탁월합니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#1CB5E0">#1CB5E0</span>
-            <span class="grad-hex" data-hex="#000851">#000851</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#F7971E,#FFD200)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">골든아워</span>
-            <span class="grad-mood">따스함 · 풍요</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #F7971E, #FFD200)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">황금빛 오렌지와 레몬 옐로우. 프리미엄 식품, 명품, 가을 시즌 디자인에 어울립니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#F7971E">#F7971E</span>
-            <span class="grad-hex" data-hex="#FFD200">#FFD200</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#12C2E9,#C471ED,#F64F59)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">네온 글로우</span>
-            <span class="grad-mood">화려 · 파티</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #12C2E9, #C471ED, #F64F59)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">하늘·보라·핑크가 이어지는 강렬한 네온 조합. 나이트클럽, 음악, 게임 브랜드에 어울립니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#12C2E9">#12C2E9</span>
-            <span class="grad-hex" data-hex="#C471ED">#C471ED</span>
-            <span class="grad-hex" data-hex="#F64F59">#F64F59</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#0BAB64,#3BB78F)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">민트 프레시</span>
-            <span class="grad-mood">청량 · 건강</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #0BAB64, #3BB78F)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">에메랄드에서 민트그린으로. 건강식품, 환경, 피트니스 브랜드에 신선한 느낌을 줍니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#0BAB64">#0BAB64</span>
-            <span class="grad-hex" data-hex="#3BB78F">#3BB78F</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#FF00CC,#333399)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">코스믹 퓨전</span>
-            <span class="grad-mood">미래적 · 독창</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #FF00CC, #333399)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">마젠타 핑크와 인디고 블루. AI, 크립토, 사이버펑크 무드의 브랜드에 완벽한 조합입니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#FF00CC">#FF00CC</span>
-            <span class="grad-hex" data-hex="#333399">#333399</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#FFECD2,#FCB69F)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">피치 플로트</span>
-            <span class="grad-mood">달콤 · 부드러움</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #FFECD2, #FCB69F)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">크림에서 복숭아빛으로 이어지는 달콤한 그라데이션. 디저트, 스킨케어, 어린이 브랜드에 잘 맞습니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#FFECD2">#FFECD2</span>
-            <span class="grad-hex" data-hex="#FCB69F">#FCB69F</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#0F0C29,#302B63,#24243E)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">자정 특급</span>
-            <span class="grad-mood">미니멀 · 세련</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #0F0C29, #302B63, #24243E)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">칠흑 같은 어둠 속 인디고의 미묘한 변화. 럭셔리, 테크, 다크 테마 UI에 깊이를 더합니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#0F0C29">#0F0C29</span>
-            <span class="grad-hex" data-hex="#302B63">#302B63</span>
-            <span class="grad-hex" data-hex="#24243E">#24243E</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#56AB2F,#A8E063)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">라임 에너지</span>
-            <span class="grad-mood">활력 · 자연</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #56AB2F, #A8E063)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">짙은 초록에서 라임으로. 스포츠, 아웃도어, 에코 브랜드의 생동감 있는 배경으로 활용하세요.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#56AB2F">#56AB2F</span>
-            <span class="grad-hex" data-hex="#A8E063">#A8E063</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#B76E79,#E8A4AD,#FFE0E5)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">로즈 골드</span>
-            <span class="grad-mood">고급 · 여성스러움</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #B76E79, #E8A4AD, #FFE0E5)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">로즈골드의 따뜻한 광택감. 주얼리, 뷰티, 프리미엄 패키지 디자인에 고급스러운 분위기를 줍니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#B76E79">#B76E79</span>
-            <span class="grad-hex" data-hex="#E8A4AD">#E8A4AD</span>
-            <span class="grad-hex" data-hex="#FFE0E5">#FFE0E5</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#89F7FE,#66A6FF)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">폴라 스카이</span>
-            <span class="grad-mood">맑음 · 자유</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #89F7FE, #66A6FF)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">투명한 하늘빛에서 코발트로. 항공, 여행, 청정 이미지의 브랜드에 시원하고 넓은 인상을 줍니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#89F7FE">#89F7FE</span>
-            <span class="grad-hex" data-hex="#66A6FF">#66A6FF</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#134E5E,#71B280)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">포레스트 딥</span>
-            <span class="grad-mood">안정 · 차분</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #134E5E, #71B280)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">어두운 틸에서 숲의 초록으로. 명상, 에코, 고급 호텔·리조트 브랜드에 깊은 안정감을 줍니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#134E5E">#134E5E</span>
-            <span class="grad-hex" data-hex="#71B280">#71B280</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#F09819,#EDDE5D)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">망고 탱고</span>
-            <span class="grad-mood">활기 · 에너지</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #F09819, #EDDE5D)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">망고빛 오렌지에서 선명한 레몬으로. 음식·음료, 여름 캠페인, 이벤트 포스터에 식욕을 돋웁니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#F09819">#F09819</span>
-            <span class="grad-hex" data-hex="#EDDE5D">#EDDE5D</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#a78bfa,#60a5fa,#34d399)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">트리플 파스텔</span>
-            <span class="grad-mood">트렌디 · 밝음</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #a78bfa, #60a5fa, #34d399)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">보라·파랑·민트가 부드럽게 이어지는 Y2K 감성. 소셜 미디어, 앱 아이콘, 굿즈 디자인에 잘 어울립니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#a78bfa">#A78BFA</span>
-            <span class="grad-hex" data-hex="#60a5fa">#60A5FA</span>
-            <span class="grad-hex" data-hex="#34d399">#34D399</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grad-item">
-        <div class="grad-bar" style="background:linear-gradient(135deg,#232526,#414345)"></div>
-        <div class="grad-body">
-          <div class="grad-top">
-            <span class="grad-name">스모키 차콜</span>
-            <span class="grad-mood">모던 · 중후함</span>
-            <button class="grad-copy-btn" data-css="linear-gradient(135deg, #232526, #414345)">CSS 복사</button>
-          </div>
-          <p class="grad-desc">다크 그레이의 미묘한 변화. 남성 패션, 프리미엄 전자제품, 건축 포트폴리오에 무게감을 더합니다.</p>
-          <div class="grad-stops">
-            <span class="grad-hex" data-hex="#232526">#232526</span>
-            <span class="grad-hex" data-hex="#414345">#414345</span>
-          </div>
-        </div>
-      </div>
-
+  <div class="features-grid">
+    <div class="feature-card fc-purple fade-in">
+      <div class="feature-icon fi-purple">🎯</div>
+      <h3>색 코드 즉시 검색</h3>
+      <p>HEX, RGB, HSL 등 원하는 색의 모든 코드를 한 번에 확인하세요. 클릭 한 번으로 클립보드에 복사됩니다.</p>
     </div>
-  </section>
+    <div class="feature-card fc-pink fade-in">
+      <div class="feature-icon fi-pink">🔄</div>
+      <h3>보색 자동 추출</h3>
+      <p>색상환 반대편의 보색을 자동으로 찾아드립니다. 강렬한 대비 효과를 원할 때 바로 활용하세요.</p>
+    </div>
+    <div class="feature-card fc-teal fade-in">
+      <div class="feature-icon fi-teal">🌈</div>
+      <h3>유사색 팔레트</h3>
+      <p>선택한 색과 인접한 유사색을 자동 생성합니다. 자연스럽고 조화로운 배색 조합을 손쉽게 만들어 보세요.</p>
+    </div>
+    <div class="feature-card fc-amber fade-in">
+      <div class="feature-icon fi-amber">🔍</div>
+      <h3>느낌으로 색 검색</h3>
+      <p>"따뜻한", "차분한", "봄날" 처럼 원하는 무드를 검색하면 딱 맞는 색 조합을 추천해 드립니다.</p>
+    </div>
+    <div class="feature-card fc-red fade-in">
+      <div class="feature-icon fi-red">💡</div>
+      <h3>배색 팁 제공</h3>
+      <p>각 색 조합마다 활용 예시와 실전 팁을 함께 제공합니다. 그림, 디자인, 인테리어 등에 바로 적용하세요.</p>
+    </div>
+    <div class="feature-card fc-indigo fade-in">
+      <div class="feature-icon fi-indigo">📋</div>
+      <h3>팔레트 저장 & 공유</h3>
+      <p>마음에 드는 색 조합을 저장하고 링크로 공유하세요. 협업 시 팀원과 색상 기준을 맞추기도 편리합니다.</p>
+    </div>
+  </div>
+</section>
 
-  <!-- SEARCH FEATURE -->
-  <section class="section" id="search">
-    <div class="search-feature">
-      <div>
-        <div class="section-label">느낌으로 검색</div>
-        <h2 class="section-title">원하는 무드를<br />그냥 입력하세요</h2>
-        <p style="color:var(--muted);font-size:1rem;line-height:1.75;margin-bottom:28px;">
-          색 이름을 몰라도 괜찮아요. "봄날 들판", "차가운 새벽", "레트로 70년대" 처럼 느낌을 검색하면 Color이 딱 맞는 색 조합과 활용 팁을 바로 알려드립니다.
-        </p>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;">
-          <li style="display:flex;align-items:center;gap:10px;font-size:0.9rem;color:var(--muted);">
-            <span style="color:#a78bfa;font-size:1.1rem;">✦</span> 한국어·영어 무드 검색 지원
-          </li>
-          <li style="display:flex;align-items:center;gap:10px;font-size:0.9rem;color:var(--muted);">
-            <span style="color:#60a5fa;font-size:1.1rem;">✦</span> 색 조합 배경·전경 대비 자동 체크
-          </li>
-          <li style="display:flex;align-items:center;gap:10px;font-size:0.9rem;color:var(--muted);">
-            <span style="color:#34d399;font-size:1.1rem;">✦</span> 결과마다 활용 팁과 예시 이미지 제공
-          </li>
-        </ul>
+<hr class="divider" />
+
+<!-- SEARCH SECTION -->
+<section class="section">
+  <div class="search-feature">
+    <div>
+      <div class="section-label">느낌으로 검색</div>
+      <h2 class="section-title">원하는 무드를<br />그냥 입력하세요</h2>
+      <p style="color:var(--muted);font-size:1rem;line-height:1.75;margin-bottom:28px;">
+        색 이름을 몰라도 괜찮아요. "봄날 들판", "차가운 새벽", "레트로 70년대" 처럼 느낌을 검색하면 Color이 딱 맞는 색 조합과 활용 팁을 바로 알려드립니다.
+      </p>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;">
+        <li style="display:flex;align-items:center;gap:10px;font-size:0.9rem;color:var(--muted);">
+          <span style="color:#a78bfa;font-size:1.1rem;">✦</span> 한국어·영어 무드 검색 지원
+        </li>
+        <li style="display:flex;align-items:center;gap:10px;font-size:0.9rem;color:var(--muted);">
+          <span style="color:#60a5fa;font-size:1.1rem;">✦</span> 색 조합 배경·전경 대비 자동 체크
+        </li>
+        <li style="display:flex;align-items:center;gap:10px;font-size:0.9rem;color:var(--muted);">
+          <span style="color:#34d399;font-size:1.1rem;">✦</span> 결과마다 활용 팁과 예시 이미지 제공
+        </li>
+      </ul>
+    </div>
+
+    <div class="search-demo fade-in">
+      <div class="demo-label">검색 예시</div>
+      <div class="demo-input">
+        <span>🔍</span>
+        <span>봄날 벚꽃 느낌</span>
+        <div class="cursor"></div>
       </div>
-
-      <div class="search-demo fade-in">
-        <div class="demo-label">검색 예시</div>
-        <div class="demo-input">
-          <span>🔍</span>
-          <span>봄날 벚꽃 느낌</span>
-          <div class="cursor"></div>
-        </div>
-
-        <div class="demo-chips">
-          <span class="chip" style="background:rgba(255,107,174,0.1);border-color:rgba(255,107,174,0.3);color:#ff6bae;"># 봄</span>
-          <span class="chip" style="background:rgba(251,191,36,0.1);border-color:rgba(251,191,36,0.3);color:#fbbf24;"># 따뜻함</span>
-          <span class="chip" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.3);color:#a78bfa;"># 파스텔</span>
-          <span class="chip" style="background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.3);color:#34d399;"># 자연</span>
-        </div>
-
-        <div class="demo-results">
-          <div class="demo-result-swatch" style="background:#ffb7c5;">#FFB7C5</div>
-          <div class="demo-result-swatch" style="background:#ffd1dc;">#FFD1DC</div>
-          <div class="demo-result-swatch" style="background:#ffe4ec;">#FFE4EC</div>
-          <div class="demo-result-swatch" style="background:#fff0f3;">#FFF0F3</div>
-          <div class="demo-result-swatch" style="background:#6b4a5a;color:rgba(255,255,255,0.9);">#6B4A5A</div>
-        </div>
-
-        <div class="demo-tip">
-          <strong>💡 Tip</strong> — 벚꽃 핑크 계열은 밝은 아이보리나 오프화이트와 함께 쓰면 더 봄다운 느낌이 나요. 포인트 색으로 짙은 자주색을 쓰면 깊이감이 생깁니다.
-        </div>
+      <div class="demo-chips">
+        <span class="chip" style="background:rgba(255,107,174,0.1);border-color:rgba(255,107,174,0.3);color:#ff6bae;"># 봄</span>
+        <span class="chip" style="background:rgba(251,191,36,0.1);border-color:rgba(251,191,36,0.3);color:#fbbf24;"># 따뜻함</span>
+        <span class="chip" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.3);color:#a78bfa;"># 파스텔</span>
+        <span class="chip" style="background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.3);color:#34d399;"># 자연</span>
+      </div>
+      <div class="demo-results">
+        <div class="demo-result-swatch" style="background:#ffb7c5;">#FFB7C5</div>
+        <div class="demo-result-swatch" style="background:#ffd1dc;">#FFD1DC</div>
+        <div class="demo-result-swatch" style="background:#ffe4ec;">#FFE4EC</div>
+        <div class="demo-result-swatch" style="background:#fff0f3;">#FFF0F3</div>
+        <div class="demo-result-swatch" style="background:#6b4a5a;color:rgba(255,255,255,0.9);">#6B4A5A</div>
+      </div>
+      <div class="demo-tip">
+        <strong>💡 Tip</strong> — 벚꽃 핑크 계열은 밝은 아이보리나 오프화이트와 함께 쓰면 더 봄다운 느낌이 나요. 포인트 색으로 짙은 자주색을 쓰면 깊이감이 생깁니다.
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <hr class="divider" />
-
-  <!-- TIPS -->
-  <section class="section" id="tips">
-    <div class="section-label">배색 팁</div>
-    <h2 class="section-title">알아두면 달라지는<br />색 활용 노하우</h2>
-    <p class="section-desc">Color이 제공하는 실전 배색 팁으로 작업의 퀄리티를 높여보세요.</p>
-
-    <div class="tips-grid">
-      <div class="tip-card fade-in">
-        <span class="tip-tag" style="background:rgba(255,107,174,0.12);color:#ff6bae;border:1px solid rgba(255,107,174,0.2);">기초</span>
-        <h4>60-30-10 법칙</h4>
-        <p>메인 색 60%, 서브 색 30%, 포인트 색 10%로 구성하면 어떤 배색도 안정적으로 보입니다. 가장 기본적인 황금 비율이에요.</p>
-        <div class="tip-palette">
-          <div class="tp" style="background:#f0e6ff;flex:6"></div>
-          <div class="tp" style="background:#a78bfa;flex:3"></div>
-          <div class="tp" style="background:#f97316;flex:1"></div>
-        </div>
-      </div>
-      <div class="tip-card fade-in">
-        <span class="tip-tag" style="background:rgba(96,165,250,0.12);color:#60a5fa;border:1px solid rgba(96,165,250,0.2);">중급</span>
-        <h4>채도를 낮춰 통일감 주기</h4>
-        <p>여러 색을 쓸 때 채도를 비슷하게 맞추면 색이 달라도 세련되게 어울립니다. 파스텔 팔레트가 통일감 있어 보이는 이유예요.</p>
-        <div class="tip-palette">
-          <div class="tp" style="background:#c4b5fd"></div>
-          <div class="tp" style="background:#93c5fd"></div>
-          <div class="tp" style="background:#86efac"></div>
-          <div class="tp" style="background:#fde68a"></div>
-          <div class="tp" style="background:#fca5a5"></div>
-        </div>
-      </div>
-      <div class="tip-card fade-in">
-        <span class="tip-tag" style="background:rgba(52,211,153,0.12);color:#34d399;border:1px solid rgba(52,211,153,0.2);">심화</span>
-        <h4>따뜻한 색 & 차가운 색의 균형</h4>
-        <p>붉은·노란 계열(warm)과 파란·초록 계열(cool)을 균형 있게 배치하면 색감에 깊이가 생기고 시각적 긴장감이 살아납니다.</p>
-        <div class="tip-palette">
-          <div class="tp" style="background:#fb923c"></div>
-          <div class="tp" style="background:#fbbf24"></div>
-          <div class="tp" style="background:#d1d5db"></div>
-          <div class="tp" style="background:#60a5fa"></div>
-          <div class="tp" style="background:#818cf8"></div>
-        </div>
-      </div>
-      <div class="tip-card fade-in">
-        <span class="tip-tag" style="background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.2);">실전</span>
-        <h4>검정·흰색 없이 명도 대비 만들기</h4>
-        <p>순수 흰색·검정 대신 아주 밝은 색조와 아주 어두운 색조를 사용하면 더 풍부하고 따뜻한 느낌의 대비를 만들 수 있어요.</p>
-        <div class="tip-palette">
-          <div class="tp" style="background:#fdf4ff"></div>
-          <div class="tp" style="background:#c4b5fd"></div>
-          <div class="tp" style="background:#7c3aed"></div>
-          <div class="tp" style="background:#3b0764"></div>
-        </div>
-      </div>
-      <div class="tip-card fade-in">
-        <span class="tip-tag" style="background:rgba(248,113,113,0.12);color:#f87171;border:1px solid rgba(248,113,113,0.2);">주의</span>
-        <h4>보색 사용 시 채도 조절</h4>
-        <p>선명한 보색을 그대로 나란히 쓰면 눈이 피로해집니다. 한쪽의 채도를 낮추거나 면적을 줄이면 훨씬 세련된 결과를 얻을 수 있어요.</p>
-        <div class="tip-palette">
-          <div class="tp" style="background:#4f46e5;flex:3"></div>
-          <div class="tp" style="background:#fed7aa;flex:2"></div>
-          <div class="tp" style="background:#92400e;flex:1"></div>
-        </div>
-      </div>
-      <div class="tip-card fade-in">
-        <span class="tip-tag" style="background:rgba(129,140,248,0.12);color:#818cf8;border:1px solid rgba(129,140,248,0.2);">트렌드</span>
-        <h4>그레이 대신 컬러 뉴트럴</h4>
-        <p>회색 대신 살짝 색조가 섞인 '컬러 뉴트럴'을 배경으로 쓰면 차분하면서도 개성 있는 분위기를 연출할 수 있습니다.</p>
-        <div class="tip-palette">
-          <div class="tp" style="background:#f5f0ff"></div>
-          <div class="tp" style="background:#e5dff0"></div>
-          <div class="tp" style="background:#c8bcd8"></div>
-          <div class="tp" style="background:#7c6f8e"></div>
-        </div>
-      </div>
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-box fade-in">
+    <h2>색을 더 잘 다루고 싶다면<br /><span class="gradient-text">Color을 시작하세요</span></h2>
+    <p>무료로 가입하고 색의 세계를 마음껏 탐색하세요.</p>
+    <div class="email-form">
+      <input type="email" placeholder="이메일을 입력하세요" />
+      <button type="button">무료 가입</button>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CTA -->
-  <section class="cta-section" id="cta">
-    <div class="cta-box">
-      <h2>색을 더 잘 다루고 싶다면<br /><span class="gradient-text">Color을 시작하세요</span></h2>
-      <p>무료로 가입하고 색의 세계를 마음껏 탐색하세요.</p>
-      <div class="email-form">
-        <input type="email" placeholder="이메일을 입력하세요" />
-        <button type="button">무료 가입</button>
-      </div>
-    </div>
-  </section>
+<!-- CONTACT -->
+<hr class="divider" />
+<section class="contact-section" id="contact">
+  <div class="section-label" style="text-align:center;">제휴 문의</div>
+  <h2 class="section-title fade-in" style="text-align:center;margin-bottom:10px;">함께 만들어 가요</h2>
+  <p style="text-align:center;color:var(--muted);font-size:1rem;margin-bottom:40px;line-height:1.75;">광고, 콘텐츠 협업, 기술 제휴 등 어떤 문의도 환영합니다.<br />보내주시면 2영업일 내 답변드립니다.</p>
 
-  <!-- CONTACT -->
-  <hr class="divider" />
-  <section class="contact-section" id="contact">
-    <div class="section-label" style="text-align:center;">제휴 문의</div>
-    <h2 class="section-title fade-in" style="text-align:center;margin-bottom:10px;">함께 만들어 가요</h2>
-    <p style="text-align:center;color:var(--muted);font-size:1rem;margin-bottom:40px;line-height:1.75;">광고, 콘텐츠 협업, 기술 제휴 등 어떤 문의도 환영합니다.<br />보내주시면 2영업일 내 답변드립니다.</p>
-
-    <div class="contact-form fade-in">
-      <form id="contactForm" action="https://formspree.io/f/xpqglkkr" method="POST" novalidate>
-        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>이름<span class="req">*</span></label>
-            <input type="text" name="name" class="form-control" placeholder="홍길동" required />
-          </div>
-          <div class="form-group">
-            <label>회사 / 브랜드명</label>
-            <input type="text" name="company" class="form-control" placeholder="(선택)" />
-          </div>
-        </div>
-
+  <div class="contact-form fade-in">
+    <form id="contactForm" action="https://formspree.io/f/xpqglkkr" method="POST" novalidate>
+      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+      <div class="form-row">
         <div class="form-group">
-          <label>이메일<span class="req">*</span></label>
-          <input type="email" name="email" class="form-control" placeholder="hello@example.com" required />
+          <label>이름<span class="req">*</span></label>
+          <input type="text" name="name" class="form-control" placeholder="홍길동" required />
         </div>
-
         <div class="form-group">
-          <label>문의 유형<span class="req">*</span></label>
-          <select name="type" class="form-control" required>
-            <option value="" disabled selected>선택해 주세요</option>
-            <option value="광고">광고 / 스폰서십</option>
-            <option value="콘텐츠 협업">콘텐츠 협업</option>
-            <option value="기술 제휴">기술 / API 제휴</option>
-            <option value="기타">기타 문의</option>
-          </select>
+          <label>회사 / 브랜드명</label>
+          <input type="text" name="company" class="form-control" placeholder="(선택)" />
         </div>
+      </div>
+      <div class="form-group">
+        <label>이메일<span class="req">*</span></label>
+        <input type="email" name="email" class="form-control" placeholder="hello@example.com" required />
+      </div>
+      <div class="form-group">
+        <label>문의 유형<span class="req">*</span></label>
+        <select name="type" class="form-control" required>
+          <option value="" disabled selected>선택해 주세요</option>
+          <option value="광고">광고 / 스폰서십</option>
+          <option value="콘텐츠 협업">콘텐츠 협업</option>
+          <option value="기술 제휴">기술 / API 제휴</option>
+          <option value="기타">기타 문의</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:24px;">
+        <label>문의 내용<span class="req">*</span></label>
+        <textarea name="message" class="form-control" placeholder="제휴 목적과 원하시는 내용을 자유롭게 적어주세요." required></textarea>
+      </div>
+      <button type="submit" class="form-submit" id="submitBtn">문의 보내기</button>
+      <div class="form-status" id="formStatus"></div>
+    </form>
+  </div>
+</section>
 
-        <div class="form-group" style="margin-bottom:24px;">
-          <label>문의 내용<span class="req">*</span></label>
-          <textarea name="message" class="form-control" placeholder="제휴 목적과 원하시는 내용을 자유롭게 적어주세요." required></textarea>
-        </div>
+<footer>
+  <a href="index.html" class="footer-logo">Color</a>
+  <p>© 2026 Color. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="#">이용약관</a></li>
+    <li><a href="#">개인정보처리방침</a></li>
+    <li><a href="#contact">문의하기</a></li>
+  </ul>
+</footer>
 
-        <button type="submit" class="form-submit" id="submitBtn">문의 보내기</button>
-        <div class="form-status" id="formStatus"></div>
-      </form>
-    </div>
-  </section>
+<script src="script.js"></script>
+<script>
+const contactForm = document.getElementById('contactForm');
+const submitBtn = document.getElementById('submitBtn');
+const formStatus = document.getElementById('formStatus');
 
-  <!-- FOOTER -->
-  <footer>
-    <span class="footer-logo">Color</span>
-    <p>© 2026 Color. All rights reserved.</p>
-    <ul class="footer-links">
-      <li><a href="#">이용약관</a></li>
-      <li><a href="#">개인정보처리방침</a></li>
-      <li><a href="#contact">문의하기</a></li>
-    </ul>
-  </footer>
-
-  <script>
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
-      { threshold: 0.12 }
-    );
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-    // Contact form — async Formspree submission
-    const contactForm = document.getElementById('contactForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const formStatus = document.getElementById('formStatus');
-
-    contactForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      submitBtn.disabled = true;
-      submitBtn.textContent = '전송 중…';
-      formStatus.className = 'form-status';
-
-      try {
-        const res = await fetch(contactForm.action, {
-          method: 'POST',
-          body: new FormData(contactForm),
-          headers: { Accept: 'application/json' },
-        });
-        if (res.ok) {
-          formStatus.className = 'form-status success';
-          formStatus.textContent = '✓ 문의가 접수되었습니다. 2영업일 내 답변드릴게요!';
-          contactForm.reset();
-        } else {
-          throw new Error();
-        }
-      } catch {
-        formStatus.className = 'form-status error';
-        formStatus.textContent = '전송에 실패했습니다. 잠시 후 다시 시도해 주세요.';
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = '문의 보내기';
-      }
+contactForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  submitBtn.disabled = true;
+  submitBtn.textContent = '전송 중…';
+  formStatus.className = 'form-status';
+  try {
+    const res = await fetch(contactForm.action, {
+      method: 'POST',
+      body: new FormData(contactForm),
+      headers: { Accept: 'application/json' },
     });
-
-    // ── GRADIENT LIST ──
-    document.querySelectorAll('.grad-copy-btn').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const css = `background: ${btn.dataset.css};`;
-        navigator.clipboard.writeText(css).catch(() => {});
-        btn.textContent = '복사됨 ✓';
-        btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'CSS 복사'; btn.classList.remove('copied'); }, 1800);
-      });
-    });
-
-    document.querySelectorAll('.grad-hex').forEach(span => {
-      span.addEventListener('click', () => {
-        navigator.clipboard.writeText(span.dataset.hex).catch(() => {});
-        const orig = span.textContent;
-        span.textContent = '복사됨!';
-        setTimeout(() => { span.textContent = orig; }, 1200);
-      });
-    });
-
-    // ── PALETTE GALLERY ──
-    document.querySelectorAll('.ptab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const filter = tab.dataset.filter;
-        document.querySelectorAll('.pal-card').forEach(card => {
-          if (filter === 'all' || card.dataset.type === filter) {
-            delete card.dataset.hidden;
-          } else {
-            card.dataset.hidden = '1';
-          }
-        });
-      });
-    });
-
-    document.getElementById('paletteGallery').addEventListener('click', e => {
-      const swatch = e.target.closest('.pal-swatch');
-      if (!swatch) return;
-      const hex = swatch.dataset.hex;
-      navigator.clipboard.writeText(hex).catch(() => {});
-      swatch.classList.remove('swatch-flash');
-      void swatch.offsetWidth;
-      swatch.classList.add('swatch-flash');
-      const toast = document.getElementById('palCopyToast');
-      toast.textContent = `${hex} 복사됨 ✓`;
-      toast.classList.add('show');
-      clearTimeout(toast._t);
-      toast._t = setTimeout(() => toast.classList.remove('show'), 1800);
-    });
-
-    // ── IMAGE COLOR EXTRACTOR ──
-    const COLOR_NAMES = [
-      ['검정','#000000'],['흰색','#FFFFFF'],['빨강','#FF0000'],['초록','#008000'],['파랑','#0000FF'],
-      ['노랑','#FFFF00'],['시안','#00FFFF'],['마젠타','#FF00FF'],['은색','#C0C0C0'],['회색','#808080'],
-      ['진홍','#800000'],['올리브','#808000'],['진녹','#006400'],['청록','#008080'],['진파랑','#000080'],
-      ['보라','#800080'],['주황','#FFA500'],['산호','#FF7F50'],['연어색','#FA8072'],['토마토','#FF6347'],
-      ['금색','#FFD700'],['카키','#F0E68C'],['라임','#00FF00'],['민트','#98FF98'],['하늘','#87CEEB'],
-      ['파우더블루','#B0E0E6'],['로열블루','#4169E1'],['인디고','#4B0082'],['슬레이트','#708090'],
-      ['라벤더','#E6E6FA'],['핫핑크','#FF69B4'],['딥핑크','#FF1493'],['버건디','#800020'],
-      ['로즈','#FF007F'],['살구','#FFDAB9'],['황토','#D2691E'],['갈색','#A52A2A'],['크림','#FFFDD0'],
-      ['아이보리','#FFFFF0'],['베이지','#F5F5DC'],['탄','#D2B48C'],['카멜','#C19A6B'],['머스터드','#FFDB58'],
-      ['라임그린','#32CD32'],['포레스트그린','#228B22'],['세이지','#8FBC8F'],['아쿠아마린','#7FFFD4'],
-      ['터쿼이즈','#40E0D0'],['스틸블루','#4682B4'],['코발트','#0047AB'],['네이비','#000080'],
-      ['미드나잇','#191970'],['플럼','#DDA0DD'],['오키드','#DA70D6'],['바이올렛','#EE82EE'],
-      ['퍼플','#9B59B6'],['와인','#722F37'],['머룬','#6D2932'],['피치','#FFCBA4'],['마룬','#800000'],
-      ['스카이블루','#87CEEB'],['딥스카이','#00BFFF'],['도저블루','#1E90FF'],['콘플라워','#6495ED'],
-      ['투명블루','#5B9BD5'],['에메랄드','#50C878'],['올리브그린','#6B8E23'],['파파야','#FFEFD5'],
-      ['레몬','#FFF44F'],['샴페인','#F7E7CE'],['로즈골드','#B76E79'],['버밀리온','#E34234'],
-      ['스카렛','#FF2400'],['시에나','#A0522D'],['토프','#483C32'],['차콜','#36454F'],
-      ['오프화이트','#F8F8FF'],['스노우','#FFFAFA'],['문스톤','#3AA8C1'],['코퍼','#B87333'],
-      ['브론즈','#CD7F32'],['틸','#367588'],['인디언레드','#CD5C5C'],['초콜릿','#7B3F00'],
-      ['호박','#FFBF00'],['네온그린','#39FF14'],['네온핑크','#FF6EC7'],['시어민트','#98DDCA'],
-      ['더스티로즈','#DCAE96'],['모브','#E0B0FF'],['테라코타','#E2725B'],['더스티블루','#8FD3F4'],
-      ['카나리','#FFFF99'],['셀라돈','#ACE1AF'],['퍼시먼','#EC5800'],['피스타치오','#93C572'],
-      ['라즈베리','#E30B5D'],['스트로베리','#FC5A8D'],['블루베리','#4F86C6'],['피그','#FD7C6E'],
-      ['멜론','#FDBCB4'],['코코아','#D2691E'],['바닐라','#F3E5AB'],['스페이스그레이','#717378'],
-      ['슬레이트블루','#6A5ACD'],['레드우드','#A45A52'],['에크루','#C2B280'],['린넨','#FAF0E6'],
-    ];
-
-    function hexToRgb(hex) {
-      const v = parseInt(hex.slice(1), 16);
-      return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
-    }
-
-    function rgbDist([r1,g1,b1], [r2,g2,b2]) {
-      return (r1-r2)**2 + (g1-g2)**2 + (b1-b2)**2;
-    }
-
-    function nearestColorName(r, g, b) {
-      let best = COLOR_NAMES[0], bestD = Infinity;
-      for (const [name, hex] of COLOR_NAMES) {
-        const d = rgbDist([r,g,b], hexToRgb(hex));
-        if (d < bestD) { bestD = d; best = [name, hex]; }
-      }
-      return best[0];
-    }
-
-    function rgbToHex(r, g, b) {
-      return '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0').toUpperCase()).join('');
-    }
-
-    function quantize(pixels, k) {
-      // Simple k-means color clustering
-      let centers = [];
-      const step = Math.max(1, Math.floor(pixels.length / k));
-      for (let i = 0; i < k; i++) centers.push([...pixels[i * step]]);
-
-      for (let iter = 0; iter < 12; iter++) {
-        const sums = Array.from({length: k}, () => [0,0,0,0]);
-        for (const [r,g,b] of pixels) {
-          let best = 0, bestD = Infinity;
-          for (let j = 0; j < k; j++) {
-            const d = rgbDist([r,g,b], centers[j]);
-            if (d < bestD) { bestD = d; best = j; }
-          }
-          sums[best][0] += r; sums[best][1] += g; sums[best][2] += b; sums[best][3]++;
-        }
-        let changed = false;
-        for (let j = 0; j < k; j++) {
-          if (sums[j][3] === 0) continue;
-          const nr = Math.round(sums[j][0]/sums[j][3]);
-          const ng = Math.round(sums[j][1]/sums[j][3]);
-          const nb = Math.round(sums[j][2]/sums[j][3]);
-          if (nr !== centers[j][0] || ng !== centers[j][1] || nb !== centers[j][2]) changed = true;
-          centers[j] = [nr, ng, nb];
-        }
-        if (!changed) break;
-      }
-
-      // Sort by luminance (darkest to brightest looks good)
-      return centers.sort((a,b) => (0.299*a[0]+0.587*a[1]+0.114*a[2]) - (0.299*b[0]+0.587*b[1]+0.114*b[2]));
-    }
-
-    function extractColors(imgEl, k) {
-      const canvas = document.getElementById('extractCanvas');
-      const MAX = 200;
-      let w = imgEl.naturalWidth, h = imgEl.naturalHeight;
-      const scale = Math.min(1, MAX / Math.max(w, h));
-      w = Math.floor(w * scale); h = Math.floor(h * scale);
-      canvas.width = w; canvas.height = h;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(imgEl, 0, 0, w, h);
-      const data = ctx.getImageData(0, 0, w, h).data;
-      const pixels = [];
-      for (let i = 0; i < data.length; i += 4) {
-        if (data[i+3] < 128) continue; // skip transparent
-        pixels.push([data[i], data[i+1], data[i+2]]);
-      }
-      // Sub-sample for speed
-      const sample = pixels.filter((_, i) => i % 3 === 0);
-      return quantize(sample, k);
-    }
-
-    function isLight(r, g, b) {
-      return (0.299*r + 0.587*g + 0.114*b) > 160;
-    }
-
-    function renderColors(colors) {
-      const container = document.getElementById('extractedColors');
-      container.innerHTML = '';
-      for (const [r,g,b] of colors) {
-        const hex = rgbToHex(r,g,b);
-        const name = nearestColorName(r,g,b);
-        const textColor = isLight(r,g,b) ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)';
-        const chip = document.createElement('div');
-        chip.className = 'color-chip';
-        chip.innerHTML = `
-          <div class="chip-swatch" style="background:${hex}">
-            <div class="chip-copy-hint" style="color:${textColor}">클릭하여 복사</div>
-          </div>
-          <div class="chip-info">
-            <div class="chip-name">${name}</div>
-            <div class="chip-hex">${hex}</div>
-            <div class="chip-rgb">rgb(${r}, ${g}, ${b})</div>
-          </div>
-        `;
-        chip.addEventListener('click', () => {
-          navigator.clipboard.writeText(hex).catch(() => {});
-          chip.classList.remove('chip-copied');
-          void chip.offsetWidth;
-          chip.classList.add('chip-copied');
-        });
-        container.appendChild(chip);
-      }
-    }
-
-    let currentImg = null;
-    let currentK = 8;
-
-    function processImage(img) {
-      currentImg = img;
-      document.getElementById('previewImg').src = img.src;
-      document.getElementById('extractorPreview').classList.add('visible');
-      const colors = extractColors(img, currentK);
-      renderColors(colors);
-      document.getElementById('extractorPreview').scrollIntoView({behavior:'smooth', block:'nearest'});
-    }
-
-    function loadFile(file) {
-      if (!file || !file.type.startsWith('image/')) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        const img = new Image();
-        img.onload = () => processImage(img);
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    // Drop zone
-    const dropZone = document.getElementById('dropZone');
-
-    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-    dropZone.addEventListener('drop', e => {
-      e.preventDefault();
-      dropZone.classList.remove('drag-over');
-      const file = e.dataTransfer.files[0];
-      loadFile(file);
-    });
-
-    document.getElementById('uploadBtn').addEventListener('click', e => {
-      e.stopPropagation();
-      document.getElementById('imageFileInput').click();
-    });
-
-    document.getElementById('imageFileInput').addEventListener('change', e => {
-      loadFile(e.target.files[0]);
-    });
-
-    // Paste button
-    document.getElementById('pasteBtn').addEventListener('click', async e => {
-      e.stopPropagation();
-      try {
-        const items = await navigator.clipboard.read();
-        for (const item of items) {
-          for (const type of item.types) {
-            if (type.startsWith('image/')) {
-              const blob = await item.getType(type);
-              loadFile(new File([blob], 'paste.png', {type}));
-              showToast();
-              return;
-            }
-          }
-        }
-      } catch {
-        alert('클립보드 접근 권한이 필요합니다. Ctrl+V 로도 붙여넣기 가능합니다.');
-      }
-    });
-
-    // Global Ctrl+V paste
-    document.addEventListener('paste', e => {
-      const items = e.clipboardData?.items;
-      if (!items) return;
-      for (const item of items) {
-        if (item.type.startsWith('image/')) {
-          loadFile(item.getAsFile());
-          showToast();
-          break;
-        }
-      }
-    });
-
-    function showToast() {
-      const toast = document.getElementById('pasteToast');
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2500);
-    }
-
-    // Color count buttons
-    document.querySelectorAll('.count-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentK = parseInt(btn.dataset.n);
-        if (currentImg) {
-          const colors = extractColors(currentImg, currentK);
-          renderColors(colors);
-        }
-      });
-    });
-
-    // Theme toggle
-    const html = document.documentElement;
-    const btn = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('color-theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (saved === 'light' || (!saved && !prefersDark)) {
-      html.classList.add('light');
-      btn.textContent = '☀️';
-    }
-
-    btn.addEventListener('click', () => {
-      const isLight = html.classList.toggle('light');
-      btn.textContent = isLight ? '☀️' : '🌙';
-      localStorage.setItem('color-theme', isLight ? 'light' : 'dark');
-    });
-  </script>
-
+    if (res.ok) {
+      formStatus.className = 'form-status success';
+      formStatus.textContent = '✓ 문의가 접수되었습니다. 2영업일 내 답변드릴게요!';
+      contactForm.reset();
+    } else { throw new Error(); }
+  } catch {
+    formStatus.className = 'form-status error';
+    formStatus.textContent = '전송에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = '문의 보내기';
+  }
+});
+</script>
 </body>
 </html>
