@@ -3,6 +3,7 @@
   <url><loc>https://color-output.com/index.html</loc><priority>1.0</priority></url>
   <url><loc>https://color-output.com/extractor.html</loc><priority>0.8</priority></url>
   <url><loc>https://color-output.com/palettes.html</loc><priority>0.8</priority></url>
+  <url><loc>https://color-output.com/recommended.html</loc><priority>0.8</priority></url>
   <url><loc>https://color-output.com/gradients.html</loc><priority>0.8</priority></url>
   <url><loc>https://color-output.com/search.html</loc><priority>0.8</priority></url>
   <url><loc>https://color-output.com/tips.html</loc><priority>0.8</priority></url>
