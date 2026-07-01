@@ -58,6 +58,24 @@
       </div>
     </div>
     <div id="extractedColors" class="extracted-colors"></div>
+
+    <div class="ratio-section">
+      <h3 class="ratio-title">색 배치 비율</h3>
+      <p class="ratio-desc">이미지에서 각 색상이 차지하는 실제 비율입니다.</p>
+      <div id="ratioBar" class="ratio-bar"></div>
+    </div>
+
+    <div class="ratio-section">
+      <h3 class="ratio-title">추천 색조 비율표</h3>
+      <p class="ratio-desc">가장 비중이 큰 색부터 메인 60% · 서브 30% · 포인트 10%의 황금 비율로 배치해 보세요.</p>
+      <div id="recoRatioBar" class="ratio-bar reco"></div>
+      <table class="ratio-table">
+        <thead>
+          <tr><th>역할</th><th>색상</th><th>HEX</th><th>권장 비율</th></tr>
+        </thead>
+        <tbody id="ratioTableBody"></tbody>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -172,9 +190,11 @@ function extractColors(img, k) {
 function renderColors(colors) {
   const container = document.getElementById('extractedColors');
   container.innerHTML = '';
-  colors.forEach(({r,g,b}) => {
+  const total = colors.reduce((s,c) => s + c.count, 0) || 1;
+  colors.forEach(({r,g,b,count}) => {
     const hex = rgbToHex(r,g,b);
     const name = nearestColorName(r,g,b);
+    const pct = (count/total*100).toFixed(1);
     const chip = document.createElement('div');
     chip.className = 'color-chip';
     chip.innerHTML = `
@@ -182,7 +202,7 @@ function renderColors(colors) {
         <div class="chip-copy-hint">클릭해서 복사</div>
       </div>
       <div class="chip-info">
-        <div class="chip-name">${name}</div>
+        <div class="chip-name">${name} <span class="chip-pct">${pct}%</span></div>
         <div class="chip-hex">${hex}</div>
         <div class="chip-rgb">rgb(${r}, ${g}, ${b})</div>
       </div>`;
@@ -197,6 +217,46 @@ function renderColors(colors) {
     });
     container.appendChild(chip);
   });
+  renderRatioSection(colors);
+}
+
+const RECO_ROLES = [
+  {label:'메인', pct:60},
+  {label:'서브', pct:30},
+  {label:'포인트', pct:10},
+];
+
+function renderRatioSection(allColors) {
+  const colors = allColors.filter(c => c.count > 0);
+  const total = colors.reduce((s,c) => s + c.count, 0) || 1;
+
+  const ratioBar = document.getElementById('ratioBar');
+  ratioBar.innerHTML = colors.map(({r,g,b,count}) => {
+    const hex = rgbToHex(r,g,b);
+    const pct = count/total*100;
+    return `<div class="ratio-seg" style="width:${pct}%;background:${hex}" title="${hex} ${pct.toFixed(1)}%"></div>`;
+  }).join('');
+
+  const n = Math.min(colors.length, RECO_ROLES.length);
+  const roles = RECO_ROLES.slice(0, n);
+  if (n > 0) roles[n-1] = {...roles[n-1], pct: roles[n-1].pct + (100 - roles.reduce((s,r)=>s+r.pct,0))};
+
+  const recoBar = document.getElementById('recoRatioBar');
+  recoBar.innerHTML = roles.map((role,i) => {
+    const hex = rgbToHex(colors[i].r, colors[i].g, colors[i].b);
+    return `<div class="ratio-seg" style="width:${role.pct}%;background:${hex}" title="${role.label} ${role.pct}%"></div>`;
+  }).join('');
+
+  const tbody = document.getElementById('ratioTableBody');
+  tbody.innerHTML = roles.map((role,i) => {
+    const hex = rgbToHex(colors[i].r, colors[i].g, colors[i].b);
+    return `<tr>
+      <td>${role.label}</td>
+      <td><span class="ratio-swatch-dot" style="background:${hex}"></span></td>
+      <td class="ratio-hex">${hex}</td>
+      <td>${role.pct}%</td>
+    </tr>`;
+  }).join('');
 }
 
 let currentColorCount = 8;
