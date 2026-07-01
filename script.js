@@ -326,8 +326,19 @@ function deleteCustomPalette(id) {
   if (!session) return;
   _saveCustomPalettes(getCustomPalettes().filter(p => !(p.id === id && p.userId === session.userId)));
 }
+function likeCustomPalette(id) {
+  const session = getSession();
+  if (!session) return null;
+  const all = getCustomPalettes();
+  const p = all.find(p => p.id === id);
+  if (!p) return null;
+  const idx = p.likes.indexOf(session.userId);
+  if (idx === -1) p.likes.push(session.userId); else p.likes.splice(idx, 1);
+  _saveCustomPalettes(all);
+  return p;
+}
 
-// ── SEARCH LOGIC ──
+// — SEARCH LOGIC —
 function searchItems(q) {
   if (!q.trim()) return [];
   const term = q.toLowerCase();
