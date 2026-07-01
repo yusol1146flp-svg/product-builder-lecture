@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 — Color</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Color</a>
+  <ul class="nav-links">
+    <li><a href="index.html">홈</a></li>
+    <li><a href="extractor.html">이미지 색 추출</a></li>
+    <li><a href="palettes.html">색 조합</a></li>
+    <li><a href="gradients.html">그라데이션</a></li>
+    <li><a href="search.html">색 검색</a></li>
+    <li><a href="tips.html">배색 팁</a></li>
+    <li><a href="favorites.html" id="navFavorites" style="display:none;">저장함</a></li>
+    <li><a href="my-palette.html" id="navMyPalette" style="display:none;">내 팔레트</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)">🔍</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
+    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인">👤</button>
+    <a href="index.html#contact" class="nav-cta">문의하기</a>
+  </div>
+</nav>
+
+<div class="section auth-section">
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">로그인</button>
+      <button class="auth-tab" data-tab="register">회원가입</button>
+    </div>
+
+    <form id="loginForm" class="auth-form">
+      <div class="modal-form-group">
+        <label>이메일</label>
+        <input type="email" class="modal-input" id="loginEmail" placeholder="hello@example.com" autocomplete="email" required>
+      </div>
+      <div class="modal-form-group">
+        <label>비밀번호</label>
+        <input type="password" class="modal-input" id="loginPw" placeholder="비밀번호" autocomplete="current-password" required>
+      </div>
+      <div class="auth-error" id="loginError"></div>
+      <button type="submit" class="modal-btn">로그인</button>
+    </form>
+
+    <form id="registerForm" class="auth-form" style="display:none;">
+      <div class="modal-form-group">
+        <label>닉네임</label>
+        <input type="text" class="modal-input" id="regName" placeholder="색을 좋아하는 이름" maxlength="20" required>
+      </div>
+      <div class="modal-form-group">
+        <label>이메일</label>
+        <input type="email" class="modal-input" id="regEmail" placeholder="hello@example.com" autocomplete="email" required>
+      </div>
+      <div class="modal-form-group">
+        <label>비밀번호</label>
+        <input type="password" class="modal-input" id="regPw" placeholder="6자 이상" autocomplete="new-password" required>
+      </div>
+      <div class="auth-error" id="registerError"></div>
+      <button type="submit" class="modal-btn">회원가입하고 시작하기</button>
+    </form>
+
+    <p class="auth-note">계정 정보는 이 브라우저에만 저장됩니다.</p>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">Color</a>
+  <p>© 2026 Color. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="#">이용약관</a></li>
+    <li><a href="#">개인정보처리방침</a></li>
+    <li><a href="index.html#contact">문의하기</a></li>
+  </ul>
+</footer>
+
+<script src="script.js"></script>
+<script>
+function redirectTarget() {
+  const params = new URLSearchParams(location.search);
+  return params.get('redirect') || 'index.html';
+}
+
+if (getSession()) location.href = redirectTarget();
+
+document.querySelectorAll('.auth-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const isLogin = tab.dataset.tab === 'login';
+    document.getElementById('loginForm').style.display = isLogin ? 'flex' : 'none';
+    document.getElementById('registerForm').style.display = isLogin ? 'none' : 'flex';
+  });
+});
+
+document.getElementById('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const errEl = document.getElementById('loginError');
+  errEl.textContent = '';
+  const email = document.getElementById('loginEmail').value;
+  const pw = document.getElementById('loginPw').value;
+  const result = await loginUser(email, pw);
+  if (!result.ok) { errEl.textContent = result.msg; return; }
+  location.href = redirectTarget();
+});
+
+document.getElementById('registerForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const errEl = document.getElementById('registerError');
+  errEl.textContent = '';
+  const name = document.getElementById('regName').value;
+  const email = document.getElementById('regEmail').value;
+  const pw = document.getElementById('regPw').value;
+  const result = await registerUser(name, email, pw);
+  if (!result.ok) { errEl.textContent = result.msg; return; }
+  location.href = redirectTarget();
+});
+</script>
+</body>
+</html>

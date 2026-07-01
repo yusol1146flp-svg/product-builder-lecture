@@ -31,7 +31,6 @@ document.querySelectorAll('.nav-links a').forEach(a => {
 
 // ── SEARCH DATA ──
 const SEARCH_DATA = [
-  // Palettes
   {type:'palette',id:'p01',name:'오션 & 선셋',mood:'자연·역동',harmony:'complementary',colors:['#264653','#2A9D8F','#E9C46A','#F4A261','#E76F51'],url:'palettes.html'},
   {type:'palette',id:'p02',name:'퍼플 & 골드',mood:'고급·신비',harmony:'complementary',colors:['#10002B','#7B2FBE','#C77DFF','#FFD60A','#FFAA00'],url:'palettes.html'},
   {type:'palette',id:'p03',name:'민트 & 코랄',mood:'청량·발랄',harmony:'complementary',colors:['#B7E4C7','#52B788','#2D6A4F','#FF4D6D','#C9184A'],url:'palettes.html'},
@@ -52,7 +51,6 @@ const SEARCH_DATA = [
   {type:'palette',id:'p18',name:'불꽃 & 로즈우드',mood:'열정·따뜻함',harmony:'monochromatic',colors:['#370617','#6A040F','#D00000','#F48C06','#FFD166'],url:'palettes.html'},
   {type:'palette',id:'p19',name:'트로피컬 선셋',mood:'이국적·활기',harmony:'split',colors:['#0D3B66','#48CAE4','#F4D35E','#EE964B','#F95738'],url:'palettes.html'},
   {type:'palette',id:'p20',name:'매직아워',mood:'도시·몽환',harmony:'split',colors:['#4361EE','#4CC9F0','#F72585','#FFBE0B'],url:'palettes.html'},
-  // Gradients
   {type:'gradient',id:'g01',name:'선셋 드라이브',mood:'따뜻함·향수',css:'linear-gradient(135deg, #FF6B6B, #FE8C00)',url:'gradients.html'},
   {type:'gradient',id:'g02',name:'오로라 보레알리스',mood:'신비·생동감',css:'linear-gradient(135deg, #00C9FF, #92FE9D)',url:'gradients.html'},
   {type:'gradient',id:'g03',name:'봄 벚꽃',mood:'로맨틱·봄',css:'linear-gradient(135deg, #FFB7C5, #FF69B4, #C9184A)',url:'gradients.html'},
@@ -73,7 +71,55 @@ const SEARCH_DATA = [
   {type:'gradient',id:'g18',name:'스모키 차콜',mood:'모던·중후함',css:'linear-gradient(135deg, #232526, #414345)',url:'gradients.html'},
 ];
 
-// ── USER STATE ──
+// ── AUTH SYSTEM ──
+async function _hash(pw) {
+  const data = new TextEncoder().encode(pw + 'color2026$salt');
+  const buf = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+function _uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function getAccounts() { return JSON.parse(localStorage.getItem('color-accounts') || '[]'); }
+function _saveAccounts(a) { localStorage.setItem('color-accounts', JSON.stringify(a)); }
+function getSession() { return JSON.parse(localStorage.getItem('color-session') || 'null'); }
+function _saveSession(s) { localStorage.setItem('color-session', JSON.stringify(s)); }
+function _clearSession() { localStorage.removeItem('color-session'); }
+
+async function registerUser(username, email, pw) {
+  if (!username.trim() || !email.trim() || !pw) return {ok:false, msg:'모든 항목을 입력해 주세요.'};
+  if (pw.length < 6) return {ok:false, msg:'비밀번호는 6자 이상이어야 합니다.'};
+  const accounts = getAccounts();
+  if (accounts.find(a => a.email.toLowerCase() === email.toLowerCase()))
+    return {ok:false, msg:'이미 사용 중인 이메일입니다.'};
+  const hash = await _hash(pw);
+  const user = {id:_uid(), username:username.trim(), email:email.trim().toLowerCase(), hash, createdAt:Date.now()};
+  accounts.push(user);
+  _saveAccounts(accounts);
+  const session = {userId:user.id, username:user.username, email:user.email};
+  _saveSession(session);
+  setUser({name:user.username, email:user.email, createdAt:user.createdAt});
+  return {ok:true, session};
+}
+
+async function loginUser(email, pw) {
+  if (!email.trim() || !pw) return {ok:false, msg:'이메일과 비밀번호를 입력해 주세요.'};
+  const accounts = getAccounts();
+  const user = accounts.find(a => a.email.toLowerCase() === email.trim().toLowerCase());
+  if (!user) return {ok:false, msg:'등록되지 않은 이메일입니다.'};
+  const hash = await _hash(pw);
+  if (hash !== user.hash) return {ok:false, msg:'비밀번호가 일치하지 않습니다.'};
+  const session = {userId:user.id, username:user.username, email:user.email};
+  _saveSession(session);
+  setUser({name:user.username, email:user.email, createdAt:user.createdAt});
+  return {ok:true, session};
+}
+
+function logoutUser() {
+  _clearSession();
+  clearUser();
+  updateUserUI();
+}
+
+// ── USER STATE (backward compat) ──
 function getUser() { return JSON.parse(localStorage.getItem('color-user') || 'null'); }
 function setUser(u) { localStorage.setItem('color-user', JSON.stringify(u)); }
 function clearUser() { localStorage.removeItem('color-user'); }
@@ -89,22 +135,193 @@ function toggleFav(type, id) {
   saveFavs(f);
   return idx === -1;
 }
-function isFaved(type, id) {
-  const f = getFavs();
-  return f[type + 's'].includes(id);
-}
+function isFaved(type, id) { return getFavs()[type + 's'].includes(id); }
 
 // ── SEARCH HISTORY ──
-function getHistory() { return JSON.parse(localStorage.getItem('color-search-history') || '[]'); }
+function getHistory() {
+  const session = getSession();
+  const key = session ? `color-history-${session.userId}` : 'color-search-history';
+  return JSON.parse(localStorage.getItem(key) || '[]');
+}
 function addHistory(q) {
   if (!q.trim()) return;
+  const session = getSession();
+  const key = session ? `color-history-${session.userId}` : 'color-search-history';
   let h = getHistory().filter(x => x !== q);
   h.unshift(q);
-  if (h.length > 8) h = h.slice(0, 8);
-  localStorage.setItem('color-search-history', JSON.stringify(h));
+  if (h.length > 20) h = h.slice(0, 20);
+  localStorage.setItem(key, JSON.stringify(h));
 }
 function removeHistory(q) {
-  localStorage.setItem('color-search-history', JSON.stringify(getHistory().filter(x => x !== q)));
+  const session = getSession();
+  const key = session ? `color-history-${session.userId}` : 'color-search-history';
+  localStorage.setItem(key, JSON.stringify(getHistory().filter(x => x !== q)));
+}
+
+// ── COMMENTS ──
+function getComments() { return JSON.parse(localStorage.getItem('color-comments') || '[]'); }
+function _saveComments(c) { localStorage.setItem('color-comments', JSON.stringify(c)); }
+function getItemComments(pageType, itemId) {
+  return getComments().filter(c => c.pageType === pageType && c.itemId === itemId)
+    .sort((a,b) => a.createdAt - b.createdAt);
+}
+function addComment(pageType, itemId, text) {
+  const session = getSession();
+  if (!session) return null;
+  const c = {
+    id: _uid(), userId: session.userId, username: session.username,
+    pageType, itemId, text: text.trim(), createdAt: Date.now(), likes: []
+  };
+  const all = getComments();
+  all.push(c);
+  _saveComments(all);
+  return c;
+}
+function deleteComment(id) {
+  const session = getSession();
+  if (!session) return;
+  const all = getComments().filter(c => !(c.id === id && c.userId === session.userId));
+  _saveComments(all);
+}
+function likeComment(id) {
+  const session = getSession();
+  if (!session) return;
+  const all = getComments();
+  const c = all.find(c => c.id === id);
+  if (!c) return;
+  const idx = c.likes.indexOf(session.userId);
+  if (idx === -1) c.likes.push(session.userId); else c.likes.splice(idx, 1);
+  _saveComments(all);
+  return c;
+}
+function timeAgo(ts) {
+  const s = Math.floor((Date.now() - ts) / 1000);
+  if (s < 60) return '방금 전';
+  if (s < 3600) return Math.floor(s/60) + '분 전';
+  if (s < 86400) return Math.floor(s/3600) + '시간 전';
+  return Math.floor(s/86400) + '일 전';
+}
+
+function renderCommentSection(wrap, pageType, itemId) {
+  const session = getSession();
+  const comments = getItemComments(pageType, itemId);
+  const count = comments.length;
+
+  wrap.innerHTML = `
+    <div class="comment-toggle-row">
+      <button class="comment-toggle-btn" data-open="false">
+        💬 댓글 <span class="cmt-count">${count}</span>
+      </button>
+    </div>
+    <div class="comment-body" style="display:none;">
+      <div class="comment-list"></div>
+      ${session
+        ? `<div class="comment-form-wrap">
+             <div class="comment-avatar small">${session.username.charAt(0).toUpperCase()}</div>
+             <div class="comment-input-row">
+               <textarea class="comment-textarea" placeholder="댓글을 입력하세요…" rows="1"></textarea>
+               <button class="comment-submit-btn">등록</button>
+             </div>
+           </div>`
+        : `<div class="comment-login-prompt">
+             <a href="login.html?redirect=${encodeURIComponent(location.href)}">로그인</a>하면 댓글을 작성할 수 있어요.
+           </div>`}
+    </div>`;
+
+  const toggleBtn = wrap.querySelector('.comment-toggle-btn');
+  const body = wrap.querySelector('.comment-body');
+  const listEl = wrap.querySelector('.comment-list');
+
+  function renderList() {
+    const cs = getItemComments(pageType, itemId);
+    wrap.querySelector('.cmt-count').textContent = cs.length;
+    if (!cs.length) {
+      listEl.innerHTML = '<div class="comment-empty">아직 댓글이 없어요. 첫 댓글을 남겨보세요!</div>';
+      return;
+    }
+    listEl.innerHTML = cs.map(c => {
+      const mine = session && c.userId === session.userId;
+      const liked = session && c.likes.includes(session.userId);
+      return `<div class="comment-item" data-id="${c.id}">
+        <div class="comment-avatar">${c.username.charAt(0).toUpperCase()}</div>
+        <div class="comment-content">
+          <div class="comment-header">
+            <span class="comment-username">${c.username}</span>
+            <span class="comment-time">${timeAgo(c.createdAt)}</span>
+          </div>
+          <div class="comment-text">${c.text.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</div>
+          <div class="comment-actions">
+            <button class="cmt-like-btn ${liked?'liked':''}" data-id="${c.id}">
+              ${liked?'❤️':'🤍'} ${c.likes.length||''}
+            </button>
+            ${mine ? `<button class="cmt-del-btn" data-id="${c.id}">삭제</button>` : ''}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+    listEl.querySelectorAll('.cmt-del-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!confirm('댓글을 삭제하시겠어요?')) return;
+        deleteComment(btn.dataset.id);
+        renderList();
+      });
+    });
+    listEl.querySelectorAll('.cmt-like-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!session) { location.href = 'login.html?redirect=' + encodeURIComponent(location.href); return; }
+        likeComment(btn.dataset.id);
+        renderList();
+      });
+    });
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    const open = toggleBtn.dataset.open === 'true';
+    toggleBtn.dataset.open = !open;
+    body.style.display = open ? 'none' : 'block';
+    if (!open) renderList();
+  });
+
+  if (session) {
+    const ta = wrap.querySelector('.comment-textarea');
+    const sub = wrap.querySelector('.comment-submit-btn');
+    ta.addEventListener('input', () => {
+      ta.style.height = 'auto';
+      ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+    });
+    sub.addEventListener('click', () => {
+      if (!ta.value.trim()) return;
+      addComment(pageType, itemId, ta.value);
+      ta.value = '';
+      ta.style.height = 'auto';
+      renderList();
+    });
+    ta.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) sub.click();
+    });
+  }
+}
+
+// ── CUSTOM PALETTES ──
+function getCustomPalettes() { return JSON.parse(localStorage.getItem('color-custom-palettes') || '[]'); }
+function _saveCustomPalettes(p) { localStorage.setItem('color-custom-palettes', JSON.stringify(p)); }
+function addCustomPalette(name, colors, desc) {
+  const session = getSession();
+  if (!session) return null;
+  const p = {
+    id: _uid(), userId: session.userId, username: session.username,
+    name: name.trim(), colors, desc: (desc||'').trim(), createdAt: Date.now(), likes: []
+  };
+  const all = getCustomPalettes();
+  all.unshift(p);
+  _saveCustomPalettes(all);
+  return p;
+}
+function deleteCustomPalette(id) {
+  const session = getSession();
+  if (!session) return;
+  _saveCustomPalettes(getCustomPalettes().filter(p => !(p.id === id && p.userId === session.userId)));
 }
 
 // ── SEARCH LOGIC ──
@@ -134,25 +351,22 @@ function injectUI() {
     </div>`;
   document.body.appendChild(overlay);
 
-  const loginModal = document.createElement('div');
-  loginModal.id = 'loginModal';
-  loginModal.className = 'modal-backdrop';
-  loginModal.innerHTML = `<div class="modal" id="loginModalInner"><button class="modal-close" id="modalClose">✕</button><div id="modalContent"></div></div>`;
-  document.body.appendChild(loginModal);
+  const profileModal = document.createElement('div');
+  profileModal.id = 'loginModal';
+  profileModal.className = 'modal-backdrop';
+  profileModal.innerHTML = `<div class="modal" id="loginModalInner"><button class="modal-close" id="modalClose">✕</button><div id="modalContent"></div></div>`;
+  document.body.appendChild(profileModal);
 
-  // Overlay outside click closes
   overlay.addEventListener('click', e => { if (e.target === overlay) closeSearch(); });
-  loginModal.addEventListener('click', e => { if (e.target === loginModal) closeModal(); });
+  profileModal.addEventListener('click', e => { if (e.target === profileModal) closeModal(); });
   document.getElementById('searchClose').addEventListener('click', closeSearch);
   document.getElementById('modalClose').addEventListener('click', closeModal);
 
-  // Keyboard shortcuts
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { closeSearch(); closeModal(); }
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
   });
 
-  // Search input
   const input = document.getElementById('searchInput');
   input.addEventListener('input', () => renderSearchResults(input.value));
   input.addEventListener('keydown', e => {
@@ -162,7 +376,6 @@ function injectUI() {
     }
   });
 
-  // Login/Search buttons
   const searchBtn = document.getElementById('searchBtn');
   const loginBtn = document.getElementById('loginBtn');
   if (searchBtn) searchBtn.addEventListener('click', openSearch);
@@ -176,16 +389,18 @@ function openSearch() {
   setTimeout(() => document.getElementById('searchInput').focus(), 50);
   renderSearchResults('');
 }
-function closeSearch() {
-  document.getElementById('searchOverlay').classList.remove('open');
-}
+function closeSearch() { document.getElementById('searchOverlay').classList.remove('open'); }
+
 function openLogin() {
+  const session = getSession();
+  if (!session) {
+    location.href = 'login.html?redirect=' + encodeURIComponent(location.href);
+    return;
+  }
   renderModal();
   document.getElementById('loginModal').classList.add('open');
 }
-function closeModal() {
-  document.getElementById('loginModal').classList.remove('open');
-}
+function closeModal() { document.getElementById('loginModal').classList.remove('open'); }
 
 function renderSearchResults(q) {
   const el = document.getElementById('searchResults');
@@ -209,18 +424,12 @@ function renderSearchResults(q) {
       });
     });
     el.querySelectorAll('.search-history-del').forEach(btn => {
-      btn.addEventListener('click', () => {
-        removeHistory(btn.dataset.del);
-        renderSearchResults('');
-      });
+      btn.addEventListener('click', () => { removeHistory(btn.dataset.del); renderSearchResults(''); });
     });
     return;
   }
   const results = searchItems(q);
-  if (!results.length) {
-    el.innerHTML = `<div class="search-empty">"${q}"에 대한 결과가 없습니다.</div>`;
-    return;
-  }
+  if (!results.length) { el.innerHTML = `<div class="search-empty">"${q}"에 대한 결과가 없습니다.</div>`; return; }
   const palettes = results.filter(r => r.type === 'palette');
   const gradients = results.filter(r => r.type === 'gradient');
   let html = '';
@@ -228,11 +437,8 @@ function renderSearchResults(q) {
     html += `<div class="search-section-title">팔레트</div>`;
     html += palettes.map(item => `
       <a href="${item.url}" class="search-result-item" data-q="${q}">
-        <div class="search-result-swatch" style="background:${item.colors[2] || item.colors[0]};"></div>
-        <div class="search-result-info">
-          <div class="search-result-name">${item.name}</div>
-          <div class="search-result-meta">${item.mood}</div>
-        </div>
+        <div class="search-result-swatch" style="background:${item.colors[2]||item.colors[0]};"></div>
+        <div class="search-result-info"><div class="search-result-name">${item.name}</div><div class="search-result-meta">${item.mood}</div></div>
         <span class="search-result-badge" style="background:rgba(167,139,250,0.12);color:#a78bfa;border:1px solid rgba(167,139,250,0.25);">팔레트</span>
       </a>`).join('');
   }
@@ -241,102 +447,75 @@ function renderSearchResults(q) {
     html += gradients.map(item => `
       <a href="${item.url}" class="search-result-item" data-q="${q}">
         <div class="search-result-swatch grad" style="background:${item.css};"></div>
-        <div class="search-result-info">
-          <div class="search-result-name">${item.name}</div>
-          <div class="search-result-meta">${item.mood}</div>
-        </div>
+        <div class="search-result-info"><div class="search-result-name">${item.name}</div><div class="search-result-meta">${item.mood}</div></div>
         <span class="search-result-badge" style="background:rgba(96,165,250,0.12);color:#60a5fa;border:1px solid rgba(96,165,250,0.25);">그라데이션</span>
       </a>`).join('');
   }
   el.innerHTML = html;
   el.querySelectorAll('.search-result-item').forEach(a => {
-    a.addEventListener('click', () => {
-      addHistory(a.dataset.q || q);
-      closeSearch();
-    });
+    a.addEventListener('click', () => { addHistory(a.dataset.q || q); closeSearch(); });
   });
 }
 
 function renderModal() {
-  const user = getUser();
+  const session = getSession();
   const mc = document.getElementById('modalContent');
-  if (user) {
-    const favs = getFavs();
-    const palCount = favs.palettes.length;
-    const gradCount = favs.gradients.length;
-    mc.innerHTML = `
-      <div class="modal-user-info">
-        <div class="modal-user-avatar">🎨</div>
-        <div class="modal-user-name">${user.name}</div>
-        <div class="modal-user-stats">Color 사용자</div>
-        <div class="modal-stats-grid">
-          <div class="modal-stat-card">
-            <div class="modal-stat-num">${palCount}</div>
-            <div class="modal-stat-label">저장된 팔레트</div>
-          </div>
-          <div class="modal-stat-card">
-            <div class="modal-stat-num">${gradCount}</div>
-            <div class="modal-stat-label">저장된 그라데이션</div>
-          </div>
-        </div>
-        <a href="favorites.html" class="modal-favorites-link" onclick="closeModal()">❤️ 내 저장함 & 추천 보기</a>
-        <button class="modal-btn-outline" id="logoutBtn">로그아웃</button>
-      </div>`;
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      clearUser();
-      updateUserUI();
-      closeModal();
-    });
-  } else {
-    mc.innerHTML = `
-      <h2>Color에 오신 걸<br>환영해요 🎨</h2>
-      <p>닉네임을 입력하면 팔레트와 그라데이션을 저장하고 맞춤 추천을 받을 수 있어요. 계정 정보는 이 기기에만 저장됩니다.</p>
-      <div class="modal-form-group">
-        <label>닉네임</label>
-        <input type="text" class="modal-input" id="nameInput" placeholder="색을 좋아하는 이름" maxlength="20">
+  if (!session) return;
+  const favs = getFavs();
+  const myPals = getCustomPalettes().filter(p => p.userId === session.userId);
+  const myCmts = getComments().filter(c => c.userId === session.userId);
+  mc.innerHTML = `
+    <div class="modal-user-info">
+      <div class="modal-user-avatar" style="font-size:1.5rem;width:56px;height:56px;background:linear-gradient(135deg,#a78bfa,#60a5fa);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;margin:0 auto 12px;">${session.username.charAt(0).toUpperCase()}</div>
+      <div class="modal-user-name">${session.username}</div>
+      <div class="modal-user-stats" style="font-size:0.78rem;color:var(--muted);margin-bottom:18px;">${session.email}</div>
+      <div class="modal-stats-grid">
+        <div class="modal-stat-card"><div class="modal-stat-num">${favs.palettes.length+favs.gradients.length}</div><div class="modal-stat-label">저장된 항목</div></div>
+        <div class="modal-stat-card"><div class="modal-stat-num">${myPals.length}</div><div class="modal-stat-label">내 팔레트</div></div>
+        <div class="modal-stat-card"><div class="modal-stat-num">${myCmts.length}</div><div class="modal-stat-label">작성 댓글</div></div>
       </div>
-      <div class="modal-form-group">
-        <label>이메일 (선택)</label>
-        <input type="email" class="modal-input" id="emailInput" placeholder="hello@example.com">
-      </div>
-      <button class="modal-btn" id="startBtn">시작하기</button>`;
-    document.getElementById('nameInput').focus();
-    document.getElementById('startBtn').addEventListener('click', () => {
-      const name = document.getElementById('nameInput').value.trim();
-      const email = document.getElementById('emailInput').value.trim();
-      if (!name) { document.getElementById('nameInput').focus(); return; }
-      setUser({ name, email, createdAt: Date.now() });
-      updateUserUI();
-      renderModal();
-    });
-    document.getElementById('nameInput').addEventListener('keydown', e => {
-      if (e.key === 'Enter') document.getElementById('startBtn').click();
-    });
-  }
+      <a href="favorites.html" class="modal-favorites-link" onclick="closeModal()">❤️ 내 저장함 보기</a>
+      <a href="my-palette.html" class="modal-favorites-link" style="margin-top:8px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.2);color:#60a5fa;" onclick="closeModal()">🎨 내 팔레트 스튜디오</a>
+      <button class="modal-btn-outline" id="logoutBtn" style="margin-top:14px;">로그아웃</button>
+    </div>`;
+  document.getElementById('logoutBtn').addEventListener('click', () => { logoutUser(); closeModal(); });
 }
 
 function updateUserUI() {
-  const user = getUser();
+  const session = getSession();
   const loginBtn = document.getElementById('loginBtn');
   const navFavs = document.getElementById('navFavorites');
+  const navMyPal = document.getElementById('navMyPalette');
+
   if (loginBtn) {
-    loginBtn.textContent = user ? '👤' : '👤';
-    loginBtn.title = user ? `${user.name} — 내 저장함` : '로그인';
-    loginBtn.classList.toggle('active-user', !!user);
+    if (session) {
+      loginBtn.textContent = session.username.charAt(0).toUpperCase();
+      loginBtn.title = `${session.username} — 프로필`;
+      loginBtn.classList.add('active-user');
+      loginBtn.style.cssText = 'background:linear-gradient(135deg,#a78bfa,#60a5fa);color:#fff;font-weight:900;border-radius:50%;width:34px;height:34px;padding:0;font-size:0.9rem;';
+    } else {
+      loginBtn.textContent = '👤';
+      loginBtn.title = '로그인';
+      loginBtn.classList.remove('active-user');
+      loginBtn.style.cssText = '';
+    }
   }
-  if (navFavs) navFavs.style.display = user ? '' : 'none';
-  // Update all fav buttons on page
+  if (navFavs) navFavs.style.display = session ? '' : 'none';
+  if (navMyPal) navMyPal.style.display = session ? '' : 'none';
+
   document.querySelectorAll('[data-fav-id]').forEach(btn => {
     const type = btn.dataset.favType;
     const id = btn.dataset.favId;
-    btn.classList.toggle('saved', isFaved(type, id));
-    btn.title = isFaved(type, id) ? '저장됨 ✓' : (user ? '저장하기' : '로그인 후 저장 가능');
+    const faved = isFaved(type, id);
+    btn.classList.toggle('saved', faved);
+    btn.textContent = faved ? '❤️' : '🤍';
+    btn.title = faved ? '저장됨 ✓' : (session ? '저장하기' : '로그인 후 저장 가능');
   });
 }
 
 function handleFavClick(btn) {
-  const user = getUser();
-  if (!user) { openLogin(); return; }
+  const session = getSession();
+  if (!session) { openLogin(); return; }
   const type = btn.dataset.favType;
   const id = btn.dataset.favId;
   const added = toggleFav(type, id);
@@ -348,11 +527,9 @@ function handleFavClick(btn) {
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
   injectUI();
-  // Fav button click delegation
   document.addEventListener('click', e => {
     const btn = e.target.closest('[data-fav-id]');
     if (btn) handleFavClick(btn);
   });
-  // Init fav button states
   updateUserUI();
 });

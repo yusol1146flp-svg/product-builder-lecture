@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 팔레트 스튜디오 — Color</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Color</a>
+  <ul class="nav-links">
+    <li><a href="index.html">홈</a></li>
+    <li><a href="extractor.html">이미지 색 추출</a></li>
+    <li><a href="palettes.html">색 조합</a></li>
+    <li><a href="gradients.html">그라데이션</a></li>
+    <li><a href="search.html">색 검색</a></li>
+    <li><a href="tips.html">배색 팁</a></li>
+    <li><a href="favorites.html" id="navFavorites" style="display:none;">저장함</a></li>
+    <li><a href="my-palette.html" id="navMyPalette" style="display:none;">내 팔레트</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)">🔍</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
+    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인">👤</button>
+    <a href="index.html#contact" class="nav-cta">문의하기</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-glow"></div>
+  <p class="breadcrumb"><a href="index.html">홈</a><span>›</span>내 팔레트 스튜디오</p>
+  <h1>내 <span class="gradient-text">팔레트 스튜디오</span></h1>
+  <p>직접 색을 골라 나만의 팔레트를 만들고 저장하세요.</p>
+</div>
+
+<div id="notLoggedIn" style="display:none;" class="section" style="padding-top:0;">
+  <div class="favs-empty">
+    <div class="favs-empty-icon">🔒</div>
+    <h3>로그인이 필요합니다</h3>
+    <p style="margin-bottom:24px;">로그인하면 나만의 팔레트를 만들고 저장할 수 있어요.</p>
+    <button class="btn-primary" id="goLoginBtn">로그인하기</button>
+  </div>
+</div>
+
+<div id="loggedInContent" style="display:none;">
+
+  <div class="section" style="padding-top:0;padding-bottom:0;">
+    <div class="section-label">새 팔레트 만들기</div>
+    <h2 class="section-title" style="margin-bottom:20px;">색을 <span class="gradient-text">직접 조합</span>해보세요</h2>
+
+    <form id="studioForm" class="studio-form">
+      <div class="modal-form-group">
+        <label>팔레트 이름</label>
+        <input type="text" class="modal-input" id="studioName" placeholder="예: 나의 여름 팔레트" maxlength="30" required>
+      </div>
+      <div class="modal-form-group">
+        <label>설명 (선택)</label>
+        <input type="text" class="modal-input" id="studioDesc" placeholder="이 팔레트에 대한 짧은 설명" maxlength="60">
+      </div>
+      <div class="modal-form-group">
+        <label>색상 (2~6개)</label>
+        <div class="studio-color-list" id="studioColorList"></div>
+        <div class="studio-color-actions">
+          <button type="button" class="dz-btn dz-btn-secondary" id="addColorBtn">+ 색상 추가</button>
+        </div>
+      </div>
+      <button type="submit" class="modal-btn" style="width:auto;padding:12px 28px;">팔레트 저장</button>
+    </form>
+  </div>
+
+  <hr class="divider" style="margin:40px 0;" />
+
+  <div class="section" style="padding-top:0;">
+    <div class="section-label">내가 만든 팔레트</div>
+    <h2 class="section-title" style="margin-bottom:32px;">나만의 <span class="gradient-text">컬렉션</span></h2>
+    <div class="palette-gallery" id="myPalettes"></div>
+    <div id="noMyPalettes" class="favs-empty" style="display:none;">
+      <div class="favs-empty-icon">🎨</div>
+      <h3>아직 만든 팔레트가 없어요</h3>
+      <p>위에서 색을 골라 첫 팔레트를 만들어보세요.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="pal-copy-toast" id="palCopyToast">복사됨 ✓</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">Color</a>
+  <p>© 2026 Color. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="#">이용약관</a></li>
+    <li><a href="#">개인정보처리방침</a></li>
+    <li><a href="index.html#contact">문의하기</a></li>
+  </ul>
+</footer>
+
+<script src="script.js"></script>
+<script>
+const DEFAULT_COLORS = ['#a78bfa', '#60a5fa'];
+let colorCount = 0;
+
+function addColorRow(hex) {
+  if (colorCount >= 6) return;
+  colorCount++;
+  const row = document.createElement('div');
+  row.className = 'studio-color-row';
+  row.innerHTML = `
+    <input type="color" class="studio-color-picker" value="${hex}">
+    <button type="button" class="studio-color-remove" title="삭제">✕</button>`;
+  document.getElementById('studioColorList').appendChild(row);
+  row.querySelector('.studio-color-remove').addEventListener('click', () => {
+    if (colorCount <= 2) return;
+    row.remove();
+    colorCount--;
+  });
+}
+
+document.getElementById('addColorBtn').addEventListener('click', () => addColorRow('#a78bfa'));
+
+function renderMyPaletteCard(p) {
+  const swatches = p.colors.map(c => `<div class="pal-swatch" style="background:${c}" data-hex="${c}"><span class="pal-hex-tip">${c}</span></div>`).join('');
+  return `
+    <div class="pal-card" data-id="${p.id}">
+      <div class="pal-swatches">${swatches}</div>
+      <div class="pal-info">
+        <div class="pal-meta"><span class="pal-name">${p.name}</span><span class="pal-mood">${p.desc || '나만의 팔레트'}</span></div>
+        <button class="studio-delete-btn" data-id="${p.id}" title="삭제">🗑️</button>
+      </div>
+    </div>`;
+}
+
+function renderMyPalettes() {
+  const session = getSession();
+  if (!session) return;
+  const mine = getCustomPalettes().filter(p => p.userId === session.userId);
+  const el = document.getElementById('myPalettes');
+  const empty = document.getElementById('noMyPalettes');
+  if (!mine.length) {
+    el.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    el.innerHTML = mine.map(renderMyPaletteCard).join('');
+  }
+  el.querySelectorAll('.studio-delete-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!confirm('이 팔레트를 삭제하시겠어요?')) return;
+      deleteCustomPalette(btn.dataset.id);
+      renderMyPalettes();
+    });
+  });
+  el.querySelectorAll('.pal-swatch').forEach(sw => {
+    sw.addEventListener('click', () => {
+      const hex = sw.dataset.hex;
+      navigator.clipboard.writeText(hex).catch(() => {});
+      const toast = document.getElementById('palCopyToast');
+      toast.textContent = `${hex} 복사됨 ✓`;
+      toast.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => toast.classList.remove('show'), 1800);
+    });
+  });
+}
+
+document.getElementById('studioForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = document.getElementById('studioName').value.trim();
+  const desc = document.getElementById('studioDesc').value.trim();
+  const colors = Array.from(document.querySelectorAll('.studio-color-picker')).map(i => i.value.toUpperCase());
+  if (!name || colors.length < 2) return;
+  addCustomPalette(name, colors, desc);
+  e.target.reset();
+  document.getElementById('studioColorList').innerHTML = '';
+  colorCount = 0;
+  addColorRow(DEFAULT_COLORS[0]);
+  addColorRow(DEFAULT_COLORS[1]);
+  renderMyPalettes();
+});
+
+function renderPage() {
+  const session = getSession();
+  document.getElementById('notLoggedIn').style.display = session ? 'none' : 'block';
+  document.getElementById('loggedInContent').style.display = session ? 'block' : 'none';
+  if (session) renderMyPalettes();
+}
+
+document.getElementById('goLoginBtn')?.addEventListener('click', () => {
+  location.href = 'login.html?redirect=' + encodeURIComponent(location.href);
+});
+
+addColorRow(DEFAULT_COLORS[0]);
+addColorRow(DEFAULT_COLORS[1]);
+renderPage();
+</script>
+</body>
+</html>
