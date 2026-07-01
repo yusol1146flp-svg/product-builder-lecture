@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>개인정보처리방침 — Color</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Color</a>
+  <ul class="nav-links">
+    <li><a href="index.html">홈</a></li>
+    <li><a href="extractor.html">이미지 색 추출</a></li>
+    <li><a href="palettes.html">색 조합</a></li>
+    <li><a href="gradients.html">그라데이션</a></li>
+    <li><a href="search.html">색 검색</a></li>
+    <li><a href="tips.html">배색 팁</a></li>
+    <li><a href="favorites.html" id="navFavorites" style="display:none;">저장함</a></li>
+    <li><a href="my-palette.html" id="navMyPalette" style="display:none;">내 팔레트</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)">🔍</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
+    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인">👤</button>
+    <a href="index.html#contact" class="nav-cta">문의하기</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-glow"></div>
+  <p class="breadcrumb"><a href="index.html">홈</a><span>›</span>개인정보처리방침</p>
+  <h1>개인정보<span class="gradient-text"> 처리방침</span></h1>
+  <p>Color(이하 "본 사이트")는 이용자의 개인정보를 소중히 다루며, 아래와 같은 방침에 따라 이를 처리합니다.</p>
+</div>
+
+<div class="section legal-section" style="padding-top:0;">
+  <div class="legal-content">
+
+    <h2>1. 수집하는 개인정보 항목 및 방법</h2>
+    <p>본 사이트는 별도의 서버 회원가입 절차 없이, 브라우저의 로컬 저장소(localStorage)만을 이용해 다음 정보를 이용자의 기기 안에 저장합니다.</p>
+    <ul>
+      <li>회원가입/로그인 시: 닉네임, 이메일 주소, 비밀번호(해시 처리된 값)</li>
+      <li>서비스 이용 시: 저장한 팔레트·그라데이션, 검색 기록, 작성한 댓글, 만든 커스텀 팔레트</li>
+    </ul>
+    <p>위 정보는 이용자의 브라우저에만 저장되며, 본 사이트의 서버로 전송되거나 별도로 수집·보관되지 않습니다. 다만 하단 "문의하기" 폼을 통해 메시지를 보내실 경우, 입력하신 이름과 이메일 주소, 문의 내용이 이메일 발송 대행 서비스(Formspree)를 통해 운영자에게 전달됩니다.</p>
+
+    <h2>2. 개인정보의 이용 목적</h2>
+    <ul>
+      <li>로그인 상태 유지 및 맞춤 서비스(저장함, 추천, 댓글, 커스텀 팔레트) 제공</li>
+      <li>문의 사항에 대한 답변 및 안내</li>
+    </ul>
+
+    <h2>3. 개인정보의 보유 및 파기</h2>
+    <p>브라우저에 저장된 정보는 이용자가 직접 로그아웃하거나 브라우저 저장소(캐시/사이트 데이터)를 삭제할 때까지 보관되며, 삭제 시 즉시 파기됩니다. 문의하기 폼을 통해 전달된 내용은 문의 응대 목적 달성 후 지체 없이 파기합니다.</p>
+
+    <h2>4. 쿠키 및 광고 서비스 안내</h2>
+    <p>본 사이트는 Google AdSense 등 제3자 광고 서비스를 이용하거나 이용할 예정입니다. Google을 포함한 광고 제공업체는 이용자의 관심에 맞는 광고를 게재하기 위해 쿠키를 사용할 수 있습니다.</p>
+    <ul>
+      <li>Google은 쿠키를 사용하여 본 사이트 및 다른 사이트 방문 이력을 기반으로 광고를 게재합니다.</li>
+      <li>이용자는 <a href="https://adssettings.google.com/" target="_blank" rel="noopener">Google 광고 설정</a>에서 맞춤 광고 게재를 원하지 않도록 설정할 수 있습니다.</li>
+      <li>또한 <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">aboutads.info</a>를 방문하여 맞춤 광고에 사용되는 제3자 공급업체의 쿠키를 비활성화할 수 있습니다.</li>
+    </ul>
+
+    <h2>5. 제3자 제공 및 위탁</h2>
+    <p>본 사이트는 이용자의 개인정보를 별도로 수집하지 않으므로 원칙적으로 제3자에게 제공하지 않습니다. 다만 문의하기 폼(Formspree)과 광고 서비스(Google AdSense) 등 사이트 운영에 필요한 범위 내에서 외부 서비스를 이용하고 있으며, 각 서비스는 자체 개인정보처리방침에 따라 정보를 처리합니다.</p>
+
+    <h2>6. 이용자의 권리</h2>
+    <p>이용자는 언제든지 로그아웃 및 브라우저 데이터 삭제를 통해 저장된 정보를 직접 열람·수정·삭제할 수 있습니다. 문의하기를 통해 전달한 정보의 열람, 정정, 삭제를 요청할 수도 있습니다.</p>
+
+    <h2>7. 문의처</h2>
+    <p>개인정보 관련 문의는 <a href="index.html#contact">문의하기</a> 페이지의 양식을 통해 접수해 주세요.</p>
+
+    <h2>8. 고지의 의무</h2>
+    <p>본 방침은 관련 법령 및 서비스 변경 사항을 반영하여 수정될 수 있으며, 변경 시 본 페이지를 통해 공지합니다.</p>
+    <p class="legal-date">시행일자: 2026년 7월 1일</p>
+
+  </div>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">Color</a>
+  <p>© 2026 Color. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="terms.html">이용약관</a></li>
+    <li><a href="privacy.html">개인정보처리방침</a></li>
+    <li><a href="index.html#contact">문의하기</a></li>
+  </ul>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
