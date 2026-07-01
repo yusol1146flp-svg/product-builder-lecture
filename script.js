@@ -186,6 +186,17 @@ function deleteComment(id) {
   const all = getComments().filter(c => !(c.id === id && c.userId === session.userId));
   _saveComments(all);
 }
+function editComment(id, text) {
+  const session = getSession();
+  if (!session || !text.trim()) return null;
+  const all = getComments();
+  const c = all.find(c => c.id === id && c.userId === session.userId);
+  if (!c) return null;
+  c.text = text.trim();
+  c.editedAt = Date.now();
+  _saveComments(all);
+  return c;
+}
 function likeComment(id) {
   const session = getSession();
   if (!session) return;
@@ -250,14 +261,15 @@ function renderCommentSection(wrap, pageType, itemId) {
         <div class="comment-content">
           <div class="comment-header">
             <span class="comment-username">${c.username}</span>
-            <span class="comment-time">${timeAgo(c.createdAt)}</span>
+            <span class="comment-time">${timeAgo(c.createdAt)}${c.editedAt ? ' (수정됨)' : ''}</span>
           </div>
           <div class="comment-text">${c.text.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</div>
           <div class="comment-actions">
             <button class="cmt-like-btn ${liked?'liked':''}" data-id="${c.id}">
               ${liked?'❤️':'🤍'} ${c.likes.length||''}
             </button>
-            ${mine ? `<button class="cmt-del-btn" data-id="${c.id}">삭제</button>` : ''}
+           ${mine ? `<button class="cmt-edit-btn" data-id="${c.id}">수정</button>` : ''}
+          ${mine ? `<button class="cmt-del-btn" data-id="${c.id}">삭제</button>` : ''}
           </div>
         </div>
       </div>`;
@@ -275,6 +287,29 @@ function renderCommentSection(wrap, pageType, itemId) {
         if (!session) { location.href = 'login.html?redirect=' + encodeURIComponent(location.href); return; }
         likeComment(btn.dataset.id);
         renderList();
+      });
+    });
+    listEl.querySelectorAll('.cmt-edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        const c = cs.find(c => c.id === id);
+        if (!c) return;
+        const textEl = listEl.querySelector(`.comment-item[data-id="${id}"] .comment-text`);
+        textEl.innerHTML = `
+          <textarea class="comment-textarea cmt-edit-textarea">${c.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
+          <div class="cmt-edit-actions">
+            <button class="cmt-edit-save" data-id="${id}">저장</button>
+            <button class="cmt-edit-cancel">취소</button>
+          </div>`;
+        const ta = textEl.querySelector('.cmt-edit-textarea');
+        ta.focus();
+        ta.setSelectionRange(ta.value.length, ta.value.length);
+        textEl.querySelector('.cmt-edit-save').addEventListener('click', () => {
+          if (!ta.value.trim()) return;
+          editComment(id, ta.value);
+          renderList();
+        });
+        textEl.querySelector('.cmt-edit-cancel').addEventListener('click', () => renderList());
       });
     });
   }
