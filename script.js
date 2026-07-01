@@ -137,16 +137,18 @@ function toggleFav(type, id) {
 }
 function isFaved(type, id) { return getFavs()[type + 's'].includes(id); }
 
-// ── SEARCH HISTORY ──
+// — SEARCH HISTORY (logged-in users only) —
 function getHistory() {
   const session = getSession();
-  const key = session ? `color-history-${session.userId}` : 'color-search-history';
+  if (!session) return [];
+  const key = `color-history-${session.userId}`;
   return JSON.parse(localStorage.getItem(key) || '[]');
 }
 function addHistory(q) {
   if (!q.trim()) return;
   const session = getSession();
-  const key = session ? `color-history-${session.userId}` : 'color-search-history';
+  if (!session) return;
+  const key = `color-history-${session.userId}`;
   let h = getHistory().filter(x => x !== q);
   h.unshift(q);
   if (h.length > 20) h = h.slice(0, 20);
@@ -154,7 +156,8 @@ function addHistory(q) {
 }
 function removeHistory(q) {
   const session = getSession();
-  const key = session ? `color-history-${session.userId}` : 'color-search-history';
+  if (!session) return;
+  const key = `color-history-${session.userId}`;
   localStorage.setItem(key, JSON.stringify(getHistory().filter(x => x !== q)));
 }
 
@@ -406,9 +409,12 @@ function renderSearchResults(q) {
   const el = document.getElementById('searchResults');
   if (!q.trim()) {
     const history = getHistory();
-    if (!history.length) {
-      el.innerHTML = '<div class="search-empty">팔레트 이름, 분위기(예: "청량"), 색상 이름으로 검색해 보세요.</div>';
-      return;
+   if (!history.length) {
+    const hint = getSession()
+    ? '팔레트 이름, 분위기(예: "청량"), 색상 이름으로 검색해 보세요.'
+    : '팔레트 이름, 분위기(예: "청량"), 색상 이름으로 검색해 보세요.<br><a href="login.html?redirect=' + encodeURIComponent(location.href) + '">로그인</a>하면 검색 기록이 저장돼요.';
+  el.innerHTML = `<div class="search-empty">${hint}</div>`;
+  return;
     }
     el.innerHTML = `<div class="search-section-title">최근 검색</div>` +
       history.map(h => `
