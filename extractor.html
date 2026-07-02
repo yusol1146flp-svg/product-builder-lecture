@@ -69,6 +69,7 @@
       <h3 class="ratio-title">색 배치 비율</h3>
       <p class="ratio-desc">이미지에서 각 색상이 차지하는 실제 비율입니다.</p>
       <div id="ratioBar" class="ratio-bar"></div>
+      <div id="ratioPctList" class="ratio-pct-list"></div>
     </div>
 
     <div class="ratio-section">
@@ -242,6 +243,18 @@ function renderRatioSection(allColors) {
     const hex = rgbToHex(r,g,b);
     const pct = count/total*100;
     return `<div class="ratio-seg" style="width:${pct}%;background:${hex}" title="${hex} ${pct.toFixed(1)}%"></div>`;
+  }).join('');
+
+  const pctList = document.getElementById('ratioPctList');
+  pctList.innerHTML = colors.map(({r,g,b,count}) => {
+    const hex = rgbToHex(r,g,b);
+    const pct = count/total*100;
+    return `<div class="ratio-pct-row">
+      <span class="ratio-pct-swatch" style="background:${hex}"></span>
+      <span class="ratio-pct-hex">${hex}</span>
+      <span class="ratio-pct-track"><span class="ratio-pct-fill" style="width:${pct}%;background:${hex}"></span></span>
+      <span class="ratio-pct-value">${pct.toFixed(1)}%</span>
+    </div>`;
   }).join('');
 
   const n = Math.min(colors.length, RECO_ROLES.length);
