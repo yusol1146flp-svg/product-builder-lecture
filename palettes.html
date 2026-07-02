@@ -41,12 +41,13 @@
 
 <div class="section" style="padding-top:0;">
   <div class="palette-tabs">
-    <button class="ptab active" data-filter="all">전체 20</button>
+    <button class="ptab active" data-filter="all">전체 26</button>
     <button class="ptab" data-filter="complementary">보색 5</button>
-    <button class="ptab" data-filter="analogous">유사색 5</button>
+    <button class="ptab" data-filter="analogous">유사색 6</button>
     <button class="ptab" data-filter="triadic">삼각 배색 4</button>
-    <button class="ptab" data-filter="monochromatic">모노크롬 4</button>
-    <button class="ptab" data-filter="split">분열 보색 2</button>
+    <button class="ptab" data-filter="monochromatic">모노크롬 6</button>
+    <button class="ptab" data-filter="split">분열 보색 3</button>
+    <button class="ptab" data-filter="tetradic">사각 배색 2</button>
   </div>
 
   <div class="palette-gallery" id="paletteGallery">
@@ -328,6 +329,91 @@
       </div>
     </div>
 
+    <!-- ── 유사색 (어스 톤 추가) ── -->
+    <div class="pal-card" data-type="analogous">
+      <div class="pal-swatches">
+        <div class="pal-swatch" style="background:#FFF3E2" data-hex="#FFF3E2"><span class="pal-hex-tip">#FFF3E2</span></div>
+        <div class="pal-swatch" style="background:#E8C39E" data-hex="#E8C39E"><span class="pal-hex-tip">#E8C39E</span></div>
+        <div class="pal-swatch" style="background:#C68B59" data-hex="#C68B59"><span class="pal-hex-tip">#C68B59</span></div>
+        <div class="pal-swatch" style="background:#A15C38" data-hex="#A15C38"><span class="pal-hex-tip">#A15C38</span></div>
+        <div class="pal-swatch" style="background:#5C3D2E" data-hex="#5C3D2E"><span class="pal-hex-tip">#5C3D2E</span></div>
+      </div>
+      <div class="pal-info">
+        <div class="pal-meta"><span class="pal-name">어스 & 테라코타</span><span class="pal-mood">편안·자연</span></div>
+        <span class="pal-badge pb-ana">유사색</span>
+      </div>
+    </div>
+
+    <!-- ── 모노크롬 (옐로우, 그레이 추가) ── -->
+    <div class="pal-card" data-type="monochromatic">
+      <div class="pal-swatches">
+        <div class="pal-swatch" style="background:#FFFBEA" data-hex="#FFFBEA"><span class="pal-hex-tip">#FFFBEA</span></div>
+        <div class="pal-swatch" style="background:#FFE066" data-hex="#FFE066"><span class="pal-hex-tip">#FFE066</span></div>
+        <div class="pal-swatch" style="background:#FFC300" data-hex="#FFC300"><span class="pal-hex-tip">#FFC300</span></div>
+        <div class="pal-swatch" style="background:#E3A008" data-hex="#E3A008"><span class="pal-hex-tip">#E3A008</span></div>
+        <div class="pal-swatch" style="background:#8C6A00" data-hex="#8C6A00"><span class="pal-hex-tip">#8C6A00</span></div>
+      </div>
+      <div class="pal-info">
+        <div class="pal-meta"><span class="pal-name">선샤인 옐로우</span><span class="pal-mood">밝음·경쾌</span></div>
+        <span class="pal-badge pb-mono">모노크롬</span>
+      </div>
+    </div>
+
+    <div class="pal-card" data-type="monochromatic">
+      <div class="pal-swatches">
+        <div class="pal-swatch" style="background:#FAFAFA" data-hex="#FAFAFA"><span class="pal-hex-tip">#FAFAFA</span></div>
+        <div class="pal-swatch" style="background:#D4D4D8" data-hex="#D4D4D8"><span class="pal-hex-tip">#D4D4D8</span></div>
+        <div class="pal-swatch" style="background:#9CA3AF" data-hex="#9CA3AF"><span class="pal-hex-tip">#9CA3AF</span></div>
+        <div class="pal-swatch" style="background:#52525B" data-hex="#52525B"><span class="pal-hex-tip">#52525B</span></div>
+        <div class="pal-swatch" style="background:#18181B" data-hex="#18181B"><span class="pal-hex-tip">#18181B</span></div>
+      </div>
+      <div class="pal-info">
+        <div class="pal-meta"><span class="pal-name">그레이스케일</span><span class="pal-mood">미니멀·모던</span></div>
+        <span class="pal-badge pb-mono">모노크롬</span>
+      </div>
+    </div>
+
+    <!-- ── 사각 배색 ── -->
+    <div class="pal-card" data-type="tetradic">
+      <div class="pal-swatches">
+        <div class="pal-swatch" style="background:#FF3355" data-hex="#FF3355"><span class="pal-hex-tip">#FF3355</span></div>
+        <div class="pal-swatch" style="background:#FFB627" data-hex="#FFB627"><span class="pal-hex-tip">#FFB627</span></div>
+        <div class="pal-swatch" style="background:#3DDC97" data-hex="#3DDC97"><span class="pal-hex-tip">#3DDC97</span></div>
+        <div class="pal-swatch" style="background:#3A86FF" data-hex="#3A86FF"><span class="pal-hex-tip">#3A86FF</span></div>
+      </div>
+      <div class="pal-info">
+        <div class="pal-meta"><span class="pal-name">레인보우 팝</span><span class="pal-mood">다채로움·유쾌</span></div>
+        <span class="pal-badge pb-tetra">사각 배색</span>
+      </div>
+    </div>
+
+    <div class="pal-card" data-type="tetradic">
+      <div class="pal-swatches">
+        <div class="pal-swatch" style="background:#FF00E5" data-hex="#FF00E5"><span class="pal-hex-tip">#FF00E5</span></div>
+        <div class="pal-swatch" style="background:#00F0FF" data-hex="#00F0FF"><span class="pal-hex-tip">#00F0FF</span></div>
+        <div class="pal-swatch" style="background:#FFEA00" data-hex="#FFEA00"><span class="pal-hex-tip">#FFEA00</span></div>
+        <div class="pal-swatch" style="background:#7B2FFF" data-hex="#7B2FFF"><span class="pal-hex-tip">#7B2FFF</span></div>
+      </div>
+      <div class="pal-info">
+        <div class="pal-meta"><span class="pal-name">네온 시티</span><span class="pal-mood">미래·강렬</span></div>
+        <span class="pal-badge pb-tetra">사각 배색</span>
+      </div>
+    </div>
+
+    <!-- ── 분열 보색 추가 ── -->
+    <div class="pal-card" data-type="split">
+      <div class="pal-swatches">
+        <div class="pal-swatch" style="background:#2B0B3F" data-hex="#2B0B3F"><span class="pal-hex-tip">#2B0B3F</span></div>
+        <div class="pal-swatch" style="background:#FF6F91" data-hex="#FF6F91"><span class="pal-hex-tip">#FF6F91</span></div>
+        <div class="pal-swatch" style="background:#FFB86B" data-hex="#FFB86B"><span class="pal-hex-tip">#FFB86B</span></div>
+        <div class="pal-swatch" style="background:#5AC8C8" data-hex="#5AC8C8"><span class="pal-hex-tip">#5AC8C8</span></div>
+      </div>
+      <div class="pal-info">
+        <div class="pal-meta"><span class="pal-name">선셋 오키드</span><span class="pal-mood">몽환·따뜻</span></div>
+        <span class="pal-badge pb-spl">분열 보색</span>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -347,9 +433,32 @@
 <script src="script.js"></script>
 <script>
 // Inject fav buttons into palette cards
-const PAL_IDS = ['p01','p02','p03','p04','p05','p06','p07','p08','p09','p10','p11','p12','p13','p14','p15','p16','p17','p18','p19','p20'];
+const PAL_IDS = ['p01','p02','p03','p04','p05','p06','p07','p08','p09','p10','p11','p12','p13','p14','p15','p16','p17','p18','p19','p20','p21','p22','p23','p24','p25','p26'];
+
+// Recommended color placement ratio: earlier (dominant) colors get more weight,
+// decaying geometrically so a 3-color palette lands near the familiar 60/30/10 rule.
+function computeRatioPcts(n) {
+  const weights = Array.from({length: n}, (_, i) => Math.pow(0.55, i));
+  const total = weights.reduce((a, b) => a + b, 0);
+  const pcts = weights.map(w => Math.round(w / total * 100));
+  pcts[0] += 100 - pcts.reduce((a, b) => a + b, 0);
+  return pcts;
+}
+
+function renderPalRatio(card) {
+  const hexes = Array.from(card.querySelectorAll('.pal-swatch')).map(sw => sw.dataset.hex);
+  const pcts = computeRatioPcts(hexes.length);
+  const ratio = document.createElement('div');
+  ratio.className = 'pal-ratio';
+  ratio.innerHTML = `
+    <div class="pal-ratio-bar">${hexes.map((hex, i) => `<span class="pal-ratio-seg" style="width:${pcts[i]}%;background:${hex}" title="${hex} ${pcts[i]}%"></span>`).join('')}</div>
+    <div class="pal-ratio-labels">${pcts.map(p => `<span style="flex:${p}">${p}%</span>`).join('')}</div>`;
+  card.querySelector('.pal-swatches').insertAdjacentElement('afterend', ratio);
+}
+
 document.querySelectorAll('.pal-card').forEach((card, i) => {
   const id = PAL_IDS[i] || ('p' + String(i+1).padStart(2,'0'));
+  renderPalRatio(card);
   const info = card.querySelector('.pal-info');
   if (info) {
     const btn = document.createElement('button');
