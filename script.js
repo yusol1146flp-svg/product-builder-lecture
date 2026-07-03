@@ -22,6 +22,50 @@ if (themeBtn) {
   });
 }
 
+// ── LANGUAGE TOGGLE ──
+const LANG_KEY = 'color-lang';
+let currentLang = localStorage.getItem(LANG_KEY) || 'ko';
+
+function t(ko, en) { return currentLang === 'en' ? en : ko; }
+
+function applyLanguage(lang) {
+  currentLang = lang;
+  html.setAttribute('lang', lang === 'en' ? 'en' : 'ko');
+
+  document.querySelectorAll('[data-en]').forEach(el => {
+    if (el._koText === undefined) el._koText = el.textContent;
+    el.textContent = lang === 'en' ? el.getAttribute('data-en') : el._koText;
+  });
+
+  ['placeholder', 'title', 'aria-label', 'content', 'alt'].forEach(attr => {
+    document.querySelectorAll(`[data-en-${attr}]`).forEach(el => {
+      if (el._koAttrs === undefined) el._koAttrs = {};
+      if (el._koAttrs[attr] === undefined) el._koAttrs[attr] = el.getAttribute(attr) || '';
+      el.setAttribute(attr, lang === 'en' ? el.getAttribute(`data-en-${attr}`) : el._koAttrs[attr]);
+    });
+  });
+
+  const langBtn = document.getElementById('langToggle');
+  if (langBtn) langBtn.textContent = lang === 'en' ? '한' : 'EN';
+  localStorage.setItem(LANG_KEY, lang);
+  document.dispatchEvent(new Event('colorlangchange'));
+}
+
+if (themeBtn) {
+  const langBtn = document.createElement('button');
+  langBtn.className = 'icon-btn lang-toggle';
+  langBtn.id = 'langToggle';
+  langBtn.type = 'button';
+  langBtn.title = 'Switch language';
+  langBtn.setAttribute('aria-label', 'Switch language');
+  langBtn.textContent = currentLang === 'en' ? '한' : 'EN';
+  langBtn.addEventListener('click', () => applyLanguage(currentLang === 'en' ? 'ko' : 'en'));
+  themeBtn.insertAdjacentElement('afterend', langBtn);
+}
+
+applyLanguage(currentLang);
+window.addEventListener('load', () => applyLanguage(currentLang));
+
 // ── ACTIVE NAV LINK ──
 const path = location.pathname.split('/').pop() || 'index.html';
 document.querySelectorAll('.nav-links a').forEach(a => {

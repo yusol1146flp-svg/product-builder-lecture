@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Color에 로그인하고 나만의 색 팔레트와 컬러 조합을 저장해 보세요.">
+<meta name="description" content="Color에 로그인하고 나만의 색 팔레트와 컬러 조합을 저장해 보세요." data-en-content="Log in to Color and save your own color palettes and combinations.">
   <meta name="keywords" content="컬러 로그인, 색 팔레트 회원가입">
   <meta name="robots" content="noindex,follow">
   <link rel="canonical" href="https://color-output.com/login.html">
@@ -20,7 +20,7 @@
 <meta name="google-adsense-account" content="ca-pub-5578005722180765">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5578005722180765"
      crossorigin="anonymous"></script>
-  <title>로그인 — Color</title>
+  <title data-en="Log In — Color">로그인 — Color</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -28,65 +28,65 @@
 <nav>
   <a href="index.html" class="logo">Color</a>
   <ul class="nav-links">
-    <li><a href="index.html">홈</a></li>
-    <li><a href="extractor.html">이미지 색 추출</a></li>
-    <li><a href="palettes.html">색 조합</a></li>
-    <li><a href="recommended.html">추천 팔레트</a></li>
-    <li><a href="gradients.html">그라데이션</a></li>
-    <li><a href="search.html">색 검색</a></li>
-    <li><a href="converter.html">변환기</a></li>
-    <li><a href="contrast-checker.html">대비 체크</a></li>
-    <li><a href="colorblind-simulator.html">색맹 체크</a></li>
-    <li><a href="tips.html">배색 팁</a></li>
-    <li><a href="favorites.html" id="navFavorites" style="display:none;">저장함</a></li>
-    <li><a href="my-palette.html" id="navMyPalette" style="display:none;">내 팔레트</a></li>
+    <li><a href="index.html" data-en="Home">홈</a></li>
+    <li><a href="extractor.html" data-en="Color Extract">이미지 색 추출</a></li>
+    <li><a href="palettes.html" data-en="Palettes">색 조합</a></li>
+    <li><a href="recommended.html" data-en="Popular">추천 팔레트</a></li>
+    <li><a href="gradients.html" data-en="Gradients">그라데이션</a></li>
+    <li><a href="search.html" data-en="Color Search">색 검색</a></li>
+    <li><a href="converter.html" data-en="Converter">변환기</a></li>
+    <li><a href="contrast-checker.html" data-en="Contrast">대비 체크</a></li>
+    <li><a href="colorblind-simulator.html" data-en="Colorblind">색맹 체크</a></li>
+    <li><a href="tips.html" data-en="Tips">배색 팁</a></li>
+    <li><a href="favorites.html" id="navFavorites" style="display:none;" data-en="Saved">저장함</a></li>
+    <li><a href="my-palette.html" id="navMyPalette" style="display:none;" data-en="My Palette">내 팔레트</a></li>
   </ul>
   <div style="display:flex;align-items:center;gap:10px;">
-    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)">🔍</button>
+    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)" data-en-aria-label="Search" data-en-title="Search (Ctrl+K)">🔍</button>
     <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
-    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인">👤</button>
-    <a href="index.html#contact" class="nav-cta">문의하기</a>
+    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인" data-en-aria-label="Login" data-en-title="Login">👤</button>
+    <a href="index.html#contact" class="nav-cta" data-en="Contact">문의하기</a>
   </div>
 </nav>
 
 <div class="section auth-section">
   <div class="auth-card">
     <div class="auth-tabs">
-      <button class="auth-tab active" data-tab="login">로그인</button>
-      <button class="auth-tab" data-tab="register">회원가입</button>
+      <button class="auth-tab active" data-tab="login" data-en="Log In">로그인</button>
+      <button class="auth-tab" data-tab="register" data-en="Sign Up">회원가입</button>
     </div>
 
     <form id="loginForm" class="auth-form">
       <div class="modal-form-group">
-        <label>이메일</label>
+        <label data-en="Email">이메일</label>
         <input type="email" class="modal-input" id="loginEmail" placeholder="hello@example.com" autocomplete="email" required>
       </div>
       <div class="modal-form-group">
-        <label>비밀번호</label>
-        <input type="password" class="modal-input" id="loginPw" placeholder="비밀번호" autocomplete="current-password" required>
+        <label data-en="Password">비밀번호</label>
+        <input type="password" class="modal-input" id="loginPw" placeholder="비밀번호" autocomplete="current-password" required data-en-placeholder="Password">
       </div>
       <div class="auth-error" id="loginError"></div>
-      <button type="submit" class="modal-btn">로그인</button>
+      <button type="submit" class="modal-btn" data-en="Log In">로그인</button>
     </form>
 
     <form id="registerForm" class="auth-form" style="display:none;">
       <div class="modal-form-group">
-        <label>닉네임</label>
-        <input type="text" class="modal-input" id="regName" placeholder="색을 좋아하는 이름" maxlength="20" required>
+        <label data-en="Nickname">닉네임</label>
+        <input type="text" class="modal-input" id="regName" placeholder="색을 좋아하는 이름" maxlength="20" required data-en-placeholder="A name that loves color">
       </div>
       <div class="modal-form-group">
-        <label>이메일</label>
+        <label data-en="Email">이메일</label>
         <input type="email" class="modal-input" id="regEmail" placeholder="hello@example.com" autocomplete="email" required>
       </div>
       <div class="modal-form-group">
-        <label>비밀번호</label>
-        <input type="password" class="modal-input" id="regPw" placeholder="6자 이상" autocomplete="new-password" required>
+        <label data-en="Password">비밀번호</label>
+        <input type="password" class="modal-input" id="regPw" placeholder="6자 이상" autocomplete="new-password" required data-en-placeholder="6+ characters">
       </div>
       <div class="auth-error" id="registerError"></div>
-      <button type="submit" class="modal-btn">회원가입하고 시작하기</button>
+      <button type="submit" class="modal-btn" data-en="Sign Up &amp; Get Started">회원가입하고 시작하기</button>
     </form>
 
-    <p class="auth-note">계정 정보는 이 브라우저에만 저장됩니다.</p>
+    <p class="auth-note" data-en="Account information is stored only in this browser.">계정 정보는 이 브라우저에만 저장됩니다.</p>
   </div>
 </div>
 
@@ -94,10 +94,10 @@
   <a href="index.html" class="footer-logo">Color</a>
   <p>© 2026 Color. All rights reserved.</p>
   <ul class="footer-links">
-    <li><a href="about.html">소개</a></li>
-    <li><a href="terms.html">이용약관</a></li>
-    <li><a href="privacy.html">개인정보처리방침</a></li>
-    <li><a href="index.html#contact">문의하기</a></li>
+    <li><a href="about.html" data-en="About">소개</a></li>
+    <li><a href="terms.html" data-en="Terms">이용약관</a></li>
+    <li><a href="privacy.html" data-en="Privacy Policy">개인정보처리방침</a></li>
+    <li><a href="index.html#contact" data-en="Contact">문의하기</a></li>
   </ul>
 </footer>
 

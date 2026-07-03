@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="글자색과 배경색의 WCAG 명도 대비를 계산해 AA·AAA 접근성 기준 통과 여부를 바로 확인하는 무료 색상 대비 체크 도구입니다.">
+  <meta name="description" content="글자색과 배경색의 WCAG 명도 대비를 계산해 AA·AAA 접근성 기준 통과 여부를 바로 확인하는 무료 색상 대비 체크 도구입니다." data-en-content="A free contrast checker that calculates the WCAG luminance contrast between text and background colors and instantly shows AA/AAA pass status.">
   <meta name="keywords" content="색상 대비 체크, 명도 대비, WCAG 대비, 웹 접근성 색상, 컬러 대비 계산기, AA AAA 대비">
   <link rel="canonical" href="https://color-output.com/contrast-checker.html">
   <meta property="og:type" content="website">
@@ -19,7 +19,7 @@
 <meta name="google-adsense-account" content="ca-pub-5578005722180765">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5578005722180765"
      crossorigin="anonymous"></script>
-  <title>색상 대비 체크 — WCAG 웹 접근성 명도 대비 계산기 | Color</title>
+  <title data-en="Contrast Checker — WCAG Accessibility Contrast Calculator | Color">색상 대비 체크 — WCAG 웹 접근성 명도 대비 계산기 | Color</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="style.css">
   <style>
@@ -63,38 +63,38 @@
 <nav>
   <a href="index.html" class="logo">Color</a>
   <ul class="nav-links">
-    <li><a href="index.html">홈</a></li>
-    <li><a href="extractor.html">이미지 색 추출</a></li>
-    <li><a href="palettes.html">색 조합</a></li>
-    <li><a href="recommended.html">추천 팔레트</a></li>
-    <li><a href="gradients.html">그라데이션</a></li>
-    <li><a href="search.html">색 검색</a></li>
-    <li><a href="converter.html">변환기</a></li>
-    <li><a href="contrast-checker.html">대비 체크</a></li>
-    <li><a href="colorblind-simulator.html">색맹 체크</a></li>
-    <li><a href="tips.html">배색 팁</a></li>
-    <li><a href="favorites.html" id="navFavorites" style="display:none;">저장함</a></li>
-    <li><a href="my-palette.html" id="navMyPalette" style="display:none;">내 팔레트</a></li>
+    <li><a href="index.html" data-en="Home">홈</a></li>
+    <li><a href="extractor.html" data-en="Color Extract">이미지 색 추출</a></li>
+    <li><a href="palettes.html" data-en="Palettes">색 조합</a></li>
+    <li><a href="recommended.html" data-en="Popular">추천 팔레트</a></li>
+    <li><a href="gradients.html" data-en="Gradients">그라데이션</a></li>
+    <li><a href="search.html" data-en="Color Search">색 검색</a></li>
+    <li><a href="converter.html" data-en="Converter">변환기</a></li>
+    <li><a href="contrast-checker.html" data-en="Contrast">대비 체크</a></li>
+    <li><a href="colorblind-simulator.html" data-en="Colorblind">색맹 체크</a></li>
+    <li><a href="tips.html" data-en="Tips">배색 팁</a></li>
+    <li><a href="favorites.html" id="navFavorites" style="display:none;" data-en="Saved">저장함</a></li>
+    <li><a href="my-palette.html" id="navMyPalette" style="display:none;" data-en="My Palette">내 팔레트</a></li>
   </ul>
   <div style="display:flex;align-items:center;gap:10px;">
-    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)">🔍</button>
+    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)" data-en-aria-label="Search" data-en-title="Search (Ctrl+K)">🔍</button>
     <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
-    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인">👤</button>
-    <a href="index.html#contact" class="nav-cta">문의하기</a>
+    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인" data-en-aria-label="Login" data-en-title="Login">👤</button>
+    <a href="index.html#contact" class="nav-cta" data-en="Contact">문의하기</a>
   </div>
 </nav>
 
 <div class="page-hero">
   <div class="page-hero-glow"></div>
-  <p class="breadcrumb"><a href="index.html">홈</a><span>›</span>대비 체크</p>
-  <h1>글자와 배경, <span class="gradient-text">잘 읽히나요?</span></h1>
-  <p>WCAG 명도 대비 기준으로 AA·AAA 접근성 통과 여부를 즉시 확인하세요.</p>
+  <p class="breadcrumb"><a href="index.html" data-en="Home">홈</a><span>›</span><span data-en="Contrast Check">대비 체크</span></p>
+  <h1><span data-en="Text and background —">글자와 배경,</span> <span class="gradient-text" data-en="do they read well?">잘 읽히나요?</span></h1>
+  <p data-en="Instantly check AA/AAA accessibility pass status using the WCAG luminance contrast standard.">WCAG 명도 대비 기준으로 AA·AAA 접근성 통과 여부를 즉시 확인하세요.</p>
 </div>
 
 <div class="section" style="padding-top:0;">
   <div class="cc-wrap">
     <div class="cc-input-card">
-      <span class="cc-input-label">글자색 (전경)</span>
+      <span class="cc-input-label" data-en="Text Color (Foreground)">글자색 (전경)</span>
       <div class="cc-input-row">
         <div class="cc-swatch-picker" id="ccFgSwatch" style="background:#1A1A2E;">
           <input type="color" id="ccFgPicker" value="#1A1A2E">
@@ -103,7 +103,7 @@
       </div>
     </div>
     <div class="cc-input-card">
-      <span class="cc-input-label">배경색</span>
+      <span class="cc-input-label" data-en="Background Color">배경색</span>
       <div class="cc-input-row">
         <div class="cc-swatch-picker" id="ccBgSwatch" style="background:#F8F7FF;">
           <input type="color" id="ccBgPicker" value="#F8F7FF">
@@ -113,18 +113,18 @@
     </div>
   </div>
 
-  <div class="cc-swap-btn"><button id="ccSwap">⇅ 글자색·배경색 바꾸기</button></div>
+  <div class="cc-swap-btn"><button id="ccSwap" data-en="⇅ Swap Text &amp; Background">⇅ 글자색·배경색 바꾸기</button></div>
 
   <div class="cc-preview-card">
     <div class="cc-preview-sample" id="ccPreview">
-      <h2>이렇게 보여요</h2>
-      <p>본문 텍스트는 이 정도 크기와 색으로 렌더링됩니다. 실제 콘텐츠에서도 이 조합이 편안하게 읽히는지 확인해 보세요.</p>
-      <button>버튼 예시</button>
+      <h2 data-en="This is how it looks">이렇게 보여요</h2>
+      <p data-en="Body text renders at about this size and color. Check whether this combination reads comfortably in real content too.">본문 텍스트는 이 정도 크기와 색으로 렌더링됩니다. 실제 콘텐츠에서도 이 조합이 편안하게 읽히는지 확인해 보세요.</p>
+      <button data-en="Button example">버튼 예시</button>
     </div>
     <div class="cc-ratio-bar">
       <div>
         <div class="cc-ratio-num" id="ccRatioNum">—</div>
-        <div class="cc-ratio-label">명도 대비 (Contrast Ratio)</div>
+        <div class="cc-ratio-label" data-en="Contrast Ratio">명도 대비 (Contrast Ratio)</div>
       </div>
     </div>
   </div>
@@ -132,18 +132,18 @@
   <div class="cc-badges" id="ccBadges"></div>
 
   <div style="margin-top:40px;">
-    <p class="cc-input-label" style="margin-bottom:12px;">자주 쓰는 조합 테스트</p>
+    <p class="cc-input-label" style="margin-bottom:12px;" data-en="Test common combinations">자주 쓰는 조합 테스트</p>
     <div class="cc-presets" id="ccPresets"></div>
   </div>
 </div>
 
 <section class="cta-section">
   <div class="cta-box">
-    <h2>접근성 좋은 색을<br /><span class="gradient-text">팔레트로 저장하세요</span></h2>
-    <p>대비까지 확인한 색 조합은 색 조합 팔레트에서 더 다양하게 확장할 수 있습니다.</p>
+    <h2><span data-en="Save accessible colors">접근성 좋은 색을</span><br /><span class="gradient-text" data-en="as a palette">팔레트로 저장하세요</span></h2>
+    <p data-en="A color combination you've verified for contrast can be expanded further in Color Palettes.">대비까지 확인한 색 조합은 색 조합 팔레트에서 더 다양하게 확장할 수 있습니다.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
-      <a href="palettes.html" class="btn-primary">팔레트 보러 가기</a>
-      <a href="converter.html" class="btn-secondary">색상 변환기 열기</a>
+      <a href="palettes.html" class="btn-primary" data-en="Browse Palettes">팔레트 보러 가기</a>
+      <a href="converter.html" class="btn-secondary" data-en="Open Color Converter">색상 변환기 열기</a>
     </div>
   </div>
 </section>
@@ -152,10 +152,10 @@
   <a href="index.html" class="footer-logo">Color</a>
   <p>© 2026 Color. All rights reserved.</p>
   <ul class="footer-links">
-    <li><a href="about.html">소개</a></li>
-    <li><a href="terms.html">이용약관</a></li>
-    <li><a href="privacy.html">개인정보처리방침</a></li>
-    <li><a href="index.html#contact">문의하기</a></li>
+    <li><a href="about.html" data-en="About">소개</a></li>
+    <li><a href="terms.html" data-en="Terms">이용약관</a></li>
+    <li><a href="privacy.html" data-en="Privacy Policy">개인정보처리방침</a></li>
+    <li><a href="index.html#contact" data-en="Contact">문의하기</a></li>
   </ul>
 </footer>
 
@@ -179,11 +179,11 @@ function contrastRatio(hex1, hex2) {
 }
 
 const CRITERIA = [
-  { name: 'AA · 일반 텍스트', req: 4.5, min: 4.5 },
-  { name: 'AA · 큰 텍스트 (18pt+)', req: 3.0, min: 3.0 },
-  { name: 'AAA · 일반 텍스트', req: 7.0, min: 7.0 },
-  { name: 'AAA · 큰 텍스트 (18pt+)', req: 4.5, min: 4.5 },
-  { name: 'UI 컴포넌트 · 그래픽', req: 3.0, min: 3.0 },
+  { name: 'AA · 일반 텍스트', nameEn: 'AA · Normal Text', req: 4.5, min: 4.5 },
+  { name: 'AA · 큰 텍스트 (18pt+)', nameEn: 'AA · Large Text (18pt+)', req: 3.0, min: 3.0 },
+  { name: 'AAA · 일반 텍스트', nameEn: 'AAA · Normal Text', req: 7.0, min: 7.0 },
+  { name: 'AAA · 큰 텍스트 (18pt+)', nameEn: 'AAA · Large Text (18pt+)', req: 4.5, min: 4.5 },
+  { name: 'UI 컴포넌트 · 그래픽', nameEn: 'UI Components · Graphics', req: 3.0, min: 3.0 },
 ];
 
 const PRESET_PAIRS = [
@@ -224,8 +224,8 @@ function update() {
   badgesEl.innerHTML = CRITERIA.map(c => {
     const pass = ratio >= c.min;
     return `<div class="cc-badge-card">
-      <div><div class="cc-badge-name">${c.name}</div><div class="cc-badge-req">최소 ${c.req}:1</div></div>
-      <span class="${pass ? 'cc-pass' : 'cc-fail'}">${pass ? '통과 ✓' : '미달'}</span>
+      <div><div class="cc-badge-name">${t(c.name, c.nameEn)}</div><div class="cc-badge-req">${t('최소', 'Min')} ${c.req}:1</div></div>
+      <span class="${pass ? 'cc-pass' : 'cc-fail'}">${pass ? t('통과 ✓', 'Pass ✓') : t('미달', 'Fail')}</span>
     </div>`;
   }).join('');
 }
@@ -246,6 +246,7 @@ document.getElementById('ccPresets').addEventListener('click', e => {
 });
 
 update();
+document.addEventListener('colorlangchange', update);
 </script>
 </body>
 </html>
