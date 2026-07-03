@@ -68,9 +68,9 @@
     .color-result-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 48px; }
     .color-result-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
-      overflow: hidden; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      overflow: hidden; transition: transform 0.24s cubic-bezier(.2,.8,.2,1), box-shadow 0.24s, border-color 0.24s;
     }
-    .color-result-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.15); border-color: rgba(167,139,250,0.22); }
+    .color-result-card:hover { transform: translateY(-4px); box-shadow: 0 16px 38px rgba(0,0,0,0.22), 0 12px 30px -14px rgba(167,139,250,0.4); border-color: rgba(167,139,250,0.28); }
     .crc-swatch { height: 140px; position: relative; cursor: pointer; }
     .crc-copy-hint {
       position: absolute; inset: 0; background: rgba(0,0,0,0.3);
@@ -130,9 +130,9 @@
     .grad-result-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-bottom: 48px; }
     .grad-result-item {
       border-radius: 14px; overflow: hidden; border: 1px solid var(--border);
-      background: var(--surface); transition: transform 0.2s, box-shadow 0.2s;
+      background: var(--surface); transition: transform 0.24s cubic-bezier(.2,.8,.2,1), box-shadow 0.24s;
     }
-    .grad-result-item:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.14); }
+    .grad-result-item:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(0,0,0,0.2), 0 10px 26px -12px rgba(167,139,250,0.35); }
     .grad-result-bar { height: 80px; }
     .grad-result-body { padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; }
     .grad-result-name { font-size: 0.85rem; font-weight: 700; }
