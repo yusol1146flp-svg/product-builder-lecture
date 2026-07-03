@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="글자색과 배경색의 WCAG 명도 대비를 계산해 AA·AAA 접근성 기준 통과 여부를 바로 확인하는 무료 색상 대비 체크 도구입니다.">
+  <meta name="keywords" content="색상 대비 체크, 명도 대비, WCAG 대비, 웹 접근성 색상, 컬러 대비 계산기, AA AAA 대비">
+  <link rel="canonical" href="https://color-output.com/contrast-checker.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Color">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:url" content="https://color-output.com/contrast-checker.html">
+  <meta property="og:title" content="색상 대비 체크 — WCAG 웹 접근성 명도 대비 계산기 | Color">
+  <meta property="og:description" content="글자색과 배경색의 WCAG 명도 대비를 계산해 AA·AAA 접근성 기준 통과 여부를 바로 확인하세요.">
+  <meta property="og:image" content="https://color-output.com/favicon.svg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="색상 대비 체크 — WCAG 웹 접근성 명도 대비 계산기 | Color">
+  <meta name="twitter:description" content="글자색과 배경색의 WCAG 명도 대비를 계산해 AA·AAA 접근성 기준 통과 여부를 바로 확인하세요.">
+<meta name="google-adsense-account" content="ca-pub-5578005722180765">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5578005722180765"
+     crossorigin="anonymous"></script>
+  <title>색상 대비 체크 — WCAG 웹 접근성 명도 대비 계산기 | Color</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .cc-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; align-items: start; }
+    @media (max-width: 760px) { .cc-wrap { grid-template-columns: 1fr; } }
+    .cc-input-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px; box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset; }
+    .cc-input-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #a78bfa; margin-bottom: 14px; display: block; }
+    .cc-input-row { display: flex; gap: 10px; align-items: center; }
+    .cc-swatch-picker { position: relative; width: 52px; height: 52px; border-radius: 12px; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.2); overflow: hidden; }
+    .cc-swatch-picker input[type="color"] { position: absolute; inset: 0; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; opacity: 0; }
+    .cc-hex-input { flex: 1; padding: 13px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 0.95rem; font-family: monospace; font-weight: 700; outline: none; transition: border-color 0.2s; }
+    .cc-hex-input:focus { border-color: rgba(167,139,250,0.5); }
+    .cc-swap-btn { display: flex; align-items: center; justify-content: center; width: 100%; margin-top: -8px; margin-bottom: 8px; }
+    .cc-swap-btn button { background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 6px 18px; color: var(--muted); font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .cc-swap-btn button:hover { color: #a78bfa; border-color: rgba(167,139,250,0.3); }
+
+    .cc-preview-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-bottom: 32px; }
+    .cc-preview-sample { padding: 56px 40px; text-align: center; transition: background 0.2s, color 0.2s; }
+    .cc-preview-sample h2 { font-size: 2rem; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.02em; }
+    .cc-preview-sample p { font-size: 1rem; line-height: 1.7; max-width: 480px; margin: 0 auto 20px; opacity: 0.92; }
+    .cc-preview-sample button { padding: 10px 26px; border-radius: 100px; border: 1.5px solid currentColor; background: transparent; color: inherit; font-weight: 700; font-size: 0.85rem; cursor: default; }
+    .cc-ratio-bar { display: flex; align-items: center; justify-content: center; gap: 18px; padding: 22px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+    .cc-ratio-num { font-size: 2.2rem; font-weight: 900; letter-spacing: -0.03em; }
+    .cc-ratio-label { font-size: 0.78rem; color: var(--muted); }
+
+    .cc-badges { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+    .cc-badge-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 10px; transition: border-color 0.2s; }
+    .cc-badge-name { font-size: 0.85rem; font-weight: 700; }
+    .cc-badge-req { font-size: 0.7rem; color: var(--muted); }
+    .cc-pass, .cc-fail { padding: 5px 14px; border-radius: 100px; font-size: 0.75rem; font-weight: 800; white-space: nowrap; }
+    .cc-pass { background: rgba(52,211,153,0.14); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+    .cc-fail { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.28); }
+
+    .cc-presets { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    .cc-preset-pair { display: flex; border-radius: 10px; overflow: hidden; cursor: pointer; border: 1px solid var(--border); transition: transform 0.15s; }
+    .cc-preset-pair:hover { transform: translateY(-2px); }
+    .cc-preset-pair span { width: 30px; height: 30px; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Color</a>
+  <ul class="nav-links">
+    <li><a href="index.html">홈</a></li>
+    <li><a href="extractor.html">이미지 색 추출</a></li>
+    <li><a href="palettes.html">색 조합</a></li>
+    <li><a href="recommended.html">추천 팔레트</a></li>
+    <li><a href="gradients.html">그라데이션</a></li>
+    <li><a href="search.html">색 검색</a></li>
+    <li><a href="converter.html">변환기</a></li>
+    <li><a href="contrast-checker.html">대비 체크</a></li>
+    <li><a href="colorblind-simulator.html">색맹 체크</a></li>
+    <li><a href="tips.html">배색 팁</a></li>
+    <li><a href="favorites.html" id="navFavorites" style="display:none;">저장함</a></li>
+    <li><a href="my-palette.html" id="navMyPalette" style="display:none;">내 팔레트</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)">🔍</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
+    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인">👤</button>
+    <a href="index.html#contact" class="nav-cta">문의하기</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-glow"></div>
+  <p class="breadcrumb"><a href="index.html">홈</a><span>›</span>대비 체크</p>
+  <h1>글자와 배경, <span class="gradient-text">잘 읽히나요?</span></h1>
+  <p>WCAG 명도 대비 기준으로 AA·AAA 접근성 통과 여부를 즉시 확인하세요.</p>
+</div>
+
+<div class="section" style="padding-top:0;">
+  <div class="cc-wrap">
+    <div class="cc-input-card">
+      <span class="cc-input-label">글자색 (전경)</span>
+      <div class="cc-input-row">
+        <div class="cc-swatch-picker" id="ccFgSwatch" style="background:#1A1A2E;">
+          <input type="color" id="ccFgPicker" value="#1A1A2E">
+        </div>
+        <input type="text" class="cc-hex-input" id="ccFgHex" value="#1A1A2E" maxlength="7" spellcheck="false">
+      </div>
+    </div>
+    <div class="cc-input-card">
+      <span class="cc-input-label">배경색</span>
+      <div class="cc-input-row">
+        <div class="cc-swatch-picker" id="ccBgSwatch" style="background:#F8F7FF;">
+          <input type="color" id="ccBgPicker" value="#F8F7FF">
+        </div>
+        <input type="text" class="cc-hex-input" id="ccBgHex" value="#F8F7FF" maxlength="7" spellcheck="false">
+      </div>
+    </div>
+  </div>
+
+  <div class="cc-swap-btn"><button id="ccSwap">⇅ 글자색·배경색 바꾸기</button></div>
+
+  <div class="cc-preview-card">
+    <div class="cc-preview-sample" id="ccPreview">
+      <h2>이렇게 보여요</h2>
+      <p>본문 텍스트는 이 정도 크기와 색으로 렌더링됩니다. 실제 콘텐츠에서도 이 조합이 편안하게 읽히는지 확인해 보세요.</p>
+      <button>버튼 예시</button>
+    </div>
+    <div class="cc-ratio-bar">
+      <div>
+        <div class="cc-ratio-num" id="ccRatioNum">—</div>
+        <div class="cc-ratio-label">명도 대비 (Contrast Ratio)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cc-badges" id="ccBadges"></div>
+
+  <div style="margin-top:40px;">
+    <p class="cc-input-label" style="margin-bottom:12px;">자주 쓰는 조합 테스트</p>
+    <div class="cc-presets" id="ccPresets"></div>
+  </div>
+</div>
+
+<section class="cta-section">
+  <div class="cta-box">
+    <h2>접근성 좋은 색을<br /><span class="gradient-text">팔레트로 저장하세요</span></h2>
+    <p>대비까지 확인한 색 조합은 색 조합 팔레트에서 더 다양하게 확장할 수 있습니다.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
+      <a href="palettes.html" class="btn-primary">팔레트 보러 가기</a>
+      <a href="converter.html" class="btn-secondary">색상 변환기 열기</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a href="index.html" class="footer-logo">Color</a>
+  <p>© 2026 Color. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="about.html">소개</a></li>
+    <li><a href="terms.html">이용약관</a></li>
+    <li><a href="privacy.html">개인정보처리방침</a></li>
+    <li><a href="index.html#contact">문의하기</a></li>
+  </ul>
+</footer>
+
+<script src="script.js"></script>
+<script>
+function hexToRgb(hex) {
+  const v = parseInt(hex.replace('#',''), 16);
+  return [(v>>16)&255, (v>>8)&255, v&255];
+}
+function isValidHex(h) { return /^#([0-9A-Fa-f]{6})$/.test(h); }
+
+function relLuminance(hex) {
+  let [r,g,b] = hexToRgb(hex).map(v => v/255);
+  [r,g,b] = [r,g,b].map(c => c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4));
+  return 0.2126*r + 0.7152*g + 0.0722*b;
+}
+function contrastRatio(hex1, hex2) {
+  const L1 = relLuminance(hex1), L2 = relLuminance(hex2);
+  const lighter = Math.max(L1,L2), darker = Math.min(L1,L2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+const CRITERIA = [
+  { name: 'AA · 일반 텍스트', req: 4.5, min: 4.5 },
+  { name: 'AA · 큰 텍스트 (18pt+)', req: 3.0, min: 3.0 },
+  { name: 'AAA · 일반 텍스트', req: 7.0, min: 7.0 },
+  { name: 'AAA · 큰 텍스트 (18pt+)', req: 4.5, min: 4.5 },
+  { name: 'UI 컴포넌트 · 그래픽', req: 3.0, min: 3.0 },
+];
+
+const PRESET_PAIRS = [
+  ['#1A1A2E', '#F8F7FF'], ['#FFFFFF', '#000000'], ['#FF6BAE', '#FFFFFF'],
+  ['#A78BFA', '#1A1A2E'], ['#34D399', '#FFFFFF'], ['#F8F7FF', '#0D0D12'],
+  ['#FBBF24', '#1A1A2E'], ['#60A5FA', '#F8F7FF'],
+];
+document.getElementById('ccPresets').innerHTML = PRESET_PAIRS.map(([fg,bg]) =>
+  `<div class="cc-preset-pair" data-fg="${fg}" data-bg="${bg}" title="${fg} on ${bg}">
+    <span style="background:${bg}"></span><span style="background:${fg}"></span>
+  </div>`
+).join('');
+
+const fgHex = document.getElementById('ccFgHex');
+const bgHex = document.getElementById('ccBgHex');
+const fgPicker = document.getElementById('ccFgPicker');
+const bgPicker = document.getElementById('ccBgPicker');
+const fgSwatch = document.getElementById('ccFgSwatch');
+const bgSwatch = document.getElementById('ccBgSwatch');
+const preview = document.getElementById('ccPreview');
+const ratioNum = document.getElementById('ccRatioNum');
+const badgesEl = document.getElementById('ccBadges');
+
+function update() {
+  const fg = fgHex.value, bg = bgHex.value;
+  if (!isValidHex(fg) || !isValidHex(bg)) return;
+  fgSwatch.style.background = fg;
+  bgSwatch.style.background = bg;
+  fgPicker.value = fg;
+  bgPicker.value = bg;
+  preview.style.color = fg;
+  preview.style.background = bg;
+
+  const ratio = contrastRatio(fg, bg);
+  ratioNum.textContent = ratio.toFixed(2) + ' : 1';
+  ratioNum.style.color = ratio >= 4.5 ? '#34d399' : (ratio >= 3 ? '#fbbf24' : '#f87171');
+
+  badgesEl.innerHTML = CRITERIA.map(c => {
+    const pass = ratio >= c.min;
+    return `<div class="cc-badge-card">
+      <div><div class="cc-badge-name">${c.name}</div><div class="cc-badge-req">최소 ${c.req}:1</div></div>
+      <span class="${pass ? 'cc-pass' : 'cc-fail'}">${pass ? '통과 ✓' : '미달'}</span>
+    </div>`;
+  }).join('');
+}
+
+fgHex.addEventListener('input', () => { let v=fgHex.value.trim(); if(v && !v.startsWith('#')) v='#'+v; if(isValidHex(v)){fgHex.value=v; update();} });
+bgHex.addEventListener('input', () => { let v=bgHex.value.trim(); if(v && !v.startsWith('#')) v='#'+v; if(isValidHex(v)){bgHex.value=v; update();} });
+fgPicker.addEventListener('input', () => { fgHex.value = fgPicker.value.toUpperCase(); update(); });
+bgPicker.addEventListener('input', () => { bgHex.value = bgPicker.value.toUpperCase(); update(); });
+
+document.getElementById('ccSwap').addEventListener('click', () => {
+  const tmp = fgHex.value; fgHex.value = bgHex.value; bgHex.value = tmp; update();
+});
+
+document.getElementById('ccPresets').addEventListener('click', e => {
+  const pair = e.target.closest('.cc-preset-pair');
+  if (!pair) return;
+  fgHex.value = pair.dataset.fg; bgHex.value = pair.dataset.bg; update();
+});
+
+update();
+</script>
+</body>
+</html>
