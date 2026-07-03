@@ -49,6 +49,10 @@
     .search-bar-big button:hover { opacity: 0.88; }
 
     .search-tags { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 22px; max-width: 680px; }
+    .search-tag-groups { display: flex; flex-direction: column; gap: 18px; margin-top: 28px; max-width: 760px; width: 100%; }
+    .search-tag-group { display: flex; flex-direction: column; align-items: center; gap: 9px; }
+    .stag-label { font-size: 0.7rem; font-weight: 700; color: #a78bfa; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.9; }
+    .stag-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
     .stag {
       padding: 7px 16px; border-radius: 100px; border: 1px solid var(--border);
       background: var(--surface); color: var(--muted); font-size: 0.82rem; font-weight: 600;
@@ -190,35 +194,78 @@
     <button id="searchSubmitBtn">검색</button>
   </div>
 
-  <div class="search-tags" id="searchTags">
-    <button class="stag">봄날 벚꽃</button>
-    <button class="stag">따뜻한 느낌</button>
-    <button class="stag">차가운 바다</button>
-    <button class="stag">가을 단풍</button>
-    <button class="stag">신비로운</button>
-    <button class="stag">파스텔</button>
-    <button class="stag">레트로 빈티지</button>
-    <button class="stag">네온</button>
-    <button class="stag">자연 숲</button>
-    <button class="stag">노을</button>
-    <button class="stag">하늘색</button>
-    <button class="stag">로맨틱</button>
-    <button class="stag">오로라</button>
-    <button class="stag">수채화</button>
-    <button class="stag">고딕</button>
-    <button class="stag">코티지코어</button>
-    <button class="stag">크리스마스</button>
-    <button class="stag">은하수</button>
-    <button class="stag">말차</button>
-    <button class="stag">지중해</button>
-    <button class="stag">밀레니얼핑크</button>
-    <button class="stag">할로윈</button>
-    <button class="stag">오묘한</button>
-    <button class="stag">야시꾸리</button>
-    <button class="stag">몽롱한</button>
-    <button class="stag">시크한</button>
-    <button class="stag">나른한</button>
-    <button class="stag">아련한</button>
+  <div class="search-tag-groups" id="searchTags">
+    <div class="search-tag-group">
+      <span class="stag-label">✨ 퍼스널컬러</span>
+      <div class="stag-row">
+        <button class="stag">웜톤</button>
+        <button class="stag">쿨톤</button>
+        <button class="stag">봄 웜톤</button>
+        <button class="stag">여름 쿨톤</button>
+        <button class="stag">가을 웜톤</button>
+        <button class="stag">겨울 쿨톤</button>
+      </div>
+    </div>
+    <div class="search-tag-group">
+      <span class="stag-label">계절</span>
+      <div class="stag-row">
+        <button class="stag">봄날 벚꽃</button>
+        <button class="stag">여름 바캉스</button>
+        <button class="stag">가을 단풍</button>
+        <button class="stag">겨울 눈송이</button>
+        <button class="stag">크리스마스</button>
+        <button class="stag">할로윈</button>
+      </div>
+    </div>
+    <div class="search-tag-group">
+      <span class="stag-label">감정·무드</span>
+      <div class="stag-row">
+        <button class="stag">따뜻한 느낌</button>
+        <button class="stag">차가운 바다</button>
+        <button class="stag">신비로운</button>
+        <button class="stag">로맨틱</button>
+        <button class="stag">오묘한</button>
+        <button class="stag">몽롱한</button>
+        <button class="stag">시크한</button>
+        <button class="stag">나른한</button>
+        <button class="stag">아련한</button>
+        <button class="stag">야시꾸리</button>
+      </div>
+    </div>
+    <div class="search-tag-group">
+      <span class="stag-label">스타일·트렌드</span>
+      <div class="stag-row">
+        <button class="stag">파스텔</button>
+        <button class="stag">레트로 빈티지</button>
+        <button class="stag">네온</button>
+        <button class="stag">고딕</button>
+        <button class="stag">코티지코어</button>
+        <button class="stag">밀레니얼핑크</button>
+        <button class="stag">수채화</button>
+      </div>
+    </div>
+    <div class="search-tag-group">
+      <span class="stag-label">활용·공간</span>
+      <div class="stag-row">
+        <button class="stag">PPT 배색</button>
+        <button class="stag">로고 컬러</button>
+        <button class="stag">무드보드</button>
+        <button class="stag">커플룩</button>
+        <button class="stag">웨딩</button>
+      </div>
+    </div>
+    <div class="search-tag-group">
+      <span class="stag-label">자연·장소</span>
+      <div class="stag-row">
+        <button class="stag">자연 숲</button>
+        <button class="stag">노을</button>
+        <button class="stag">하늘색</button>
+        <button class="stag">오로라</button>
+        <button class="stag">은하수</button>
+        <button class="stag">말차</button>
+        <button class="stag">지중해</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -809,6 +856,40 @@ const MOOD_DB = [
   {tags:['웅장','웅장한','장엄한','스케일큰','압도적인'],
    colors:['#0A1128','#1B2845','#B8860B','#4A5A7A','#2C3E5A'],
    name:'웅장한 스케일', desc:'압도적이고 장엄한 스케일이 느껴지는 딥 컬러'},
+
+  /* ── 퍼스널컬러 (검색 유입 강화) ── */
+  {tags:['웜톤','웜톤컬러','퍼스널컬러웜톤','옐로우베이스','웜톤퍼스널컬러'],
+   colors:['#F4A261','#E76F51','#E9C46A','#C97B2E','#D4A373'],
+   name:'웜톤 퍼스널컬러', desc:'옐로우 베이스 피부에 잘 어울리는 따뜻한 웜톤 컬러'},
+  {tags:['쿨톤','쿨톤컬러','퍼스널컬러쿨톤','블루베이스','쿨톤퍼스널컬러'],
+   colors:['#8E9AAF','#5C80BC','#B8C0FF','#748CAB','#3A5A80'],
+   name:'쿨톤 퍼스널컬러', desc:'블루 베이스 피부에 어울리는 시원한 쿨톤 컬러'},
+  {tags:['봄웜톤','봄웜','봄퍼스널컬러','스프링웜'],
+   colors:['#FFB6A3','#FFD97D','#B5E5A5','#FF9A76','#FFE4B5'],
+   name:'봄 웜톤', desc:'화사하고 맑은 봄웜 퍼스널컬러 팔레트'},
+  {tags:['여름쿨톤','여름쿨','여름퍼스널컬러','서머쿨'],
+   colors:['#A8C5E0','#C9B8D8','#F4A6C1','#8FB8B0','#B8A8C8'],
+   name:'여름 쿨톤', desc:'부드럽고 뿌연 여름쿨 퍼스널컬러 팔레트'},
+  {tags:['가을웜톤','가을웜','가을퍼스널컬러','어텀웜'],
+   colors:['#B5651D','#C68E4A','#8B5A2B','#A87C3F','#6B4423'],
+   name:'가을 웜톤', desc:'깊고 차분한 가을웜 퍼스널컬러 팔레트'},
+  {tags:['겨울쿨톤','겨울쿨','겨울퍼스널컬러','윈터쿨'],
+   colors:['#1A1A2E','#E63960','#0F4C81','#FFFFFF','#4B0082'],
+   name:'겨울 쿨톤', desc:'선명하고 대비가 강한 겨울쿨 퍼스널컬러 팔레트'},
+
+  /* ── 활용·공간 (검색 유입 강화) ── */
+  {tags:['ppt배색','파워포인트색','프레젠테이션컬러','ppt컬러','발표자료색'],
+   colors:['#1F2937','#2563EB','#F59E0B','#F3F4F6','#FFFFFF'],
+   name:'PPT 배색', desc:'깔끔하고 전문적인 발표 자료용 배색 조합'},
+  {tags:['로고컬러','브랜드컬러','브랜딩색','기업로고색','로고색상'],
+   colors:['#0F172A','#2563EB','#F97316','#FFFFFF','#64748B'],
+   name:'로고 & 브랜드 컬러', desc:'신뢰감과 개성을 동시에 담는 브랜드 컬러 조합'},
+  {tags:['무드보드','무드보드컬러','디자인무드보드','무드보드색'],
+   colors:['#EAE0D5','#C6AC8F','#22333B','#0A0908','#5E503F'],
+   name:'무드보드 팔레트', desc:'감성적인 무드보드에 어울리는 톤온톤 조합'},
+  {tags:['커플룩','커플컬러','커플옷색','럽스타그램','커플코디'],
+   colors:['#FFC1CC','#A2D2FF','#FFFFFF','#BDE0FE','#FFAFCC'],
+   name:'커플룩 컬러', desc:'함께 매치하기 좋은 커플룩 색 조합'},
 ];
 
 // ── SEARCH LOGIC ──
@@ -1120,7 +1201,7 @@ document.querySelectorAll('.stag').forEach(btn => {
 
 // ── INITIAL SHOWCASE (popular moods before search) ──
 function renderInitialGrid() {
-  const featured = ['봄날 벚꽃', '따뜻한 온기', '깊은 바다', '신비로운 보라', '레트로 빈티지', '비비드 팝'];
+  const featured = ['웜톤 퍼스널컬러', '쿨톤 퍼스널컬러', 'PPT 배색', '커플룩 컬러', '봄날 벚꽃', '신비로운 보라', '가을 단풍', '레트로 빈티지'];
   const moods = featured.map(name => MOOD_DB.find(m => m.name === name)).filter(Boolean);
   const el = document.getElementById('initialGrid2');
   if (!el) return;
