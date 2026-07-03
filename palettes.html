@@ -670,6 +670,14 @@ document.querySelectorAll('.pal-card').forEach((card, i) => {
   const id = PAL_IDS[i] || ('p' + String(i+1).padStart(2,'0'));
   renderPalRatio(card);
   attachScenePreview(card);
+  card.querySelectorAll('.pal-swatch').forEach(sw => {
+    const btn = document.createElement('button');
+    btn.className = 'add-to-basket-btn';
+    btn.textContent = '+';
+    btn.title = '색상함에 담기';
+    btn.addEventListener('click', e => { e.stopPropagation(); addToBasket(sw.dataset.hex); btn.classList.add('added'); setTimeout(()=>btn.classList.remove('added'), 700); });
+    sw.appendChild(btn);
+  });
   const info = card.querySelector('.pal-info');
   if (info) {
     const btn = document.createElement('button');

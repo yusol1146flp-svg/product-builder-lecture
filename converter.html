@@ -85,6 +85,7 @@
         <span class="conv-swatch-label">클릭해서 색 선택</span>
       </div>
       <input type="text" class="conv-hex-input" id="convHexInput" value="#A78BFA" maxlength="7" spellcheck="false">
+      <button class="btn-secondary" id="convAddToBasket" style="width:100%;margin-top:12px;padding:11px;font-size:0.85rem;">🧺 색상함에 담기</button>
       <div class="conv-presets" id="convPresets"></div>
     </div>
 
@@ -270,6 +271,8 @@ document.querySelectorAll('.conv-copy-btn').forEach(btn => {
     copyText(text);
   });
 });
+
+document.getElementById('convAddToBasket').addEventListener('click', () => addToBasket(current));
 
 render(current);
 </script>

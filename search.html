@@ -972,6 +972,7 @@ function renderColorCards(colors, names=[]) {
       <div class="color-result-card">
         <div class="crc-swatch" style="background:${h}" data-hex="${h}">
           <div class="crc-copy-hint" style="color:${textColor}">클릭해서 복사</div>
+          <button class="add-to-basket-btn" onclick="event.stopPropagation(); addToBasket('${h}'); this.classList.add('added'); setTimeout(()=>this.classList.remove('added'),700);" title="색상함에 담기">+</button>
         </div>
         <div class="crc-body">
           ${name ? `<div class="crc-name">${name}</div>` : ''}
@@ -987,7 +988,9 @@ function renderHarmonyDetail(baseHex, baseLabel='기준 색상') {
   const [r,g,b] = hexToRgb(baseHex);
   function sw(hex, label='') {
     return `<div class="hd-swatch-wrap">
-      <div class="hd-swatch" style="background:${hex}" data-hex="${hex}" title="${hex}"></div>
+      <div class="hd-swatch" style="background:${hex}" data-hex="${hex}" title="${hex}">
+        <button class="add-to-basket-btn" onclick="event.stopPropagation(); addToBasket('${hex}'); this.classList.add('added'); setTimeout(()=>this.classList.remove('added'),700);" title="색상함에 담기">+</button>
+      </div>
       <div class="hd-hex-label" data-hex="${hex}">${hex.toUpperCase()}</div>
     </div>`;
   }
@@ -1063,6 +1066,7 @@ function renderResults(query) {
         <div class="color-result-card">
           <div class="crc-swatch" style="background:${c.hex}" data-hex="${c.hex}">
             <div class="crc-copy-hint" style="color:${textColor}">클릭해서 복사</div>
+            <button class="add-to-basket-btn" onclick="event.stopPropagation(); addToBasket('${c.hex}'); this.classList.add('added'); setTimeout(()=>this.classList.remove('added'),700);" title="색상함에 담기">+</button>
           </div>
           <div class="crc-body">
             <div class="crc-name">${c.name}</div>
@@ -1089,12 +1093,13 @@ function renderResults(query) {
     mood.colors.forEach(hex => {
       const [r,g,b] = hexToRgb(hex);
       const tc = isLight(hex)?'rgba(0,0,0,0.6)':'rgba(255,255,255,0.9)';
-      html += `<div style="flex:1;height:80px;border-radius:12px;background:${hex};cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;transition:transform 0.15s;"
+      html += `<div style="flex:1;height:80px;border-radius:12px;background:${hex};cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;transition:transform 0.15s;position:relative;"
                     data-hex="${hex}"
                     onmouseover="this.style.transform='scaleY(1.06)'"
                     onmouseleave="this.style.transform='scaleY(1)'"
                     class="mood-main-swatch">
         <span style="font-size:0.6rem;font-weight:700;color:${tc};letter-spacing:0.04em;">${hex.toUpperCase()}</span>
+        <button class="add-to-basket-btn" onclick="event.stopPropagation(); addToBasket('${hex}'); this.classList.add('added'); setTimeout(()=>this.classList.remove('added'),700);" title="색상함에 담기">+</button>
       </div>`;
     });
     html += `</div>`;
@@ -1106,6 +1111,7 @@ function renderResults(query) {
       html += `<div class="color-result-card">
         <div class="crc-swatch" style="background:${hex};height:60px;" data-hex="${hex}">
           <div class="crc-copy-hint" style="color:${tc}">복사</div>
+          <button class="add-to-basket-btn" onclick="event.stopPropagation(); addToBasket('${hex}'); this.classList.add('added'); setTimeout(()=>this.classList.remove('added'),700);" title="색상함에 담기">+</button>
         </div>
         <div class="crc-body" style="padding:8px 10px;">
           <div class="crc-hex" style="font-size:0.75rem;" data-hex="${hex}">${hex.toUpperCase()}</div>

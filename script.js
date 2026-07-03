@@ -582,9 +582,131 @@ function handleFavClick(btn) {
   btn.title = added ? '저장됨 ✓' : '저장하기';
 }
 
+// ── COLOR BASKET (add colors to a running list without leaving the page) ──
+const BASKET_KEY = 'colorBasket';
+const BASKET_MAX = 30;
+
+function getBasket() {
+  try { return JSON.parse(localStorage.getItem(BASKET_KEY)) || []; }
+  catch { return []; }
+}
+function setBasket(arr) {
+  localStorage.setItem(BASKET_KEY, JSON.stringify(arr));
+  renderBasketFab();
+}
+function addToBasket(hex) {
+  hex = hex.toUpperCase();
+  const basket = getBasket();
+  if (basket.includes(hex)) { showBasketToast(`${hex} 이미 담겨 있어요`); return; }
+  if (basket.length >= BASKET_MAX) { showBasketToast(`최대 ${BASKET_MAX}개까지 담을 수 있어요`); return; }
+  basket.push(hex);
+  setBasket(basket);
+  showBasketToast(`${hex} 담았어요 ✓`);
+  renderBasketPanel();
+}
+function removeFromBasket(hex) {
+  setBasket(getBasket().filter(h => h !== hex));
+  renderBasketPanel();
+}
+function clearBasket() {
+  setBasket([]);
+  renderBasketPanel();
+}
+
+function renderBasketFab() {
+  const countEl = document.getElementById('basketFabCount');
+  if (!countEl) return;
+  const n = getBasket().length;
+  countEl.textContent = n;
+  countEl.classList.toggle('hidden', n === 0);
+  countEl.classList.remove('pulse');
+  void countEl.offsetWidth;
+  countEl.classList.add('pulse');
+}
+
+function renderBasketPanel() {
+  const body = document.getElementById('basketBody');
+  if (!body) return;
+  const basket = getBasket();
+  if (!basket.length) {
+    body.innerHTML = `<div class="basket-empty">🧺<p>아직 담은 색이 없어요.<br>스와치 위에 마우스를 올리고<br>+ 버튼을 눌러보세요.</p></div>`;
+    return;
+  }
+  body.innerHTML = `
+    <div class="basket-list">
+      ${basket.map(hex => `
+        <div class="basket-item">
+          <div class="sw" style="background:${hex}"></div>
+          <span class="hex">${hex}</span>
+          <button class="rm" data-hex="${hex}" title="삭제">✕</button>
+        </div>`).join('')}
+    </div>
+    <div class="basket-actions">
+      <button class="btn-secondary" id="basketCopyAllBtn" style="width:100%;">전체 복사 (${basket.length}개)</button>
+      <a href="my-palette.html" class="btn-primary" style="width:100%;text-align:center;">스튜디오에서 팔레트 만들기 →</a>
+      <button class="basket-clear-btn" id="basketClearBtn">비우기</button>
+    </div>`;
+
+  body.querySelectorAll('.rm').forEach(btn => btn.addEventListener('click', () => removeFromBasket(btn.dataset.hex)));
+  const copyBtn = document.getElementById('basketCopyAllBtn');
+  if (copyBtn) copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(basket.join(', ')).catch(()=>{});
+    showBasketToast('색상 코드 전체 복사됨 ✓');
+  });
+  const clearBtn = document.getElementById('basketClearBtn');
+  if (clearBtn) clearBtn.addEventListener('click', () => {
+    if (confirm('담은 색을 모두 비울까요?')) clearBasket();
+  });
+}
+
+function showBasketToast(msg) {
+  const t = document.getElementById('basketToast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+function initColorBasket() {
+  const fab = document.createElement('button');
+  fab.className = 'basket-fab';
+  fab.id = 'basketFab';
+  fab.setAttribute('aria-label', '담은 색상함 열기');
+  fab.title = '담은 색상함';
+  fab.innerHTML = `🧺<span class="basket-fab-count hidden" id="basketFabCount">0</span>`;
+  document.body.appendChild(fab);
+
+  const backdrop = document.createElement('div');
+  backdrop.className = 'basket-backdrop';
+  backdrop.id = 'basketBackdrop';
+  backdrop.innerHTML = `
+    <div class="basket-panel">
+      <div class="basket-header">
+        <h3>담은 색상함</h3>
+        <button class="basket-close" id="basketCloseBtn">✕</button>
+      </div>
+      <div class="basket-body" id="basketBody"></div>
+    </div>`;
+  document.body.appendChild(backdrop);
+
+  const toast = document.createElement('div');
+  toast.className = 'copy-toast-small';
+  toast.id = 'basketToast';
+  document.body.appendChild(toast);
+
+  fab.addEventListener('click', () => { renderBasketPanel(); backdrop.classList.add('open'); });
+  backdrop.addEventListener('click', e => { if (e.target === backdrop) backdrop.classList.remove('open'); });
+  document.getElementById('basketCloseBtn').addEventListener('click', () => backdrop.classList.remove('open'));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') backdrop.classList.remove('open'); });
+
+  renderBasketFab();
+}
+
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
   injectUI();
+  initColorBasket();
   document.addEventListener('click', e => {
     const btn = e.target.closest('[data-fav-id]');
     if (btn) handleFavClick(btn);

@@ -236,6 +236,7 @@ function renderColors(colors) {
     chip.innerHTML = `
       <div class="chip-swatch" style="background:${hex}">
         <div class="chip-copy-hint">클릭해서 복사</div>
+        <button class="add-to-basket-btn" title="색상함에 담기">+</button>
       </div>
       <div class="chip-info">
         <div class="chip-name">${name} <span class="chip-pct">${pct}%</span></div>
@@ -250,6 +251,12 @@ function renderColors(colors) {
       const hint = chip.querySelector('.chip-copy-hint');
       hint.textContent = '복사됨 ✓';
       setTimeout(()=>{ hint.textContent='클릭해서 복사'; chip.classList.remove('chip-copied'); }, 1500);
+    });
+    chip.querySelector('.add-to-basket-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      addToBasket(hex);
+      e.currentTarget.classList.add('added');
+      setTimeout(() => e.currentTarget.classList.remove('added'), 700);
     });
     container.appendChild(chip);
   });

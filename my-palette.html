@@ -213,8 +213,13 @@ document.getElementById('goLoginBtn')?.addEventListener('click', () => {
   location.href = 'login.html?redirect=' + encodeURIComponent(location.href);
 });
 
-addColorRow(DEFAULT_COLORS[0]);
-addColorRow(DEFAULT_COLORS[1]);
+const basketColors = (typeof getBasket === 'function') ? getBasket() : [];
+if (basketColors.length >= 2) {
+  basketColors.slice(0, 6).forEach(hex => addColorRow(hex));
+} else {
+  addColorRow(DEFAULT_COLORS[0]);
+  addColorRow(DEFAULT_COLORS[1]);
+}
 renderPage();
 </script>
 </body>

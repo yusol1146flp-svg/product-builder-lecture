@@ -152,6 +152,66 @@ html.light body::before { opacity: 0.025; }
 .modal-btn:hover { opacity: 0.88; }
 .modal-user-info { text-align: center; }
 .modal-user-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #a78bfa, #60a5fa); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin: 0 auto 16px; }
+
+/* ── COLOR BASKET (add-to-list without leaving the page) ── */
+.add-to-basket-btn {
+  position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(0,0,0,0.45); color: #fff; border: none; font-size: 0.9rem; font-weight: 800;
+  line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.15s, background 0.15s, transform 0.15s; z-index: 5;
+}
+.add-to-basket-btn:hover { background: #a78bfa; transform: scale(1.12); }
+.add-to-basket-btn.added { background: #34d399; opacity: 1; }
+*:hover > .add-to-basket-btn { opacity: 1; }
+
+.basket-fab {
+  position: fixed; bottom: 24px; right: 24px; z-index: 500;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #a78bfa, #60a5fa);
+  border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 1.35rem; box-shadow: 0 10px 30px rgba(167,139,250,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.basket-fab:hover { transform: scale(1.08); box-shadow: 0 14px 38px rgba(167,139,250,0.5); }
+.basket-fab-count {
+  position: absolute; top: -4px; right: -4px; background: #ff6bae; color: #fff;
+  font-size: 0.68rem; font-weight: 800; min-width: 20px; height: 20px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; padding: 0 5px;
+  border: 2px solid var(--bg); transition: transform 0.2s;
+}
+.basket-fab-count.hidden { display: none; }
+.basket-fab-count.pulse { animation: basketPulse 0.4s ease; }
+@keyframes basketPulse { 0%{transform:scale(1)} 40%{transform:scale(1.5)} 100%{transform:scale(1)} }
+
+.basket-backdrop {
+  position: fixed; inset: 0; z-index: 501; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+  opacity: 0; pointer-events: none; transition: opacity 0.25s;
+}
+.basket-backdrop.open { opacity: 1; pointer-events: all; }
+.basket-panel {
+  position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 92vw;
+  background: var(--surface); border-left: 1px solid var(--border);
+  transform: translateX(100%); transition: transform 0.3s cubic-bezier(.2,.8,.2,1);
+  display: flex; flex-direction: column; padding: 26px;
+  box-shadow: -10px 0 40px rgba(0,0,0,0.3);
+}
+.basket-backdrop.open .basket-panel { transform: translateX(0); }
+.basket-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-shrink: 0; }
+.basket-header h3 { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.02em; }
+.basket-close { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1.3rem; line-height: 1; transition: color 0.2s; }
+.basket-close:hover { color: var(--text); }
+.basket-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--muted); text-align: center; gap: 12px; font-size: 2rem; }
+.basket-empty p { font-size: 0.85rem; line-height: 1.7; }
+.basket-body { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.basket-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.basket-item { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); }
+.basket-item .sw { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; }
+.basket-item .hex { font-family: monospace; font-size: 0.82rem; font-weight: 700; flex: 1; }
+.basket-item .rm { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; padding: 4px; transition: color 0.2s; }
+.basket-item .rm:hover { color: #f87171; }
+.basket-actions { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+.basket-clear-btn { background: none; border: none; color: var(--muted); font-size: 0.78rem; cursor: pointer; padding: 6px; transition: color 0.2s; }
+.basket-clear-btn:hover { color: #f87171; }
 .modal-user-name { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
 .modal-user-stats { font-size: 0.85rem; color: var(--muted); margin-bottom: 24px; }
 .modal-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
