@@ -502,6 +502,7 @@
 </div>
 
 <div class="pal-copy-toast" id="palCopyToast">복사됨 ✓</div>
+<div class="pal-scene-preview" id="palScenePreview"><div class="pal-scene-inner" id="palSceneInner"></div></div>
 
 <footer>
   <a href="index.html" class="footer-logo">Color</a>
@@ -529,6 +530,55 @@ function computeRatioPcts(n) {
   return pcts;
 }
 
+// Builds a small SVG "room" mockup so a palette's colors can be seen applied
+// together, not just as isolated swatches. Colors are assigned by dominance
+// (same order as the ratio bar) to area size: wall > floor > sofa > accents.
+function buildRoomScene(hexes) {
+  const c = i => hexes[Math.min(i, hexes.length - 1)];
+  const wall = c(0), floor = c(1), sofa = c(2), cushion = c(3), plant = c(4);
+  return `<svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="240" height="96" fill="${wall}"/>
+    <rect x="0" y="96" width="240" height="54" fill="${floor}"/>
+    <ellipse cx="90" cy="132" rx="70" ry="10" fill="${floor}" opacity="0.5"/>
+    <rect x="172" y="14" width="52" height="34" rx="3" fill="none" stroke="${cushion}" stroke-width="3"/>
+    <rect x="178" y="20" width="40" height="22" fill="${sofa}" opacity="0.55"/>
+    <circle cx="34" cy="76" r="13" fill="${sofa}"/>
+    <circle cx="146" cy="76" r="13" fill="${sofa}"/>
+    <rect x="26" y="78" width="134" height="40" rx="12" fill="${sofa}"/>
+    <rect x="50" y="86" width="26" height="26" rx="6" fill="${cushion}"/>
+    <rect x="88" y="86" width="26" height="26" rx="6" fill="${cushion}" opacity="0.8"/>
+    <circle cx="205" cy="92" r="18" fill="${plant}"/>
+    <rect x="195" y="108" width="20" height="16" rx="2" fill="${wall}" opacity="0.7"/>
+  </svg>`;
+}
+
+const scenePreview = document.getElementById('palScenePreview');
+const sceneInner = document.getElementById('palSceneInner');
+
+function positionScenePreview(card) {
+  const rect = card.getBoundingClientRect();
+  const panelWidth = 260;
+  let left = rect.left + rect.width / 2 - panelWidth / 2;
+  left = Math.max(8, Math.min(left, window.innerWidth - panelWidth - 8));
+  let top = rect.top - 210;
+  if (top < 8) top = Math.min(rect.bottom + 12, window.innerHeight - 220);
+  scenePreview.style.left = left + 'px';
+  scenePreview.style.top = top + 'px';
+}
+
+function attachScenePreview(card) {
+  const hexes = Array.from(card.querySelectorAll('.pal-swatch')).map(sw => sw.dataset.hex);
+  const name = card.querySelector('.pal-name')?.textContent || '';
+  const svg = buildRoomScene(hexes);
+  card.addEventListener('mouseenter', () => {
+    sceneInner.innerHTML = svg + `<div class="pal-scene-caption">${name} 적용 예시</div>`;
+    positionScenePreview(card);
+    scenePreview.classList.add('show');
+  });
+  card.addEventListener('mousemove', () => positionScenePreview(card));
+  card.addEventListener('mouseleave', () => scenePreview.classList.remove('show'));
+}
+
 function renderPalRatio(card) {
   const hexes = Array.from(card.querySelectorAll('.pal-swatch')).map(sw => sw.dataset.hex);
   const pcts = computeRatioPcts(hexes.length);
@@ -543,6 +593,7 @@ function renderPalRatio(card) {
 document.querySelectorAll('.pal-card').forEach((card, i) => {
   const id = PAL_IDS[i] || ('p' + String(i+1).padStart(2,'0'));
   renderPalRatio(card);
+  attachScenePreview(card);
   const info = card.querySelector('.pal-info');
   if (info) {
     const btn = document.createElement('button');

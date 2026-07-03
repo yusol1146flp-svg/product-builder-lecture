@@ -520,6 +520,11 @@ footer p { color: var(--muted); font-size: 0.82rem; }
 .pal-ratio-labels span { text-align: center; font-size: 0.68rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .pal-copy-toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: #34d399; color: #fff; padding: 10px 24px; border-radius: 100px; font-size: 0.85rem; font-weight: 700; z-index: 9998; transition: transform 0.3s cubic-bezier(.34,1.56,.64,1); pointer-events: none; }
 .pal-copy-toast.show { transform: translateX(-50%) translateY(0); }
+.pal-scene-preview { position: fixed; z-index: 9997; pointer-events: none; opacity: 0; transform: translateY(6px) scale(0.98); transition: opacity 0.15s ease, transform 0.15s ease; }
+.pal-scene-preview.show { opacity: 1; transform: translateY(0) scale(1); }
+.pal-scene-inner { width: 240px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+.pal-scene-inner svg { width: 100%; height: auto; border-radius: 8px; display: block; }
+.pal-scene-caption { margin-top: 8px; font-size: 0.72rem; font-weight: 700; color: var(--muted); text-align: center; }
 
 /* ── GRADIENT LIST ── */
 .grad-list { display: flex; flex-direction: column; gap: 14px; }
