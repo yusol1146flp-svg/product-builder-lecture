@@ -51,6 +51,30 @@
     .tc-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
     .tc-line { height: 8px; border-radius: 4px; background: var(--border); flex: 1; }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "Color",
+        "url": "https://color-output.com/",
+        "logo": "https://color-output.com/favicon.svg"
+      },
+      {
+        "@type": "WebSite",
+        "name": "Color",
+        "url": "https://color-output.com/",
+        "description": "색의 모든 것을 한 곳에서. 편리한 이미지 색 추출, 초보자도 쉽게 하는 색 조합, 커스텀 색조로 나만의 팔레트를 만들고 공유하는 무료 색 팔레트 사이트.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://color-output.com/search.html?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 <nav>
@@ -386,6 +410,14 @@ contactForm.addEventListener('submit', async (e) => {
     submitBtn.disabled = false;
     submitBtn.textContent = '문의 보내기';
   }
+});
+
+document.querySelectorAll('.palette-preview .swatch').forEach(sw => {
+  sw.addEventListener('click', () => {
+    const hex = sw.querySelector('.swatch-code').textContent;
+    navigator.clipboard.writeText(hex).catch(() => {});
+    showBasketToast(`${hex} 복사됨 ✓`);
+  });
 });
 </script>
 </body>
