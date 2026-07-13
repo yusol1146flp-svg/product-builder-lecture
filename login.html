@@ -110,15 +110,27 @@ function redirectTarget() {
 
 if (getSession()) location.href = redirectTarget();
 
+function activateTab(name) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  const isLogin = name === 'login';
+  document.getElementById('loginForm').style.display = isLogin ? 'flex' : 'none';
+  document.getElementById('registerForm').style.display = isLogin ? 'none' : 'flex';
+}
+
 document.querySelectorAll('.auth-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    const isLogin = tab.dataset.tab === 'login';
-    document.getElementById('loginForm').style.display = isLogin ? 'flex' : 'none';
-    document.getElementById('registerForm').style.display = isLogin ? 'none' : 'flex';
-  });
+  tab.addEventListener('click', () => activateTab(tab.dataset.tab));
 });
+
+const initialParams = new URLSearchParams(location.search);
+const prefillEmail = initialParams.get('email') || '';
+if (prefillEmail) {
+  document.getElementById('regEmail').value = prefillEmail;
+  document.getElementById('loginEmail').value = prefillEmail;
+}
+if (initialParams.get('tab') === 'register') {
+  activateTab('register');
+  if (prefillEmail) document.getElementById('regName').focus();
+}
 
 document.getElementById('loginForm').addEventListener('submit', async e => {
   e.preventDefault();

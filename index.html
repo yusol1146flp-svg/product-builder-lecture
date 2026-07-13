@@ -329,10 +329,10 @@
   <div class="cta-box fade-in">
     <h2><span data-en="Want to master color?">색을 더 잘 다루고 싶다면</span><br /><span class="gradient-text" data-en="Get started with Color">Color을 시작하세요</span></h2>
     <p data-en="Sign up for free and explore the world of color.">무료로 가입하고 색의 세계를 마음껏 탐색하세요.</p>
-    <div class="email-form">
-      <input type="email" placeholder="이메일을 입력하세요" data-en-placeholder="Enter your email" />
-      <button type="button" data-en="Sign Up Free">무료 가입</button>
-    </div>
+    <form class="email-form" id="ctaSignupForm">
+      <input type="email" id="ctaSignupEmail" placeholder="이메일을 입력하세요" data-en-placeholder="Enter your email" required />
+      <button type="submit" data-en="Sign Up Free">무료 가입</button>
+    </form>
   </div>
 </section>
 
@@ -420,6 +420,19 @@ contactForm.addEventListener('submit', async (e) => {
     submitBtn.disabled = false;
     submitBtn.textContent = '문의 보내기';
   }
+});
+
+const ctaSignupForm = document.getElementById('ctaSignupForm');
+ctaSignupForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const emailInput = document.getElementById('ctaSignupEmail');
+  const email = emailInput.value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showBasketToast('올바른 이메일 주소를 입력해 주세요');
+    emailInput.focus();
+    return;
+  }
+  location.href = `login.html?tab=register&email=${encodeURIComponent(email)}&redirect=${encodeURIComponent('index.html')}`;
 });
 
 document.querySelectorAll('.palette-preview .swatch').forEach(sw => {
