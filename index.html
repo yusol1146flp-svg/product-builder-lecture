@@ -37,6 +37,16 @@
     .demo-tip { font-size: 0.78rem; color: var(--muted); line-height: 1.65; padding: 12px; background: rgba(167,139,250,0.06); border-radius: 10px; border: 1px solid rgba(167,139,250,0.12); }
     @media (max-width: 768px) { .search-feature { grid-template-columns: 1fr; gap: 32px; } }
 
+    /* Calmer, single-hue hero heading (overrides the site-wide rainbow gradient-text) */
+    .hero .gradient-text, .cta-box .gradient-text {
+      background: linear-gradient(90deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text; background-clip: text;
+      animation: none;
+    }
+    html:not(.light) .hero .gradient-text, html:not(.light) .cta-box .gradient-text {
+      filter: drop-shadow(0 0 24px rgba(167,139,250,0.22));
+    }
+
     /* Tool card previews */
     .tc-extractor { background: linear-gradient(135deg, #0d0d12 0%, #1c1c28 100%); }
     .tc-extractor-inner { display: flex; gap: 6px; padding: 16px; }
@@ -197,15 +207,15 @@
       <div class="tool-card-preview">
         <div class="tc-tips" style="width:100%;height:150px;">
           <div class="tc-tip-row">
-            <div class="tc-dot" style="background:#ff6bae"></div>
+            <div class="tc-dot" style="background:#a78bfa"></div>
             <div class="tc-line" style="width:60%"></div>
           </div>
           <div class="tc-tip-row">
-            <div class="tc-dot" style="background:#60a5fa"></div>
+            <div class="tc-dot" style="background:#a78bfa"></div>
             <div class="tc-line" style="width:80%"></div>
           </div>
           <div class="tc-tip-row">
-            <div class="tc-dot" style="background:#34d399"></div>
+            <div class="tc-dot" style="background:#a78bfa"></div>
             <div class="tc-line" style="width:70%"></div>
           </div>
         </div>
@@ -278,10 +288,10 @@
           <span style="color:#a78bfa;font-size:1.1rem;">✦</span> <span data-en="Supports Korean &amp; English mood search">한국어·영어 무드 검색 지원</span>
         </li>
         <li style="display:flex;align-items:center;gap:10px;font-size:0.9rem;color:var(--muted);">
-          <span style="color:#60a5fa;font-size:1.1rem;">✦</span> <span data-en="Automatic background/foreground contrast check">색 조합 배경·전경 대비 자동 체크</span>
+          <span style="color:#a78bfa;font-size:1.1rem;">✦</span> <span data-en="Automatic background/foreground contrast check">색 조합 배경·전경 대비 자동 체크</span>
         </li>
         <li style="display:flex;align-items:center;gap:10px;font-size:0.9rem;color:var(--muted);">
-          <span style="color:#34d399;font-size:1.1rem;">✦</span> <span data-en="Usage tips and sample images with every result">결과마다 활용 팁과 예시 이미지 제공</span>
+          <span style="color:#a78bfa;font-size:1.1rem;">✦</span> <span data-en="Usage tips and sample images with every result">결과마다 활용 팁과 예시 이미지 제공</span>
         </li>
       </ul>
     </div>
@@ -294,10 +304,10 @@
         <div class="cursor"></div>
       </div>
       <div class="demo-chips">
-        <span class="chip" style="background:rgba(255,107,174,0.1);border-color:rgba(255,107,174,0.3);color:#ff6bae;" data-en="# Spring"># 봄</span>
-        <span class="chip" style="background:rgba(251,191,36,0.1);border-color:rgba(251,191,36,0.3);color:#fbbf24;" data-en="# Warm"># 따뜻함</span>
+        <span class="chip" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.3);color:#a78bfa;" data-en="# Spring"># 봄</span>
+        <span class="chip" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.3);color:#a78bfa;" data-en="# Warm"># 따뜻함</span>
         <span class="chip" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.3);color:#a78bfa;" data-en="# Pastel"># 파스텔</span>
-        <span class="chip" style="background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.3);color:#34d399;" data-en="# Nature"># 자연</span>
+        <span class="chip" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.3);color:#a78bfa;" data-en="# Nature"># 자연</span>
       </div>
       <div class="demo-results">
         <div class="demo-result-swatch" style="background:#ffb7c5;">#FFB7C5</div>
