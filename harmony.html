@@ -55,6 +55,8 @@
     .harmony-sw-add:hover { background: linear-gradient(135deg,#a78bfa,#60a5fa); border-color: transparent; color: #fff; }
     .harmony-actions { margin-top: 18px; }
     .harmony-mode-desc { color: var(--muted); font-size: 0.85rem; margin: -12px 0 20px; line-height: 1.6; }
+    .harmony-pal-section { margin-top: 40px; }
+    .harmony-pal-section .pal-card { max-width: 640px; }
   </style>
   <script type="application/ld+json">
   {
@@ -159,6 +161,21 @@
       </div>
     </div>
   </div>
+
+  <div class="harmony-pal-section">
+    <div class="section-label" data-en="View as a Palette">팔레트로 보기</div>
+    <div class="pal-card" id="harmonyPalCard">
+      <div class="pal-swatches" id="harmonyPalSwatches"></div>
+      <div class="pal-info">
+        <div class="pal-meta">
+          <span class="pal-name" id="harmonyPalName">보색</span>
+          <span class="pal-mood" id="harmonyPalMood"></span>
+        </div>
+        <span class="pal-badge" id="harmonyPalBadge"></span>
+      </div>
+      <button type="button" class="pal-copyall-btn" id="harmonyPalCopyAll" data-en="📋 Copy the whole palette">📋 팔레트 그대로 복사</button>
+    </div>
+  </div>
 </div>
 
 <hr class="divider" />
@@ -223,11 +240,11 @@ function hsvToRgb(h, s, v) {
 function hsvToHex(h, s, v) { return rgbToHex(...hsvToRgb(h, s, v)); }
 
 const HARMONY_MODES = {
-  complementary:       { label: '보색',      angles: [0, 180], desc: '색상환에서 정반대에 있는 두 색 — 가장 강한 대비를 만듭니다.' },
-  splitComplementary:  { label: '분할 보색',  angles: [0, 150, 210], desc: '보색 양옆의 두 색을 사용해 대비는 살리면서 조금 더 부드럽게 어울립니다.' },
-  analogous:            { label: '유사색',    angles: [0, 30, -30], desc: '색상환에서 서로 이웃한 색들 — 편안하고 자연스러운 조합입니다.' },
-  triadic:              { label: '삼각 배색',  angles: [0, 120, 240], desc: '색상환을 3등분한 색 — 균형 잡히면서도 생동감 있는 조합입니다.' },
-  doubleComplementary:  { label: '이중 보색',  angles: [0, 60, 180, 240], desc: '보색 두 쌍을 함께 사용하는 조합 — 색이 풍부한 배색을 만들 때 좋습니다.' },
+  complementary:       { label: '보색',      angles: [0, 180], desc: '색상환에서 정반대에 있는 두 색 — 가장 강한 대비를 만듭니다.', badge: 'pb-comp' },
+  splitComplementary:  { label: '분할 보색',  angles: [0, 150, 210], desc: '보색 양옆의 두 색을 사용해 대비는 살리면서 조금 더 부드럽게 어울립니다.', badge: 'pb-spl' },
+  analogous:            { label: '유사색',    angles: [0, 30, -30], desc: '색상환에서 서로 이웃한 색들 — 편안하고 자연스러운 조합입니다.', badge: 'pb-ana' },
+  triadic:              { label: '삼각 배색',  angles: [0, 120, 240], desc: '색상환을 3등분한 색 — 균형 잡히면서도 생동감 있는 조합입니다.', badge: 'pb-tri' },
+  doubleComplementary:  { label: '이중 보색',  angles: [0, 60, 180, 240], desc: '보색 두 쌍을 함께 사용하는 조합 — 색이 풍부한 배색을 만들 때 좋습니다.', badge: 'pb-tetra' },
 };
 
 const [hmInitH, hmInitS, hmInitV] = rgbToHsv(167, 139, 250);
@@ -242,6 +259,10 @@ const hmReadoutHex = document.getElementById('hmReadoutHex');
 const harmonyWheel = document.getElementById('harmonyWheel');
 const harmonySwatches = document.getElementById('harmonySwatches');
 const harmonyModeDesc = document.getElementById('harmonyModeDesc');
+const harmonyPalSwatches = document.getElementById('harmonyPalSwatches');
+const harmonyPalName = document.getElementById('harmonyPalName');
+const harmonyPalMood = document.getElementById('harmonyPalMood');
+const harmonyPalBadge = document.getElementById('harmonyPalBadge');
 
 function renderHmMap() {
   hmSv.style.backgroundColor = hsvToHex(hmHue, 100, 100);
@@ -284,6 +305,16 @@ function renderHarmony() {
     dot.title = colors[i];
     harmonyWheel.appendChild(dot);
   });
+
+  harmonyPalSwatches.innerHTML = colors.map(hex => `
+    <div class="pal-swatch" style="background:${hex}" data-hex="${hex}">
+      <span class="pal-hex-tip">${hex}</span>
+      <button type="button" class="add-to-basket-btn" title="색상함에 담기">+</button>
+    </div>`).join('');
+  harmonyPalName.textContent = mode.label;
+  harmonyPalMood.textContent = `${colors[0]} 기준 · ${colors.length}색`;
+  harmonyPalBadge.className = 'pal-badge ' + mode.badge;
+  harmonyPalBadge.textContent = mode.label;
 }
 
 function setSvFromEvent(e) {
@@ -354,6 +385,25 @@ document.getElementById('hmAddBase').addEventListener('click', () => addToBasket
 
 document.getElementById('harmonyAddAll').addEventListener('click', () => {
   HARMONY_MODES[hmMode].angles.forEach(a => addToBasket(hsvToHex((hmHue + a + 360) % 360, hmSat, hmVal)));
+});
+
+harmonyPalSwatches.addEventListener('click', e => {
+  const addBtn = e.target.closest('.add-to-basket-btn');
+  if (addBtn) {
+    e.stopPropagation();
+    const hex = addBtn.closest('.pal-swatch').dataset.hex;
+    addToBasket(hex);
+    addBtn.classList.add('added');
+    setTimeout(() => addBtn.classList.remove('added'), 700);
+    return;
+  }
+  const swatch = e.target.closest('.pal-swatch');
+  if (swatch) copyText(swatch.dataset.hex);
+});
+
+document.getElementById('harmonyPalCopyAll').addEventListener('click', () => {
+  const hexes = Array.from(harmonyPalSwatches.querySelectorAll('.pal-swatch')).map(sw => sw.dataset.hex);
+  copyText(hexes.join(', '));
 });
 
 function copyText(text) {
