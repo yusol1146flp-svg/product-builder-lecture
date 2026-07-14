@@ -43,39 +43,6 @@
     .conv-copy-btn:hover { background: linear-gradient(135deg,#a78bfa,#60a5fa); border-color: transparent; color: #fff; }
     .conv-row-value { font-family: monospace; font-size: 1.05rem; font-weight: 700; color: var(--text); word-break: break-all; }
     .conv-row input { width: 100%; background: none; border: none; outline: none; font-family: monospace; font-size: 1.05rem; font-weight: 700; color: var(--text); padding: 0; }
-
-    /* Color harmony (color map + wheel) */
-    .harmony-wrap { display: grid; grid-template-columns: 300px 1fr; gap: 40px; align-items: start; }
-    @media (max-width: 800px) { .harmony-wrap { grid-template-columns: 1fr; } }
-    .hmap-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px; box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset; }
-    .hmap-sv { position: relative; width: 100%; aspect-ratio: 1 / 1; border-radius: 14px; cursor: crosshair; touch-action: none; overflow: hidden; margin-bottom: 16px; background-image: linear-gradient(to top, #000, rgba(0,0,0,0)), linear-gradient(to right, #fff, rgba(255,255,255,0)); outline: none; }
-    .hmap-sv:focus-visible { box-shadow: 0 0 0 3px rgba(167,139,250,0.5); }
-    .hmap-sv-handle { position: absolute; width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid #fff; box-shadow: 0 0 0 1.5px rgba(0,0,0,0.4), 0 2px 6px rgba(0,0,0,0.35); transform: translate(-50%, -50%); pointer-events: none; }
-    .hmap-hue { position: relative; width: 100%; height: 16px; border-radius: 100px; margin-bottom: 18px; cursor: pointer; touch-action: none; outline: none; background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000); }
-    .hmap-hue:focus-visible { box-shadow: 0 0 0 3px rgba(167,139,250,0.5); }
-    .hmap-hue-handle { position: absolute; top: 50%; width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 2px solid rgba(0,0,0,0.25); box-shadow: 0 2px 6px rgba(0,0,0,0.3); transform: translate(-50%, -50%); pointer-events: none; }
-    .hmap-readout { display: flex; align-items: center; gap: 10px; }
-    .hmap-readout-sw { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--border); flex-shrink: 0; }
-    .hmap-readout-hex { font-family: monospace; font-weight: 700; font-size: 1rem; color: var(--text); flex: 1; }
-    .harmony-modes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
-    .harmony-mode-btn { padding: 9px 16px; border-radius: 100px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-    .harmony-mode-btn:hover { border-color: rgba(167,139,250,0.4); color: var(--text); }
-    .harmony-mode-btn.active { background: linear-gradient(135deg, #a78bfa, #60a5fa); border-color: transparent; color: #fff; }
-    .harmony-content { display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: start; }
-    @media (max-width: 600px) { .harmony-content { grid-template-columns: 1fr; justify-items: center; } }
-    .harmony-wheel { position: relative; width: 140px; height: 140px; border-radius: 50%; flex-shrink: 0; background: conic-gradient(hsl(0,100%,50%), hsl(60,100%,50%), hsl(120,100%,50%), hsl(180,100%,50%), hsl(240,100%,50%), hsl(300,100%,50%), hsl(360,100%,50%)); box-shadow: inset 0 0 0 1px var(--border); }
-    .harmony-wheel-core { position: absolute; inset: 22%; border-radius: 50%; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); }
-    .harmony-wheel-dot { position: absolute; width: 15px; height: 15px; border-radius: 50%; border: 2.5px solid #fff; box-shadow: 0 0 0 1.5px rgba(0,0,0,0.35), 0 2px 5px rgba(0,0,0,0.3); transform: translate(-50%, -50%); }
-    .harmony-wheel-dot.base { width: 19px; height: 19px; z-index: 2; }
-    .harmony-swatches { display: flex; flex-wrap: wrap; gap: 12px; }
-    .harmony-sw-card { width: 106px; background: var(--bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: transform 0.15s; }
-    .harmony-sw-card:hover { transform: translateY(-2px); }
-    .harmony-sw-block { height: 64px; }
-    .harmony-sw-foot { padding: 8px 9px; display: flex; flex-direction: column; gap: 6px; }
-    .harmony-sw-hex { font-family: monospace; font-size: 0.72rem; font-weight: 700; color: var(--text); text-align: center; cursor: pointer; }
-    .harmony-sw-add { width: 100%; padding: 4px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 0.66rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-    .harmony-sw-add:hover { background: linear-gradient(135deg,#a78bfa,#60a5fa); border-color: transparent; color: #fff; }
-    .harmony-actions { margin-top: 18px; }
   </style>
   <script type="application/ld+json">
   {
@@ -105,6 +72,7 @@
     <li><a href="gradients.html" data-en="Gradients">그라데이션</a></li>
     <li><a href="search.html" data-en="Color Search">색 검색</a></li>
     <li><a href="converter.html" data-en="Converter">변환기</a></li>
+    <li><a href="harmony.html" data-en="Color Wheel">색상환</a></li>
     <li><a href="contrast-checker.html" data-en="Contrast">대비 체크</a></li>
     <li><a href="colorblind-simulator.html" data-en="Colorblind">색맹 체크</a></li>
     <li><a href="tips.html" data-en="Tips">배색 팁</a></li>
@@ -163,58 +131,13 @@
   </div>
 </div>
 
-<hr class="divider" />
-
-<div class="section" id="harmony">
-  <div class="section-label" data-en="New — Color Wheel">새 기능 — 색상환</div>
-  <h2 class="section-title" style="margin-bottom:14px;" data-en="Pick any color, get a matching harmony">색상 하나로 어울리는 배색 찾기</h2>
-  <p class="section-desc" data-en="Drag on the color map to pick any shade, choose a harmony rule, and the matching colors appear instantly right next to it — plus a color wheel showing exactly where they sit.">컬러 맵에서 원하는 색을 드래그해서 고르고 배색 규칙을 선택하면, 모드에 맞는 색이 바로 옆에 나타납니다 — 색상환에서 위치까지 한눈에 확인하세요.</p>
-
-  <div class="harmony-wrap">
-    <div class="hmap-card">
-      <div class="hmap-sv" id="hmSv" tabindex="0" role="slider" aria-label="채도·명도" aria-valuetext="채도·명도 선택">
-        <div class="hmap-sv-handle" id="hmSvHandle"></div>
-      </div>
-      <div class="hmap-hue" id="hmHueBar" tabindex="0" role="slider" aria-label="색상 각도" aria-valuemin="0" aria-valuemax="359">
-        <div class="hmap-hue-handle" id="hmHueHandle"></div>
-      </div>
-      <div class="hmap-readout">
-        <div class="hmap-readout-sw" id="hmReadoutSw"></div>
-        <span class="hmap-readout-hex" id="hmReadoutHex">#A78BFA</span>
-        <button class="btn-secondary" id="hmAddBase" style="padding:8px 14px;font-size:0.78rem;flex-shrink:0;" data-en="+ Add">+ 담기</button>
-      </div>
-    </div>
-
-    <div>
-      <div class="harmony-modes" id="harmonyModes">
-        <button class="harmony-mode-btn active" data-mode="complementary" data-en="Complementary">보색</button>
-        <button class="harmony-mode-btn" data-mode="splitComplementary" data-en="Split Complementary">분할 보색</button>
-        <button class="harmony-mode-btn" data-mode="analogous" data-en="Analogous">유사색</button>
-        <button class="harmony-mode-btn" data-mode="triadic" data-en="Triadic">삼각 배색</button>
-        <button class="harmony-mode-btn" data-mode="doubleComplementary" data-en="Double Complementary">이중 보색</button>
-      </div>
-
-      <div class="harmony-content">
-        <div class="harmony-wheel" id="harmonyWheel">
-          <div class="harmony-wheel-core"></div>
-        </div>
-        <div class="harmony-swatches" id="harmonySwatches"></div>
-      </div>
-
-      <div class="harmony-actions">
-        <button class="btn-primary" id="harmonyAddAll" data-en="Add this harmony to basket">이 배색 전체 담기</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <section class="cta-section">
   <div class="cta-box">
-    <h2><span data-en="Take your harmony colors">찾은 배색을</span><br /><span class="gradient-text" data-en="and save it as a palette">내 팔레트로 저장해보세요</span></h2>
-    <p data-en="Colors you add to the basket carry straight over into My Palette Studio.">색상함에 담은 색은 내 팔레트 스튜디오로 그대로 이어집니다.</p>
+    <h2><span data-en="Not sure what goes with it?">어울리는 색이 궁금하다면</span><br /><span class="gradient-text" data-en="Find it on the color wheel">색상환에서 찾아보세요</span></h2>
+    <p data-en="Complementary, analogous, and triadic matches — see them instantly on a live color wheel.">보색, 유사색, 삼각 배색까지 — 색상환에서 바로 확인할 수 있어요.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
-      <a href="my-palette.html" class="btn-primary" data-en="Go to Palette Studio">팔레트 스튜디오로 가기</a>
-      <a href="palettes.html" class="btn-secondary" data-en="Browse Palettes">팔레트 보러 가기</a>
+      <a href="harmony.html" class="btn-primary" data-en="Open the Color Wheel">색상환 열어보기</a>
+      <a href="my-palette.html" class="btn-secondary" data-en="Go to Palette Studio">팔레트 스튜디오로 가기</a>
     </div>
   </div>
 </section>
@@ -370,157 +293,6 @@ document.getElementById('convAddToBasket').addEventListener('click', () => addTo
 
 render(current);
 
-// ── COLOR HARMONY (color map + hue bar + wheel) ──
-function hsvToRgb(h, s, v) {
-  s /= 100; v /= 100;
-  const c = v * s;
-  const x = c * (1 - Math.abs((h / 60) % 2 - 1));
-  const m = v - c;
-  let r, g, b;
-  if (h < 60) { r = c; g = x; b = 0; }
-  else if (h < 120) { r = x; g = c; b = 0; }
-  else if (h < 180) { r = 0; g = c; b = x; }
-  else if (h < 240) { r = 0; g = x; b = c; }
-  else if (h < 300) { r = x; g = 0; b = c; }
-  else { r = c; g = 0; b = x; }
-  return [(r + m) * 255, (g + m) * 255, (b + m) * 255];
-}
-function hsvToHex(h, s, v) { return rgbToHex(...hsvToRgb(h, s, v)); }
-
-const HARMONY_MODES = {
-  complementary:       { label: '보색',      angles: [0, 180] },
-  splitComplementary:  { label: '분할 보색',  angles: [0, 150, 210] },
-  analogous:            { label: '유사색',    angles: [0, 30, -30] },
-  triadic:              { label: '삼각 배색',  angles: [0, 120, 240] },
-  doubleComplementary:  { label: '이중 보색',  angles: [0, 60, 180, 240] },
-};
-
-const [hmInitH, hmInitS, hmInitV] = rgbToHsv(167, 139, 250);
-let hmHue = hmInitH, hmSat = hmInitS, hmVal = hmInitV, hmMode = 'complementary';
-
-const hmSv = document.getElementById('hmSv');
-const hmSvHandle = document.getElementById('hmSvHandle');
-const hmHueBar = document.getElementById('hmHueBar');
-const hmHueHandle = document.getElementById('hmHueHandle');
-const hmReadoutSw = document.getElementById('hmReadoutSw');
-const hmReadoutHex = document.getElementById('hmReadoutHex');
-const harmonyWheel = document.getElementById('harmonyWheel');
-const harmonySwatches = document.getElementById('harmonySwatches');
-
-function renderHmMap() {
-  hmSv.style.backgroundColor = hsvToHex(hmHue, 100, 100);
-  hmSvHandle.style.left = hmSat + '%';
-  hmSvHandle.style.top = (100 - hmVal) + '%';
-  hmHueHandle.style.left = (hmHue / 360 * 100) + '%';
-  const baseHex = hsvToHex(hmHue, hmSat, hmVal);
-  hmReadoutSw.style.background = baseHex;
-  hmReadoutHex.textContent = baseHex;
-  hmSv.setAttribute('aria-valuetext', `채도 ${Math.round(hmSat)}%, 명도 ${Math.round(hmVal)}%, ${baseHex}`);
-  hmHueBar.setAttribute('aria-valuenow', Math.round(hmHue));
-}
-
-function renderHarmony() {
-  const mode = HARMONY_MODES[hmMode];
-  const colors = mode.angles.map(a => hsvToHex((hmHue + a + 360) % 360, hmSat, hmVal));
-
-  harmonySwatches.innerHTML = colors.map(hex => `
-    <div class="harmony-sw-card">
-      <div class="harmony-sw-block" style="background:${hex}"></div>
-      <div class="harmony-sw-foot">
-        <span class="harmony-sw-hex" data-hex="${hex}" title="클릭해서 복사">${hex}</span>
-        <button class="harmony-sw-add" data-hex="${hex}" data-en="+ Add">+ 담기</button>
-      </div>
-    </div>`).join('');
-
-  harmonyWheel.querySelectorAll('.harmony-wheel-dot').forEach(d => d.remove());
-  const R = 39;
-  mode.angles.forEach((a, i) => {
-    const angle = (hmHue + a + 360) % 360;
-    const rad = angle * Math.PI / 180;
-    const x = 50 + R * Math.sin(rad);
-    const y = 50 - R * Math.cos(rad);
-    const dot = document.createElement('div');
-    dot.className = 'harmony-wheel-dot' + (i === 0 ? ' base' : '');
-    dot.style.left = x + '%';
-    dot.style.top = y + '%';
-    dot.style.background = colors[i];
-    dot.title = colors[i];
-    harmonyWheel.appendChild(dot);
-  });
-}
-
-function setSvFromEvent(e) {
-  const rect = hmSv.getBoundingClientRect();
-  const x = Math.min(rect.width, Math.max(0, e.clientX - rect.left));
-  const y = Math.min(rect.height, Math.max(0, e.clientY - rect.top));
-  hmSat = (x / rect.width) * 100;
-  hmVal = 100 - (y / rect.height) * 100;
-  renderHmMap();
-  renderHarmony();
-}
-let svDragging = false;
-hmSv.addEventListener('pointerdown', e => { svDragging = true; hmSv.setPointerCapture(e.pointerId); setSvFromEvent(e); });
-hmSv.addEventListener('pointermove', e => { if (svDragging) setSvFromEvent(e); });
-hmSv.addEventListener('pointerup', () => svDragging = false);
-hmSv.addEventListener('pointercancel', () => svDragging = false);
-
-function setHueFromEvent(e) {
-  const rect = hmHueBar.getBoundingClientRect();
-  const x = Math.min(rect.width, Math.max(0, e.clientX - rect.left));
-  hmHue = (x / rect.width) * 360;
-  renderHmMap();
-  renderHarmony();
-}
-let hueDragging = false;
-hmHueBar.addEventListener('pointerdown', e => { hueDragging = true; hmHueBar.setPointerCapture(e.pointerId); setHueFromEvent(e); });
-hmHueBar.addEventListener('pointermove', e => { if (hueDragging) setHueFromEvent(e); });
-hmHueBar.addEventListener('pointerup', () => hueDragging = false);
-hmHueBar.addEventListener('pointercancel', () => hueDragging = false);
-
-hmSv.addEventListener('keydown', e => {
-  const step = e.shiftKey ? 10 : 2;
-  if (e.key === 'ArrowRight') hmSat = Math.min(100, hmSat + step);
-  else if (e.key === 'ArrowLeft') hmSat = Math.max(0, hmSat - step);
-  else if (e.key === 'ArrowUp') hmVal = Math.min(100, hmVal + step);
-  else if (e.key === 'ArrowDown') hmVal = Math.max(0, hmVal - step);
-  else return;
-  e.preventDefault();
-  renderHmMap();
-  renderHarmony();
-});
-hmHueBar.addEventListener('keydown', e => {
-  const step = e.shiftKey ? 20 : 4;
-  if (e.key === 'ArrowRight' || e.key === 'ArrowUp') hmHue = (hmHue + step) % 360;
-  else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') hmHue = (hmHue - step + 360) % 360;
-  else return;
-  e.preventDefault();
-  renderHmMap();
-  renderHarmony();
-});
-
-document.getElementById('harmonyModes').addEventListener('click', e => {
-  const btn = e.target.closest('.harmony-mode-btn');
-  if (!btn) return;
-  hmMode = btn.dataset.mode;
-  document.querySelectorAll('.harmony-mode-btn').forEach(b => b.classList.toggle('active', b === btn));
-  renderHarmony();
-});
-
-harmonySwatches.addEventListener('click', e => {
-  const hexEl = e.target.closest('.harmony-sw-hex');
-  if (hexEl) { copyText(hexEl.dataset.hex); return; }
-  const addBtn = e.target.closest('.harmony-sw-add');
-  if (addBtn) addToBasket(addBtn.dataset.hex);
-});
-
-document.getElementById('hmAddBase').addEventListener('click', () => addToBasket(hsvToHex(hmHue, hmSat, hmVal)));
-
-document.getElementById('harmonyAddAll').addEventListener('click', () => {
-  HARMONY_MODES[hmMode].angles.forEach(a => addToBasket(hsvToHex((hmHue + a + 360) % 360, hmSat, hmVal)));
-});
-
-renderHmMap();
-renderHarmony();
 </script>
 </body>
 </html>
