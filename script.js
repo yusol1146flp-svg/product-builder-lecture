@@ -72,6 +72,38 @@ document.querySelectorAll('.nav-links a').forEach(a => {
   const href = a.getAttribute('href');
   if (href === path || (path === '' && href === 'index.html')) a.classList.add('active');
 });
+document.querySelectorAll('.nav-dropdown').forEach(dd => {
+  if (dd.querySelector('.nav-dropdown-menu a.active')) {
+    dd.querySelector('.nav-dropdown-trigger').classList.add('active');
+  }
+});
+
+// ── NAV DROPDOWN GROUPS ──
+function closeNavDropdowns() {
+  document.querySelectorAll('.nav-dropdown.open').forEach(dd => dd.classList.remove('open'));
+}
+document.querySelectorAll('.nav-dropdown').forEach(dd => {
+  const trigger = dd.querySelector('.nav-dropdown-trigger');
+  const menu = dd.querySelector('.nav-dropdown-menu');
+  trigger.addEventListener('click', e => {
+    e.stopPropagation();
+    const willOpen = !dd.classList.contains('open');
+    closeNavDropdowns();
+    if (willOpen) {
+      const r = trigger.getBoundingClientRect();
+      menu.style.left = Math.round(r.left) + 'px';
+      menu.style.top = Math.round(r.bottom + 8) + 'px';
+      dd.classList.add('open');
+    }
+  });
+  dd.addEventListener('focusout', () => {
+    setTimeout(() => { if (!dd.contains(document.activeElement)) dd.classList.remove('open'); }, 0);
+  });
+});
+document.addEventListener('click', closeNavDropdowns);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNavDropdowns(); });
+window.addEventListener('scroll', closeNavDropdowns, { passive: true });
+window.addEventListener('resize', closeNavDropdowns);
 
 // ── SEARCH DATA ──
 const SEARCH_DATA = [
