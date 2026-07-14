@@ -308,6 +308,60 @@ function getSession() { return JSON.parse(localStorage.getItem('color-session') 
 function _saveSession(s) { localStorage.setItem('color-session', JSON.stringify(s)); }
 function _clearSession() { localStorage.removeItem('color-session'); }
 
+// ── DEVICE TRUST / EMAIL 2-STEP VERIFICATION ──
+// This app has no server, so "another device" really means "a browser this
+// account has never completed verification on before." Each browser gets a
+// persistent random deviceId; an account remembers which deviceIds it has
+// verified. Verification is required once per new device, not on every login.
+function getDeviceId() {
+  let id = localStorage.getItem('color-device-id');
+  if (!id) {
+    id = (crypto.randomUUID ? crypto.randomUUID() : _uid() + _uid());
+    localStorage.setItem('color-device-id', id);
+  }
+  return id;
+}
+function _genCode() { return String(Math.floor(100000 + Math.random() * 900000)); }
+function _savePending(p) { sessionStorage.setItem('color-pending-2fa', JSON.stringify(p)); }
+function getPendingVerification() {
+  try { return JSON.parse(sessionStorage.getItem('color-pending-2fa')); }
+  catch { return null; }
+}
+function clearPendingVerification() { sessionStorage.removeItem('color-pending-2fa'); }
+function _startVerification(mode, user) {
+  const code = _genCode();
+  _savePending({
+    mode, userId: user.id, email: user.email, username: user.username,
+    code, expiresAt: Date.now() + 10 * 60 * 1000, deviceId: getDeviceId(),
+  });
+  return code;
+}
+function resendVerificationCode() {
+  const pending = getPendingVerification();
+  if (!pending) return null;
+  pending.code = _genCode();
+  pending.expiresAt = Date.now() + 10 * 60 * 1000;
+  _savePending(pending);
+  return pending.code;
+}
+function completeVerification(inputCode) {
+  const pending = getPendingVerification();
+  if (!pending) return {ok:false, msg:'인증 요청을 찾을 수 없습니다. 처음부터 다시 시도해 주세요.'};
+  if (Date.now() > pending.expiresAt) { clearPendingVerification(); return {ok:false, msg:'인증 코드가 만료됐습니다. 다시 받아 주세요.'}; }
+  if (inputCode.trim() !== pending.code) return {ok:false, msg:'인증 코드가 일치하지 않습니다.'};
+  const accounts = getAccounts();
+  const user = accounts.find(a => a.id === pending.userId);
+  if (!user) { clearPendingVerification(); return {ok:false, msg:'계정을 찾을 수 없습니다.'}; }
+  user.trustedDevices = user.trustedDevices || [];
+  if (!user.trustedDevices.includes(pending.deviceId)) user.trustedDevices.push(pending.deviceId);
+  _saveAccounts(accounts);
+  clearPendingVerification();
+  const session = {userId:user.id, username:user.username, email:user.email};
+  _saveSession(session);
+  setUser({name:user.username, email:user.email, createdAt:user.createdAt});
+  return {ok:true, session};
+}
+
 async function registerUser(username, email, pw) {
   if (!username.trim() || !email.trim() || !pw) return {ok:false, msg:'모든 항목을 입력해 주세요.'};
   if (pw.length < 6) return {ok:false, msg:'비밀번호는 6자 이상이어야 합니다.'};
@@ -315,26 +369,29 @@ async function registerUser(username, email, pw) {
   if (accounts.find(a => a.email.toLowerCase() === email.toLowerCase()))
     return {ok:false, msg:'이미 사용 중인 이메일입니다.'};
   const hash = await _hash(pw);
-  const user = {id:_uid(), username:username.trim(), email:email.trim().toLowerCase(), hash, createdAt:Date.now()};
+  const user = {id:_uid(), username:username.trim(), email:email.trim().toLowerCase(), hash, createdAt:Date.now(), trustedDevices:[]};
   accounts.push(user);
   _saveAccounts(accounts);
-  const session = {userId:user.id, username:user.username, email:user.email};
-  _saveSession(session);
-  setUser({name:user.username, email:user.email, createdAt:user.createdAt});
-  return {ok:true, session};
+  const code = _startVerification('register', user);
+  return {ok:true, needsVerification:true, email:user.email, code};
 }
 
-async function loginUser(email, pw) {
+async function loginUser(email, pw, opts={}) {
   if (!email.trim() || !pw) return {ok:false, msg:'이메일과 비밀번호를 입력해 주세요.'};
   const accounts = getAccounts();
   const user = accounts.find(a => a.email.toLowerCase() === email.trim().toLowerCase());
   if (!user) return {ok:false, msg:'등록되지 않은 이메일입니다.'};
   const hash = await _hash(pw);
   if (hash !== user.hash) return {ok:false, msg:'비밀번호가 일치하지 않습니다.'};
-  const session = {userId:user.id, username:user.username, email:user.email};
-  _saveSession(session);
-  setUser({name:user.username, email:user.email, createdAt:user.createdAt});
-  return {ok:true, session};
+  const trusted = (user.trustedDevices || []).includes(getDeviceId());
+  if (trusted && !opts.forceVerify) {
+    const session = {userId:user.id, username:user.username, email:user.email};
+    _saveSession(session);
+    setUser({name:user.username, email:user.email, createdAt:user.createdAt});
+    return {ok:true, session};
+  }
+  const code = _startVerification('login', user);
+  return {ok:true, needsVerification:true, email:user.email, code};
 }
 
 function logoutUser() {

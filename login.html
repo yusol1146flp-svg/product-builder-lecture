@@ -66,6 +66,10 @@
         <label data-en="Password">비밀번호</label>
         <input type="password" class="modal-input" id="loginPw" placeholder="비밀번호" autocomplete="current-password" required data-en-placeholder="Password">
       </div>
+      <label class="auth-check">
+        <input type="checkbox" id="loginForceVerify">
+        <span data-en="🧪 Test as a new device (demo)">🧪 새 기기에서 로그인하는 것처럼 테스트</span>
+      </label>
       <div class="auth-error" id="loginError"></div>
       <button type="submit" class="modal-btn" data-en="Log In">로그인</button>
     </form>
@@ -87,7 +91,24 @@
       <button type="submit" class="modal-btn" data-en="Sign Up &amp; Get Started">회원가입하고 시작하기</button>
     </form>
 
-    <p class="auth-note" data-en="Account information is stored only in this browser.">계정 정보는 이 브라우저에만 저장됩니다.</p>
+    <form id="verifyForm" class="auth-form" style="display:none;">
+      <p class="auth-note" style="margin-top:0;margin-bottom:16px;" data-en="A verification code was sent to the email below to confirm this device.">이 기기를 확인하기 위해 아래 이메일로 인증 코드를 보냈습니다.</p>
+      <p class="auth-note" style="margin-top:-12px;margin-bottom:16px;font-weight:700;color:var(--text);" id="verifyEmailLabel"></p>
+      <div class="auth-demo-code">
+        <div class="auth-demo-code-label" data-en="🧪 Demo mode — no real email is sent, so here's the code">🧪 데모 모드 — 실제 이메일 발송 없이 코드를 여기 표시합니다</div>
+        <div class="auth-demo-code-value" id="verifyDemoCode"></div>
+      </div>
+      <div class="modal-form-group">
+        <label data-en="Verification Code">인증 코드</label>
+        <input type="text" class="modal-input auth-code-input" id="verifyCode" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="one-time-code" required>
+      </div>
+      <div class="auth-error" id="verifyError"></div>
+      <button type="submit" class="modal-btn" data-en="Verify &amp; Continue">인증하고 계속하기</button>
+      <button type="button" class="modal-btn-outline" id="verifyResend" data-en="Resend code">코드 다시 받기</button>
+      <button type="button" class="modal-btn-outline" id="verifyCancel" data-en="Back">뒤로 가기</button>
+    </form>
+
+    <p class="auth-note" id="authFooterNote" data-en="Account information is stored only in this browser.">계정 정보는 이 브라우저에만 저장됩니다.</p>
   </div>
 </div>
 
@@ -116,6 +137,23 @@ function activateTab(name) {
   const isLogin = name === 'login';
   document.getElementById('loginForm').style.display = isLogin ? 'flex' : 'none';
   document.getElementById('registerForm').style.display = isLogin ? 'none' : 'flex';
+  document.getElementById('verifyForm').style.display = 'none';
+  document.querySelector('.auth-tabs').style.display = 'flex';
+  document.getElementById('authFooterNote').style.display = 'block';
+}
+
+function showVerifyStep(email, code) {
+  document.querySelector('.auth-tabs').style.display = 'none';
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('registerForm').style.display = 'none';
+  document.getElementById('authFooterNote').style.display = 'none';
+  document.getElementById('verifyForm').style.display = 'flex';
+  document.getElementById('verifyEmailLabel').textContent = email;
+  document.getElementById('verifyDemoCode').textContent = code;
+  document.getElementById('verifyError').textContent = '';
+  const codeInput = document.getElementById('verifyCode');
+  codeInput.value = '';
+  codeInput.focus();
 }
 
 document.querySelectorAll('.auth-tab').forEach(tab => {
@@ -139,8 +177,10 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
   errEl.textContent = '';
   const email = document.getElementById('loginEmail').value;
   const pw = document.getElementById('loginPw').value;
-  const result = await loginUser(email, pw);
+  const forceVerify = document.getElementById('loginForceVerify').checked;
+  const result = await loginUser(email, pw, {forceVerify});
   if (!result.ok) { errEl.textContent = result.msg; return; }
+  if (result.needsVerification) { showVerifyStep(result.email, result.code); return; }
   location.href = redirectTarget();
 });
 
@@ -153,7 +193,28 @@ document.getElementById('registerForm').addEventListener('submit', async e => {
   const pw = document.getElementById('regPw').value;
   const result = await registerUser(name, email, pw);
   if (!result.ok) { errEl.textContent = result.msg; return; }
+  if (result.needsVerification) { showVerifyStep(result.email, result.code); return; }
   location.href = redirectTarget();
+});
+
+document.getElementById('verifyForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const errEl = document.getElementById('verifyError');
+  errEl.textContent = '';
+  const code = document.getElementById('verifyCode').value;
+  const result = completeVerification(code);
+  if (!result.ok) { errEl.textContent = result.msg; return; }
+  location.href = redirectTarget();
+});
+
+document.getElementById('verifyResend').addEventListener('click', () => {
+  const code = resendVerificationCode();
+  if (code) document.getElementById('verifyDemoCode').textContent = code;
+});
+
+document.getElementById('verifyCancel').addEventListener('click', () => {
+  clearPendingVerification();
+  activateTab('login');
 });
 </script>
 </body>
