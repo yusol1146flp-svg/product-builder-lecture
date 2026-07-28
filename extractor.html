@@ -146,6 +146,28 @@
 <div class="paste-toast" id="pasteToast" data-en="Pasted image from clipboard ✓">클립보드에서 이미지를 붙여넣었습니다 ✓</div>
 <div class="paste-toast" id="paletteToast" data-en="Saved to My Palette ✓">내 팔레트에 저장했어요 ✓</div>
 
+<hr class="divider" />
+
+<div class="section">
+  <div class="section-label" data-en="About This Tool">이 도구는 무엇인가요</div>
+  <h2 class="section-title" style="margin-bottom:16px;" data-en="Pull a color code straight out of a photo">사진 한 장으로 컬러 코드를 뽑는 방법</h2>
+  <p class="section-desc" style="max-width:760px;" data-en="Once you drop in a photo, the tool groups its pixels by similarity and picks the most common shades as the image's representative colors &mdash; the same idea used to build color palettes from a mood board or reference image. It's useful whenever you need to match a specific color: pulling a brand's palette from its logo, matching wallpaper or furniture colors from an interior photo, or finding a starting palette for a new design from a photo you like. Every step of the analysis runs right in your browser, so the photo itself is never uploaded to a server.">사진을 넣으면 비슷한 색끼리 픽셀을 묶어 가장 많이 등장하는 색을 대표 색상으로 골라냅니다. 무드보드나 레퍼런스 이미지에서 팔레트를 뽑아낼 때 쓰는 것과 같은 방식이에요. 브랜드 로고에서 고유 컬러를 확인하거나, 인테리어 사진 속 벽지·가구 색을 맞추거나, 마음에 드는 사진에서 새 디자인의 시작 팔레트를 찾을 때처럼 특정 색을 정확히 짚어야 할 때 유용합니다. 분석 과정은 전부 사용자의 브라우저 안에서 처리되기 때문에 업로드한 사진이 서버로 전송되지 않습니다.</p>
+  <div class="tips-grid">
+    <div class="tip-card fade-in">
+      <h4 data-en="Why do the extracted colors look slightly off from the photo?">추출된 색이 실제 사진과 조금 다르게 보여요, 왜 그런가요?</h4>
+      <p data-en="The tool clusters pixels of similar color and averages each cluster into one representative shade, so fine gradations get simplified. Photo compression and your monitor's color calibration can also shift the result slightly.">비슷한 색끼리 픽셀을 묶어 평균값을 대표 색상으로 삼는 방식이라, 미세한 색 차이는 하나로 단순화됩니다. 사진의 압축 상태나 모니터 색 보정에 따라서도 결과가 조금씩 달라질 수 있어요.</p>
+    </div>
+    <div class="tip-card fade-in">
+      <h4 data-en="Is my uploaded photo saved or sent to a server?">업로드한 사진이 서버에 저장되거나 전송되나요?</h4>
+      <p data-en="No. The entire analysis runs locally in your browser using the Canvas API, and the image data never leaves your device.">아니요. 모든 분석은 브라우저의 캔버스(Canvas) 기능으로 로컬에서 처리되며, 이미지 데이터가 기기 밖으로 전송되지 않습니다.</p>
+    </div>
+    <div class="tip-card fade-in">
+      <h4 data-en="What can I do with the extracted colors?">추출한 색을 어디에 쓸 수 있나요?</h4>
+      <p data-en="Add any swatch to your color basket and carry it into the Converter, Color Wheel, or Palette Studio &mdash; or press &quot;Save to My Palette&quot; to automatically pick a handful of representative colors and store them as a new palette.">색상 카드를 색상함에 담아 변환기·색상환·팔레트 스튜디오로 이어서 활용하거나, '내 팔레트에 저장' 버튼을 누르면 대표 색상 몇 가지를 자동으로 골라 새 팔레트로 저장해줍니다.</p>
+    </div>
+  </div>
+</div>
+
 <footer>
   <a href="index.html" class="footer-logo">Color</a>
   <p>© 2026 Color. All rights reserved.</p>
