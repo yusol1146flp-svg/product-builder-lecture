@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="색맹 유형별 특징과 색맹 시뮬레이터로 디자인을 미리 검증하는 법, 색만으로 정보를 전달하지 않는 실전 가이드 4가지를 정리했습니다." data-en-content="Types of color vision deficiency, how to pre-check a design with a colorblind simulator, and 4 practical rules for not relying on color alone to carry information.">
+  <meta name="keywords" content="색맹 접근성, 색각 이상, 색맹 시뮬레이터, 적록색맹, 컬러 접근성 디자인, 색맹 디자인 가이드">
+  <link rel="canonical" href="https://color-output.com/blog-colorblind-accessibility-guide.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Color">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:url" content="https://color-output.com/blog-colorblind-accessibility-guide.html">
+  <meta property="og:title" content="색맹 접근성 디자인 가이드 (색만으로 정보를 전달하지 않는 법) | Color">
+  <meta property="og:description" content="색맹 유형별 특징과 색맹 시뮬레이터로 디자인을 미리 검증하는 법, 실전 가이드 4가지를 정리했습니다.">
+  <meta property="og:image" content="https://color-output.com/favicon.svg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="색맹 접근성 디자인 가이드 (색만으로 정보를 전달하지 않는 법) | Color">
+  <meta name="twitter:description" content="색맹 유형별 특징과 색맹 시뮬레이터로 디자인을 미리 검증하는 법, 실전 가이드 4가지를 정리했습니다.">
+<meta name="google-adsense-account" content="ca-pub-5578005722180765">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5578005722180765"
+     crossorigin="anonymous"></script>
+  <title data-en="A Guide to Colorblind-Accessible Design | Color">색맹 접근성 디자인 가이드 (색만으로 정보를 전달하지 않는 법) | Color</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "색맹 접근성 디자인 가이드 (색만으로 정보를 전달하지 않는 법)",
+    "url": "https://color-output.com/blog-colorblind-accessibility-guide.html",
+    "description": "색맹 유형별 특징과 색맹 시뮬레이터로 디자인을 미리 검증하는 법, 실전 가이드 4가지를 정리했습니다.",
+    "datePublished": "2026-08-05",
+    "dateModified": "2026-08-05",
+    "author": { "@type": "Organization", "name": "Color" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Color",
+      "logo": { "@type": "ImageObject", "url": "https://color-output.com/favicon.svg" }
+    },
+    "image": "https://color-output.com/favicon.svg",
+    "isPartOf": { "@type": "WebSite", "name": "Color", "url": "https://color-output.com/" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://color-output.com/blog-colorblind-accessibility-guide.html" }
+  }
+  </script>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Color</a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-en="Home">홈</a></li>
+    <li class="nav-dropdown">
+      <button class="nav-dropdown-trigger" type="button" data-en="Palettes">팔레트<span class="nav-dropdown-caret"></span></button>
+      <ul class="nav-dropdown-menu">
+        <li><a href="palettes.html" data-en="Color Combos">색 조합</a></li>
+        <li><a href="recommended.html" data-en="Popular">추천 팔레트</a></li>
+        <li><a href="gradients.html" data-en="Gradients">그라데이션</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <button class="nav-dropdown-trigger" type="button" data-en="Color Tools">색상 도구<span class="nav-dropdown-caret"></span></button>
+      <ul class="nav-dropdown-menu">
+        <li><a href="extractor.html" data-en="Color Extract">이미지 색 추출</a></li>
+        <li><a href="search.html" data-en="Color Search">색 검색</a></li>
+        <li><a href="converter.html" data-en="Converter">변환기</a></li>
+        <li><a href="harmony.html" data-en="Color Wheel">색상환</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <button class="nav-dropdown-trigger" type="button" data-en="Accessibility">접근성<span class="nav-dropdown-caret"></span></button>
+      <ul class="nav-dropdown-menu">
+        <li><a href="contrast-checker.html" data-en="Contrast">대비 체크</a></li>
+        <li><a href="colorblind-simulator.html" data-en="Colorblind">색맹 체크</a></li>
+      </ul>
+    </li>
+    <li><a href="tips.html" data-en="Tips">배색 팁</a></li>
+    <li><a href="blog.html" data-en="Blog">블로그</a></li>
+    <li><a href="favorites.html" id="navFavorites" style="display:none;" data-en="Saved">저장함</a></li>
+    <li><a href="my-palette.html" id="navMyPalette" style="display:none;" data-en="My Palette">내 팔레트</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)" data-en-aria-label="Search" data-en-title="Search (Ctrl+K)">🔍</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
+    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인" data-en-aria-label="Login" data-en-title="Login">👤</button>
+    <a href="index.html#contact" class="nav-cta" data-en="Contact">문의하기</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-glow"></div>
+  <p class="breadcrumb"><a href="index.html" data-en="Home">홈</a><span>›</span><a href="blog.html" data-en="Blog">블로그</a><span>›</span><span data-en="Colorblind Accessibility">색맹 접근성</span></p>
+  <h1><span data-en="Design that works,">색만으로 설계하지 않는</span> <span class="gradient-text" data-en="without relying on color alone">디자인</span></h1>
+  <p data-en="Types of color vision deficiency, how to pre-check a design with a colorblind simulator, and 4 practical rules for not relying on color alone to carry information.">색맹 유형별 특징과 색맹 시뮬레이터로 디자인을 미리 검증하는 법, 색만으로 정보를 전달하지 않는 실전 가이드 4가지를 정리했습니다.</p>
+  <div class="article-meta-row">
+    <span class="blog-tag" style="background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.2);" data-en="Accessibility">접근성</span>
+    <span>2026.08.05</span><span>·</span><span data-en="6 min read">6분 읽기</span>
+  </div>
+</div>
+
+<div class="section" style="padding-top:0;">
+  <article class="article-content">
+    <p class="article-lead" data-en="Roughly 8% of men and 0.5% of women live with some form of color vision deficiency — not a small number. Yet plenty of designs still lean entirely on color to communicate: red text for errors, green for success. To someone with red-green color blindness, those two colors are nearly indistinguishable, which means the design is silently hiding the most important information it has.">전 세계 남성의 약 8%, 여성의 약 0.5%가 어떤 형태로든 색각 이상을 겪습니다. 결코 적은 숫자가 아니죠. 그런데도 많은 디자인이 "빨간 글씨는 오류, 초록 글씨는 성공"처럼 색에만 의존해 정보를 전달합니다. 적록색맹을 가진 사용자에게는 이 두 색이 거의 구분되지 않기 때문에, 결과적으로 서비스의 핵심 정보를 놓치게 만드는 셈입니다.</p>
+
+    <div class="article-toc">
+      <div class="article-toc-label" data-en="In This Article">목차</div>
+      <ol>
+        <li><a href="#stats" data-en="Color vision deficiency is more common than it seems">색각 이상, 생각보다 흔합니다</a></li>
+        <li><a href="#types" data-en="3 types of color blindness">색맹 유형 3가지</a></li>
+        <li><a href="#simulate" data-en="Pre-checking with a colorblind simulator">색맹 시뮬레이터로 미리 확인하기</a></li>
+        <li><a href="#rules" data-en="4 practical design rules">실전 가이드 4가지</a></li>
+        <li><a href="#beyond" data-en="Why this helps even sighted users">색맹이 아니어도 도움이 되는 이유</a></li>
+      </ol>
+    </div>
+
+    <h2 id="stats" data-en="1. Color vision deficiency is more common than it seems">1. 색각 이상, 생각보다 흔합니다</h2>
+    <p data-en="At roughly 1 in 12 men, color vision deficiency is common enough that almost every product with a meaningful user base includes people affected by it — whether or not the team designing it realizes that.">남성 약 12명 중 1명꼴이라는 건, 사용자가 어느 정도 있는 제품이라면 사실상 거의 모든 서비스에 색각 이상을 겪는 사용자가 포함되어 있다는 뜻입니다. 디자인 팀이 그 사실을 인지하고 있는지와는 별개로요.</p>
+
+    <h2 id="types" data-en="2. 3 types of color blindness">2. 색맹 유형 3가지</h2>
+    <ul>
+      <li data-en="Red-green color blindness (protanopia, deuteranopia) — the most common type, making red and green hard to tell apart.">적록색맹(protanopia, deuteranopia) — 가장 흔한 유형으로, 빨강과 초록의 구분이 어렵습니다.</li>
+      <li data-en="Blue-yellow color blindness (tritanopia) — rarer, making blue and yellow hard to distinguish.">청황색맹(tritanopia) — 상대적으로 드문 유형으로, 파랑과 노랑 구분에 어려움을 겪습니다.</li>
+      <li data-en="Total color blindness (achromatopsia) — no color perception at all; the world is seen only in shades of light and dark.">완전색맹(achromatopsia) — 색을 아예 인지하지 못하고 명암으로만 세상을 봅니다.</li>
+    </ul>
+
+    <h2 id="simulate" data-en="3. Pre-checking with a colorblind simulator">3. 색맹 시뮬레이터로 미리 확인하기</h2>
+    <p data-en="When validating a design, it's worth simulating each type to see how it actually reads. Run a design draft or palette through a colorblind simulator and you can immediately confirm whether the distinctions you intended are actually holding up.">디자인을 검증할 때는 이 유형들을 시뮬레이션해서 실제로 어떻게 보이는지 확인하는 과정이 꼭 필요합니다. 색맹 시뮬레이터에 디자인 시안이나 팔레트를 넣어보면, 내가 의도한 색 구분이 실제로 유지되는지 바로 확인할 수 있습니다.</p>
+
+    <h2 id="rules" data-en="4. 4 practical design rules">4. 실전 가이드 4가지</h2>
+    <ul>
+      <li data-en="Never rely on color alone to indicate state — always pair an error message with an icon (a warning symbol) or text (&quot;Error: ...&quot;).">색만으로 상태를 구분하지 마세요. 오류 메시지에는 색과 함께 아이콘(경고 표시)이나 텍스트("오류: ~")를 반드시 병기하세요.</li>
+      <li data-en="In charts and graphs, consider patterns (stripes, dots) or direct labels instead of relying on color alone to separate series.">차트나 그래프에서는 색상 구분 대신 패턴(줄무늬, 점무늬)이나 직접 라벨을 추가하는 방법도 함께 고려하세요.</li>
+      <li data-en="For clickable elements like links and buttons, add a shape cue — an underline or weight change — instead of relying on color alone.">링크나 버튼처럼 클릭 가능한 요소는 색만이 아니라 밑줄이나 굵기 같은 형태 변화로도 구분되게 하세요.</li>
+      <li data-en="Ensure enough lightness contrast between palette colors — then even if the hues look similar, the distinction still survives when converted to grayscale.">팔레트를 구성할 때 명도 차이를 충분히 확보하세요. 색상이 비슷해 보여도 흑백으로 전환했을 때 여전히 구분이 가능합니다.</li>
+    </ul>
+
+    <h2 id="beyond" data-en="5. Why this helps even sighted users">5. 색맹이 아니어도 도움이 되는 이유</h2>
+    <p data-en="Colorblind accessibility isn't a favor reserved for a specific group — it's a design principle that improves how information reads in dim lighting, on a washed-out screen, or when printed in black and white — situations anyone can run into.">색맹 접근성은 특별한 사용자만을 위한 배려가 아니라, 조명이 어둡거나 화면이 흐린 환경, 흑백 프린트처럼 누구나 겪을 수 있는 상황에서도 정보 전달력을 높여주는 실용적인 설계 원칙입니다.</p>
+  </article>
+
+  <div class="article-share">
+    <a href="colorblind-simulator.html" class="btn-primary" data-en="Try the Colorblind Simulator →">지금 색맹 시뮬레이터 써보기 →</a>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<div class="section related-posts">
+  <div class="section-label" data-en="Keep Reading">이어서 읽기</div>
+  <div class="blog-grid">
+    <a href="blog-wcag-contrast-guide.html" class="blog-card fade-in" style="text-decoration:none;color:inherit;">
+      <div class="blog-card-cover" style="background:linear-gradient(135deg,#78350f 0%,#f59e0b 50%,#fde68a 100%);">🔠</div>
+      <div class="blog-card-body">
+        <div class="blog-card-meta"><span class="blog-tag" style="background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.2);" data-en="Accessibility">접근성</span><span>2026.08.01</span></div>
+        <h3 data-en="The Complete Guide to WCAG Contrast Ratios">WCAG 대비 기준 완벽 정리</h3>
+        <p data-en="AA vs. AAA, and how to check contrast the fast way.">AA vs AAA 기준과 빠르게 검증하는 실전 체크법.</p>
+      </div>
+    </a>
+    <a href="blog-css-gradient-guide.html" class="blog-card fade-in" style="text-decoration:none;color:inherit;">
+      <div class="blog-card-cover" style="background:linear-gradient(135deg,#7c3aed 0%,#ec4899 50%,#fbbf24 100%);">🌈</div>
+      <div class="blog-card-body">
+        <div class="blog-card-meta"><span class="blog-tag" style="background:rgba(139,92,246,0.12);color:#8b5cf6;border:1px solid rgba(139,92,246,0.2);" data-en="Tutorial">튜토리얼</span><span>2026.08.07</span></div>
+        <h3 data-en="How to Build CSS Gradients, Plus Go-To Recipes">CSS 그라데이션 만드는 법 & 레시피</h3>
+        <p data-en="The syntax and go-to recipes for CSS gradients.">CSS 그라데이션 문법과 자주 쓰는 레시피.</p>
+      </div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">Color</a>
+  <p>© 2026 Color. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="about.html" data-en="About">소개</a></li>
+    <li><a href="terms.html" data-en="Terms">이용약관</a></li>
+    <li><a href="privacy.html" data-en="Privacy Policy">개인정보처리방침</a></li>
+    <li><a href="index.html#contact" data-en="Contact">문의하기</a></li>
+  </ul>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

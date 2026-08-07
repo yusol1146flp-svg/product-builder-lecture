@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="CSS linear-gradient·radial-gradient 기본 문법부터 메시 그라데이션, 모노크로매틱, 보색 조합 레시피, 텍스트·테두리·그림자 응용법까지 정리했습니다." data-en-content="CSS linear-gradient and radial-gradient syntax, go-to recipes for mesh, monochromatic, and complementary gradients, and how to apply them beyond backgrounds.">
+  <meta name="keywords" content="CSS 그라데이션, linear-gradient, radial-gradient, 그라데이션 레시피, 메시 그라데이션, 모노크로매틱 그라데이션, 그라데이션 배경 만들기">
+  <link rel="canonical" href="https://color-output.com/blog-css-gradient-guide.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Color">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:url" content="https://color-output.com/blog-css-gradient-guide.html">
+  <meta property="og:title" content="CSS 그라데이션 만드는 법 & 자주 쓰는 레시피 | Color">
+  <meta property="og:description" content="CSS linear-gradient·radial-gradient 기본 문법부터 자주 쓰는 그라데이션 레시피, 응용법까지 정리했습니다.">
+  <meta property="og:image" content="https://color-output.com/favicon.svg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="CSS 그라데이션 만드는 법 & 자주 쓰는 레시피 | Color">
+  <meta name="twitter:description" content="CSS linear-gradient·radial-gradient 기본 문법부터 자주 쓰는 그라데이션 레시피, 응용법까지 정리했습니다.">
+<meta name="google-adsense-account" content="ca-pub-5578005722180765">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5578005722180765"
+     crossorigin="anonymous"></script>
+  <title data-en="How to Build CSS Gradients, Plus Go-To Recipes | Color">CSS 그라데이션 만드는 법 & 자주 쓰는 레시피 | Color</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "CSS 그라데이션 만드는 법 & 자주 쓰는 그라데이션 레시피",
+    "url": "https://color-output.com/blog-css-gradient-guide.html",
+    "description": "CSS linear-gradient·radial-gradient 기본 문법부터 자주 쓰는 그라데이션 레시피, 응용법까지 정리했습니다.",
+    "datePublished": "2026-08-07",
+    "dateModified": "2026-08-07",
+    "author": { "@type": "Organization", "name": "Color" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Color",
+      "logo": { "@type": "ImageObject", "url": "https://color-output.com/favicon.svg" }
+    },
+    "image": "https://color-output.com/favicon.svg",
+    "isPartOf": { "@type": "WebSite", "name": "Color", "url": "https://color-output.com/" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://color-output.com/blog-css-gradient-guide.html" }
+  }
+  </script>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Color</a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-en="Home">홈</a></li>
+    <li class="nav-dropdown">
+      <button class="nav-dropdown-trigger" type="button" data-en="Palettes">팔레트<span class="nav-dropdown-caret"></span></button>
+      <ul class="nav-dropdown-menu">
+        <li><a href="palettes.html" data-en="Color Combos">색 조합</a></li>
+        <li><a href="recommended.html" data-en="Popular">추천 팔레트</a></li>
+        <li><a href="gradients.html" data-en="Gradients">그라데이션</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <button class="nav-dropdown-trigger" type="button" data-en="Color Tools">색상 도구<span class="nav-dropdown-caret"></span></button>
+      <ul class="nav-dropdown-menu">
+        <li><a href="extractor.html" data-en="Color Extract">이미지 색 추출</a></li>
+        <li><a href="search.html" data-en="Color Search">색 검색</a></li>
+        <li><a href="converter.html" data-en="Converter">변환기</a></li>
+        <li><a href="harmony.html" data-en="Color Wheel">색상환</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <button class="nav-dropdown-trigger" type="button" data-en="Accessibility">접근성<span class="nav-dropdown-caret"></span></button>
+      <ul class="nav-dropdown-menu">
+        <li><a href="contrast-checker.html" data-en="Contrast">대비 체크</a></li>
+        <li><a href="colorblind-simulator.html" data-en="Colorblind">색맹 체크</a></li>
+      </ul>
+    </li>
+    <li><a href="tips.html" data-en="Tips">배색 팁</a></li>
+    <li><a href="blog.html" data-en="Blog">블로그</a></li>
+    <li><a href="favorites.html" id="navFavorites" style="display:none;" data-en="Saved">저장함</a></li>
+    <li><a href="my-palette.html" id="navMyPalette" style="display:none;" data-en="My Palette">내 팔레트</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)" data-en-aria-label="Search" data-en-title="Search (Ctrl+K)">🔍</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
+    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인" data-en-aria-label="Login" data-en-title="Login">👤</button>
+    <a href="index.html#contact" class="nav-cta" data-en="Contact">문의하기</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-glow"></div>
+  <p class="breadcrumb"><a href="index.html" data-en="Home">홈</a><span>›</span><a href="blog.html" data-en="Blog">블로그</a><span>›</span><span data-en="CSS Gradients">CSS 그라데이션</span></p>
+  <h1><span data-en="CSS gradients,">CSS 그라데이션,</span> <span class="gradient-text" data-en="built the right way">제대로 만드는 법</span></h1>
+  <p data-en="CSS linear-gradient and radial-gradient syntax, go-to recipes for mesh, monochromatic, and complementary gradients, and how to apply them beyond backgrounds.">CSS linear-gradient·radial-gradient 기본 문법부터 메시·모노크로매틱·보색 그라데이션 레시피, 배경 너머로 응용하는 법까지 정리했습니다.</p>
+  <div class="article-meta-row">
+    <span class="blog-tag" style="background:rgba(139,92,246,0.12);color:#8b5cf6;border:1px solid rgba(139,92,246,0.2);" data-en="Tutorial">튜토리얼</span>
+    <span>2026.08.07</span><span>·</span><span data-en="6 min read">6분 읽기</span>
+  </div>
+</div>
+
+<div class="section" style="padding-top:0;">
+  <article class="article-content">
+    <p class="article-lead" data-en="A flat, single-color background can start to feel a little lifeless. Adding just one gradient gives a screen depth and energy it didn't have before. Building a gradient in CSS is simpler than it looks, and knowing a few underlying principles is the difference between a gradient that looks intentional and one that just looks like a default.">플랫한 단색 배경이 다소 밋밋하게 느껴질 때, 그라데이션 하나만 더해도 화면에 깊이감과 생동감이 생깁니다. CSS에서 그라데이션을 만드는 건 생각보다 간단하지만, 몇 가지 원리를 알아두면 기본값처럼 보이는 그라데이션과 의도가 느껴지는 그라데이션의 차이를 만들 수 있습니다.</p>
+
+    <div class="article-toc">
+      <div class="article-toc-label" data-en="In This Article">목차</div>
+      <ol>
+        <li><a href="#syntax" data-en="Basic syntax: linear vs. radial">기본 문법: linear-gradient vs radial-gradient</a></li>
+        <li><a href="#recipes" data-en="3 go-to gradient recipes">자주 쓰는 그라데이션 레시피 3가지</a></li>
+        <li><a href="#ready-made" data-en="Using ready-made gradients">미리 만들어진 그라데이션 활용하기</a></li>
+        <li><a href="#beyond-bg" data-en="Beyond backgrounds: text, borders, shadows">배경 너머: 텍스트·테두리·그림자에 응용하기</a></li>
+      </ol>
+    </div>
+
+    <h2 id="syntax" data-en="1. Basic syntax: linear vs. radial">1. 기본 문법: linear-gradient vs radial-gradient</h2>
+    <p data-en="linear-gradient() transitions color along a straight line, while radial-gradient() spreads color outward from a center point. For example:">`linear-gradient()`는 직선 방향으로 색이 변하는 그라데이션을, `radial-gradient()`는 중심에서 바깥으로 퍼지는 원형 그라데이션을 만듭니다. 예를 들어:</p>
+    <div class="article-callout">
+      <p style="font-family:monospace;font-size:0.88rem;" data-en="background: linear-gradient(135deg, #ff6b6b, #4ecdc4);">background: linear-gradient(135deg, #ff6b6b, #4ecdc4);</p>
+    </div>
+    <p data-en="This produces a background that flows from red to teal at a 135-degree angle. You can swap the angle for a direction keyword like &quot;to right&quot; or &quot;to bottom right&quot;, and list more than two colors to build a richer transition.">이렇게 작성하면 135도 각도로 붉은색에서 청록색으로 자연스럽게 이어지는 배경이 만들어집니다. 각도(deg) 대신 `to right`, `to bottom right` 같은 방향 키워드를 써도 되고, 색상을 두 개가 아니라 여러 개 나열해 다채로운 흐름을 만들 수도 있습니다.</p>
+
+    <h2 id="recipes" data-en="2. 3 go-to gradient recipes">2. 자주 쓰는 그라데이션 레시피 3가지</h2>
+    <h3 data-en="Mesh-style gradients">메시 그라데이션 느낌 내기</h3>
+    <p data-en="Take 3-4 analogous colors (neighbors on the color wheel) and blend them at a soft 45-degree angle. The result feels cohesive but still has a quiet sense of depth.">유사색(색상환에서 인접한 색) 서너 개를 45도 각도로 부드럽게 이어보세요. 통일감 있으면서도 은은한 입체감이 생깁니다.</p>
+    <h3 data-en="Monochromatic gradients">모노크로매틱 그라데이션</h3>
+    <p data-en="For hero sections and buttons, a gradient built from different lightness values of the same hue works well — it adds subtle depth without the tone feeling like it's jumping around.">히어로 섹션이나 버튼에는 같은 색상의 명도만 다르게 조합한 모노크로매틱 그라데이션이 잘 어울립니다. 톤이 튀지 않으면서도 은근한 깊이를 줄 수 있습니다.</p>
+    <h3 data-en="Complementary gradients">보색 그라데이션</h3>
+    <p data-en="For a gradient that needs to grab attention, try a complementary color pair — just dial back the saturation a bit, or the two colors will fight each other and look noisy instead of bold.">눈에 확 띄는 포인트가 필요하다면 보색 조합의 그라데이션을 써보세요. 다만 채도를 살짝 낮추지 않으면 색이 부딪혀 산만해 보일 수 있으니 주의가 필요합니다.</p>
+
+    <h2 id="ready-made" data-en="3. Using ready-made gradients">3. 미리 만들어진 그라데이션 활용하기</h2>
+    <p data-en="If combining colors from scratch feels daunting, browsing a pre-built gradient collection and copying the CSS is a perfectly good shortcut. Pick a mood — warm, calm, pastel — and grab the code directly to cut down on review time.">색을 직접 조합하는 게 막막하다면, 미리 만들어진 그라데이션 팔레트를 참고하고 코드를 그대로 복사해 쓰는 방법도 좋습니다. 원하는 분위기(따뜻한, 차분한, 파스텔 등)의 그라데이션을 골라 CSS 코드를 바로 가져다 쓰면 디자인 검토 시간을 크게 줄일 수 있습니다.</p>
+
+    <h2 id="beyond-bg" data-en="4. Beyond backgrounds: text, borders, shadows">4. 배경 너머: 텍스트·테두리·그림자에 응용하기</h2>
+    <p data-en="Gradients aren't limited to backgrounds. Combine `background-clip: text` with a transparent text color to gradient-fill text directly, or apply a gradient to a border or box-shadow for a softer accent than a flat color.">그라데이션은 배경뿐 아니라 다른 곳에도 응용할 수 있습니다. `background-clip: text`와 투명한 텍스트 색을 함께 쓰면 텍스트 자체를 그라데이션으로 채울 수 있고, 테두리나 그림자에 그라데이션을 적용하면 단색보다 훨씬 부드러운 포인트를 줄 수 있습니다.</p>
+    <p data-en="Once you're comfortable with the basics, try applying a gradient to one element outside the background — it's a small change that noticeably lifts the polish of a page.">기본기를 익힌 뒤에는 배경이 아닌 요소 하나에 그라데이션을 적용해보세요. 작은 변화지만 페이지의 완성도를 눈에 띄게 끌어올려 줍니다.</p>
+  </article>
+
+  <div class="article-share">
+    <a href="gradients.html" class="btn-primary" data-en="Browse Gradient Recipes →">그라데이션 레시피 보러 가기 →</a>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<div class="section related-posts">
+  <div class="section-label" data-en="Keep Reading">이어서 읽기</div>
+  <div class="blog-grid">
+    <a href="blog-colorblind-accessibility-guide.html" class="blog-card fade-in" style="text-decoration:none;color:inherit;">
+      <div class="blog-card-cover" style="background:linear-gradient(135deg,#1e3a8a 0%,#3b82f6 50%,#93c5fd 100%);">👁️</div>
+      <div class="blog-card-body">
+        <div class="blog-card-meta"><span class="blog-tag" style="background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.2);" data-en="Accessibility">접근성</span><span>2026.08.05</span></div>
+        <h3 data-en="A Guide to Colorblind-Accessible Design">색맹 접근성 디자인 가이드</h3>
+        <p data-en="How to stop relying on color alone to carry information.">색만으로 정보를 전달하지 않는 법.</p>
+      </div>
+    </a>
+    <a href="blog-color-extraction-guide.html" class="blog-card fade-in" style="text-decoration:none;color:inherit;">
+      <div class="blog-card-cover" style="background:linear-gradient(135deg,#0f766e 0%,#2dd4bf 50%,#99f6e4 100%);">🖼️</div>
+      <div class="blog-card-body">
+        <div class="blog-card-meta"><span class="blog-tag" style="background:rgba(45,212,191,0.12);color:#2dd4bf;border:1px solid rgba(45,212,191,0.2);" data-en="Tool Guide">도구 가이드</span><span>2026.07.25</span></div>
+        <h3 data-en="How to Extract Colors from an Image">이미지에서 색 추출하는 법</h3>
+        <p data-en="Pulling exact HEX/RGB codes from a reference photo.">레퍼런스 이미지에서 정확한 HEX·RGB 코드 뽑아내기.</p>
+      </div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">Color</a>
+  <p>© 2026 Color. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="about.html" data-en="About">소개</a></li>
+    <li><a href="terms.html" data-en="Terms">이용약관</a></li>
+    <li><a href="privacy.html" data-en="Privacy Policy">개인정보처리방침</a></li>
+    <li><a href="index.html#contact" data-en="Contact">문의하기</a></li>
+  </ul>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

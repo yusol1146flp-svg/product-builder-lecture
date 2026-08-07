@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="사진이나 레퍼런스 이미지에서 정확한 HEX·RGB 색상 코드를 뽑아내는 방법과 브랜드 무드보드, 웹 컬러 시스템, SNS 콘텐츠에 활용하는 실전 사례를 정리했습니다." data-en-content="How to pull exact HEX/RGB color codes from a photo or reference image, and how to put them to work in brand moodboards, web color systems, and social content.">
+  <meta name="keywords" content="이미지 색 추출, 색상 추출기, 사진 색상 코드, 이미지에서 색 뽑기, 컬러 팔레트 추출, HEX 코드 추출, 브랜드 무드보드">
+  <link rel="canonical" href="https://color-output.com/blog-color-extraction-guide.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Color">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:url" content="https://color-output.com/blog-color-extraction-guide.html">
+  <meta property="og:title" content="이미지에서 색 추출하는 법 & 활용 사례 | Color">
+  <meta property="og:description" content="사진이나 레퍼런스 이미지에서 정확한 HEX·RGB 색상 코드를 뽑아내는 방법과 실전 활용 사례를 정리했습니다.">
+  <meta property="og:image" content="https://color-output.com/favicon.svg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="이미지에서 색 추출하는 법 & 활용 사례 | Color">
+  <meta name="twitter:description" content="사진이나 레퍼런스 이미지에서 정확한 HEX·RGB 색상 코드를 뽑아내는 방법과 실전 활용 사례를 정리했습니다.">
+<meta name="google-adsense-account" content="ca-pub-5578005722180765">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5578005722180765"
+     crossorigin="anonymous"></script>
+  <title data-en="How to Extract Colors from an Image, and What to Do With Them | Color">이미지에서 색 추출하는 법 & 활용 사례 | Color</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "이미지에서 색 추출하는 법 & 활용 사례",
+    "url": "https://color-output.com/blog-color-extraction-guide.html",
+    "description": "사진이나 레퍼런스 이미지에서 정확한 HEX·RGB 색상 코드를 뽑아내는 방법과 실전 활용 사례를 정리했습니다.",
+    "datePublished": "2026-07-25",
+    "dateModified": "2026-07-25",
+    "author": { "@type": "Organization", "name": "Color" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Color",
+      "logo": { "@type": "ImageObject", "url": "https://color-output.com/favicon.svg" }
+    },
+    "image": "https://color-output.com/favicon.svg",
+    "isPartOf": { "@type": "WebSite", "name": "Color", "url": "https://color-output.com/" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://color-output.com/blog-color-extraction-guide.html" }
+  }
+  </script>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Color</a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-en="Home">홈</a></li>
+    <li class="nav-dropdown">
+      <button class="nav-dropdown-trigger" type="button" data-en="Palettes">팔레트<span class="nav-dropdown-caret"></span></button>
+      <ul class="nav-dropdown-menu">
+        <li><a href="palettes.html" data-en="Color Combos">색 조합</a></li>
+        <li><a href="recommended.html" data-en="Popular">추천 팔레트</a></li>
+        <li><a href="gradients.html" data-en="Gradients">그라데이션</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <button class="nav-dropdown-trigger" type="button" data-en="Color Tools">색상 도구<span class="nav-dropdown-caret"></span></button>
+      <ul class="nav-dropdown-menu">
+        <li><a href="extractor.html" data-en="Color Extract">이미지 색 추출</a></li>
+        <li><a href="search.html" data-en="Color Search">색 검색</a></li>
+        <li><a href="converter.html" data-en="Converter">변환기</a></li>
+        <li><a href="harmony.html" data-en="Color Wheel">색상환</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <button class="nav-dropdown-trigger" type="button" data-en="Accessibility">접근성<span class="nav-dropdown-caret"></span></button>
+      <ul class="nav-dropdown-menu">
+        <li><a href="contrast-checker.html" data-en="Contrast">대비 체크</a></li>
+        <li><a href="colorblind-simulator.html" data-en="Colorblind">색맹 체크</a></li>
+      </ul>
+    </li>
+    <li><a href="tips.html" data-en="Tips">배색 팁</a></li>
+    <li><a href="blog.html" data-en="Blog">블로그</a></li>
+    <li><a href="favorites.html" id="navFavorites" style="display:none;" data-en="Saved">저장함</a></li>
+    <li><a href="my-palette.html" id="navMyPalette" style="display:none;" data-en="My Palette">내 팔레트</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)" data-en-aria-label="Search" data-en-title="Search (Ctrl+K)">🔍</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
+    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인" data-en-aria-label="Login" data-en-title="Login">👤</button>
+    <a href="index.html#contact" class="nav-cta" data-en="Contact">문의하기</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-glow"></div>
+  <p class="breadcrumb"><a href="index.html" data-en="Home">홈</a><span>›</span><a href="blog.html" data-en="Blog">블로그</a><span>›</span><span data-en="Color Extraction">색 추출 가이드</span></p>
+  <h1><span data-en="Extract colors from an image,">이미지에서 색 추출하는 법,</span> <span class="gradient-text" data-en="and what to do with them">그리고 활용법</span></h1>
+  <p data-en="How to pull exact HEX/RGB color codes from a photo or reference image, and how to put them to work in brand moodboards, web color systems, and social content.">사진이나 레퍼런스 이미지에서 정확한 HEX·RGB 색상 코드를 뽑아내는 방법과, 브랜드 무드보드·웹 컬러 시스템·SNS 콘텐츠에 활용하는 실전 사례를 정리했습니다.</p>
+  <div class="article-meta-row">
+    <span class="blog-tag" style="background:rgba(45,212,191,0.12);color:#2dd4bf;border:1px solid rgba(45,212,191,0.2);" data-en="Tool Guide">도구 가이드</span>
+    <span>2026.07.25</span><span>·</span><span data-en="6 min read">6분 읽기</span>
+  </div>
+</div>
+
+<div class="section" style="padding-top:0;">
+  <article class="article-content">
+    <p class="article-lead" data-en="Design work often hits a moment where you want to reuse the exact color from a reference photo. Eyeballing a &quot;close enough&quot; match almost always drifts slightly, and that small drift throws off the tone of the whole piece. A color extraction tool reads the actual pixel values in an image and pulls out precise HEX/RGB codes instead.">디자인 작업을 하다 보면 "이 사진에 쓰인 저 색을 그대로 쓰고 싶다"는 순간이 자주 옵니다. 감으로 비슷한 색을 고르면 미묘하게 어긋나기 마련이고, 결국 결과물 전체의 톤이 흐트러지죠. 이럴 때 필요한 게 바로 이미지 색상 추출 도구입니다. 이미지 안에서 실제로 쓰인 픽셀 값을 분석해 정확한 HEX·RGB 코드를 뽑아냅니다.</p>
+
+    <div class="article-toc">
+      <div class="article-toc-label" data-en="In This Article">목차</div>
+      <ol>
+        <li><a href="#why" data-en="Why eyeballed colors drift">감으로 고른 색이 어긋나는 이유</a></li>
+        <li><a href="#howto" data-en="3 steps to extract colors">색 추출 도구 사용법 3단계</a></li>
+        <li><a href="#usecases" data-en="3 practical use cases">실전 활용 사례 3가지</a></li>
+        <li><a href="#ratio" data-en="Allocating colors with the 60-30-10 rule">추출한 색, 60-30-10으로 배분하기</a></li>
+        <li><a href="#save" data-en="Saving and reusing your palette">팔레트 저장하고 재사용하기</a></li>
+      </ol>
+    </div>
+
+    <h2 id="why" data-en="1. Why eyeballed colors drift">1. 감으로 고른 색이 어긋나는 이유</h2>
+    <p data-en="Screens render color differently depending on calibration and ambient light, and human color perception shifts depending on what's next to it. Pick a color by eye from a reference image and you'll almost always land a few percentage points off in hue or saturation — close enough to look fine on its own, but just off enough to clash once it sits next to the rest of your palette.">화면은 캘리브레이션과 주변 조명에 따라 색을 조금씩 다르게 보여주고, 사람의 색 인지는 주변에 어떤 색이 있느냐에 따라서도 흔들립니다. 레퍼런스 이미지를 보고 감으로 색을 고르면 색상이나 채도가 몇 퍼센트씩 어긋나기 마련인데, 그 자체로는 괜찮아 보여도 나머지 팔레트와 나란히 놓이는 순간 미묘하게 어긋나 보입니다.</p>
+    <p data-en="An extraction tool skips the guesswork entirely — it reads the pixel data directly, so the code you get is the exact color that's actually in the image, not your best guess at it.">색 추출 도구는 이 추측 과정 자체를 건너뜁니다. 픽셀 데이터를 직접 읽기 때문에, 결과로 나오는 코드는 "비슷하게 고른 색"이 아니라 이미지에 실제로 존재하는 정확한 색 그 자체입니다.</p>
+
+    <h2 id="howto" data-en="2. 3 steps to extract colors">2. 색 추출 도구 사용법 3단계</h2>
+    <ol>
+      <li data-en="Prepare a reference image — an interior photo, a brand logo, an impressive movie still, anything with a mood you want to capture.">참고하고 싶은 이미지를 준비하세요. 인테리어 사진, 좋아하는 브랜드의 로고, 인상적인 영화 스틸컷도 좋습니다.</li>
+      <li data-en="Upload it — the tool automatically analyzes the image and surfaces the main colors as a palette.">이미지를 업로드하세요. 도구가 자동으로 주요 색상들을 뽑아 팔레트 형태로 보여줍니다.</li>
+      <li data-en="Review both the dominant colors and the accent colors — the small pop of color that isn't the biggest area but does the most visual work is often the one worth keeping.">가장 많이 쓰인 색뿐 아니라 포인트로 쓰인 색까지 함께 확인하세요. 면적은 작아도 시선을 가장 많이 끄는 색이 실무에서는 더 중요한 경우가 많습니다.</li>
+    </ol>
+
+    <h2 id="usecases" data-en="3. 3 practical use cases">3. 실전 활용 사례 3가지</h2>
+    <h3 data-en="Brand moodboards">브랜드 무드보드 만들기</h3>
+    <p data-en="Extract colors from 3-4 reference images a client sends over, then look for the colors that show up across all of them. Whatever repeats is the mood the client is actually asking for, translated into a color language you can work with.">클라이언트가 보내준 레퍼런스 이미지 3~4장에서 색을 추출한 뒤, 공통적으로 등장하는 색을 찾아보세요. 반복해서 나타나는 색이 곧 클라이언트가 진짜로 원하는 무드를 색상 언어로 옮긴 것입니다.</p>
+    <h3 data-en="Web and app color systems">웹·앱 컬러 시스템 정하기</h3>
+    <p data-en="Pull colors from real product photography or shoot footage and structure them into primary, secondary, and accent roles. Because the source is a real image rather than a color picker, the tone-and-manner ends up feeling coherent without extra effort.">실제 제품 사진이나 촬영 이미지에서 색을 뽑아 메인·서브·포인트 컬러로 구성하세요. 컬러 피커가 아니라 실제 이미지에서 출발했기 때문에, 톤앤매너가 별다른 노력 없이도 자연스럽게 통일됩니다.</p>
+    <h3 data-en="Social content">SNS 콘텐츠 제작</h3>
+    <p data-en="Analyze the color feel of a post that's performing well and use it to keep your own feed's palette consistent — this works especially well for accounts that live or die on a recognizable visual identity.">인기 게시물의 색감을 분석해 내 피드의 색 일관성을 만드는 데 활용해보세요. 시각적 정체성이 계정의 인상을 좌우하는 경우 특히 효과적입니다.</p>
+
+    <h2 id="ratio" data-en="4. Allocating extracted colors with the 60-30-10 rule">4. 추출한 색, 60-30-10으로 배분하기</h2>
+    <p data-en="Once you have 4-5 extracted colors, don't use them in equal measure — assign roles. The 60-30-10 rule (60% neutral base, 30% primary, 10% accent) turns a raw palette into something that reads as intentional rather than busy.">추출한 색이 4~5개 모였다면, 그 색들을 똑같은 비중으로 쓰지 말고 역할을 나눠주세요. 60-30-10 법칙(뉴트럴 60%, 메인 30%, 포인트 10%)을 적용하면 그냥 나열된 팔레트가 아니라 의도가 느껴지는 배색으로 완성됩니다.</p>
+    <div class="article-swatch-row">
+      <div class="as" style="background:#e2e8f0;color:#0f172a;">60% Base</div>
+      <div class="as" style="background:#0f766e;color:#fff;">30% Primary</div>
+      <div class="as" style="background:#fb923c;color:#fff;">10% Accent</div>
+    </div>
+
+    <h2 id="save" data-en="5. Saving and reusing your palette">5. 팔레트 저장하고 재사용하기</h2>
+    <p data-en="Save every extracted palette instead of using it once and forgetting it. If you run multiple projects at once, keeping a palette per project is a habit that pays back in saved time later — you won't have to re-extract from the same reference twice.">추출한 색상은 그대로 저장해두고 다음 작업에 재사용하는 것이 좋습니다. 특히 여러 프로젝트를 동시에 진행한다면, 프로젝트별로 팔레트를 저장해두는 습관이 나중에 큰 시간 절약으로 돌아옵니다. 같은 레퍼런스에서 색을 또 뽑을 필요가 없어지니까요.</p>
+    <p data-en="After extracting, run the palette through the 60-30-10 split above before you finalize it — a little structure goes a long way toward a stable, professional-looking result.">색을 추출한 뒤에는 위에서 소개한 60-30-10 법칙에 따라 메인·서브·포인트 비율로 배분해보세요. 훨씬 안정적인 배색이 완성됩니다.</p>
+  </article>
+
+  <div class="article-share">
+    <a href="extractor.html" class="btn-primary" data-en="Extract Colors From an Image →">지금 이미지에서 색 추출하기 →</a>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<div class="section related-posts">
+  <div class="section-label" data-en="Keep Reading">이어서 읽기</div>
+  <div class="blog-grid">
+    <a href="blog-wcag-contrast-guide.html" class="blog-card fade-in" style="text-decoration:none;color:inherit;">
+      <div class="blog-card-cover" style="background:linear-gradient(135deg,#78350f 0%,#f59e0b 50%,#fde68a 100%);">🔠</div>
+      <div class="blog-card-body">
+        <div class="blog-card-meta"><span class="blog-tag" style="background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.2);" data-en="Accessibility">접근성</span><span>2026.08.01</span></div>
+        <h3 data-en="The Complete Guide to WCAG Contrast Ratios">WCAG 대비 기준 완벽 정리</h3>
+        <p data-en="AA vs. AAA, and how to check contrast the fast way.">AA vs AAA 기준과 빠르게 검증하는 실전 체크법.</p>
+      </div>
+    </a>
+    <a href="blog-brand-color-guide.html" class="blog-card fade-in" style="text-decoration:none;color:inherit;">
+      <div class="blog-card-cover" style="background:linear-gradient(135deg,#1e1b4b 0%,#4338ca 50%,#34d399 100%);">🏷️</div>
+      <div class="blog-card-body">
+        <div class="blog-card-meta"><span class="blog-tag" style="background:rgba(52,211,153,0.12);color:#34d399;border:1px solid rgba(52,211,153,0.2);" data-en="Branding">브랜딩</span><span>2026.07.04</span></div>
+        <h3 data-en="How to Choose a Brand Color, Start to Finish">브랜드 컬러 정하는 법: 처음부터 끝까지</h3>
+        <p data-en="A step-by-step process for picking and testing a primary brand color.">메인 브랜드 컬러를 정하고 검증하는 과정을 단계별로.</p>
+      </div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">Color</a>
+  <p>© 2026 Color. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="about.html" data-en="About">소개</a></li>
+    <li><a href="terms.html" data-en="Terms">이용약관</a></li>
+    <li><a href="privacy.html" data-en="Privacy Policy">개인정보처리방침</a></li>
+    <li><a href="index.html#contact" data-en="Contact">문의하기</a></li>
+  </ul>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

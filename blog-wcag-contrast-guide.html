@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="WCAG 명도 대비 기준(AA·AAA)의 정확한 수치와 실무 체크리스트, 다크모드에서 특히 주의할 점까지 대비 체크 도구로 빠르게 검증하는 법을 정리했습니다." data-en-content="The exact WCAG contrast ratio thresholds (AA/AAA), a practical checklist, and what to watch for in dark mode — how to verify contrast fast with a contrast checker tool.">
+  <meta name="keywords" content="WCAG 대비, 명도 대비 기준, AA AAA 대비, 웹 접근성, 대비 체크 도구, 텍스트 배경 대비, 다크모드 접근성">
+  <link rel="canonical" href="https://color-output.com/blog-wcag-contrast-guide.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Color">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:url" content="https://color-output.com/blog-wcag-contrast-guide.html">
+  <meta property="og:title" content="WCAG 대비 기준 완벽 정리 (AA vs AAA, 실전 체크법) | Color">
+  <meta property="og:description" content="WCAG 명도 대비 기준의 정확한 수치와 실무 체크리스트, 다크모드에서 특히 주의할 점까지 정리했습니다.">
+  <meta property="og:image" content="https://color-output.com/favicon.svg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="WCAG 대비 기준 완벽 정리 (AA vs AAA, 실전 체크법) | Color">
+  <meta name="twitter:description" content="WCAG 명도 대비 기준의 정확한 수치와 실무 체크리스트, 다크모드에서 특히 주의할 점까지 정리했습니다.">
+<meta name="google-adsense-account" content="ca-pub-5578005722180765">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5578005722180765"
+     crossorigin="anonymous"></script>
+  <title data-en="The Complete Guide to WCAG Contrast Ratios (AA vs. AAA) | Color">WCAG 대비 기준 완벽 정리 (AA vs AAA, 실전 체크법) | Color</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "WCAG 대비 기준 완벽 정리 (AA vs AAA, 실전 체크법)",
+    "url": "https://color-output.com/blog-wcag-contrast-guide.html",
+    "description": "WCAG 명도 대비 기준의 정확한 수치와 실무 체크리스트, 다크모드에서 특히 주의할 점까지 정리했습니다.",
+    "datePublished": "2026-08-01",
+    "dateModified": "2026-08-01",
+    "author": { "@type": "Organization", "name": "Color" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Color",
+      "logo": { "@type": "ImageObject", "url": "https://color-output.com/favicon.svg" }
+    },
+    "image": "https://color-output.com/favicon.svg",
+    "isPartOf": { "@type": "WebSite", "name": "Color", "url": "https://color-output.com/" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://color-output.com/blog-wcag-contrast-guide.html" }
+  }
+  </script>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Color</a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-en="Home">홈</a></li>
+    <li class="nav-dropdown">
+      <button class="nav-dropdown-trigger" type="button" data-en="Palettes">팔레트<span class="nav-dropdown-caret"></span></button>
+      <ul class="nav-dropdown-menu">
+        <li><a href="palettes.html" data-en="Color Combos">색 조합</a></li>
+        <li><a href="recommended.html" data-en="Popular">추천 팔레트</a></li>
+        <li><a href="gradients.html" data-en="Gradients">그라데이션</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <button class="nav-dropdown-trigger" type="button" data-en="Color Tools">색상 도구<span class="nav-dropdown-caret"></span></button>
+      <ul class="nav-dropdown-menu">
+        <li><a href="extractor.html" data-en="Color Extract">이미지 색 추출</a></li>
+        <li><a href="search.html" data-en="Color Search">색 검색</a></li>
+        <li><a href="converter.html" data-en="Converter">변환기</a></li>
+        <li><a href="harmony.html" data-en="Color Wheel">색상환</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <button class="nav-dropdown-trigger" type="button" data-en="Accessibility">접근성<span class="nav-dropdown-caret"></span></button>
+      <ul class="nav-dropdown-menu">
+        <li><a href="contrast-checker.html" data-en="Contrast">대비 체크</a></li>
+        <li><a href="colorblind-simulator.html" data-en="Colorblind">색맹 체크</a></li>
+      </ul>
+    </li>
+    <li><a href="tips.html" data-en="Tips">배색 팁</a></li>
+    <li><a href="blog.html" data-en="Blog">블로그</a></li>
+    <li><a href="favorites.html" id="navFavorites" style="display:none;" data-en="Saved">저장함</a></li>
+    <li><a href="my-palette.html" id="navMyPalette" style="display:none;" data-en="My Palette">내 팔레트</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="icon-btn" id="searchBtn" aria-label="검색" title="검색 (Ctrl+K)" data-en-aria-label="Search" data-en-title="Search (Ctrl+K)">🔍</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
+    <button class="icon-btn" id="loginBtn" aria-label="로그인" title="로그인" data-en-aria-label="Login" data-en-title="Login">👤</button>
+    <a href="index.html#contact" class="nav-cta" data-en="Contact">문의하기</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-glow"></div>
+  <p class="breadcrumb"><a href="index.html" data-en="Home">홈</a><span>›</span><a href="blog.html" data-en="Blog">블로그</a><span>›</span><span data-en="WCAG Contrast">WCAG 대비 기준</span></p>
+  <h1><span data-en="WCAG contrast,">WCAG 대비 기준,</span> <span class="gradient-text" data-en="fully explained">완벽 정리</span></h1>
+  <p data-en="The exact WCAG contrast ratio thresholds (AA/AAA), a practical checklist, and what to watch for in dark mode.">WCAG 명도 대비 기준(AA·AAA)의 정확한 수치와 실무 체크리스트, 다크모드에서 특히 주의할 점까지 정리했습니다.</p>
+  <div class="article-meta-row">
+    <span class="blog-tag" style="background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.2);" data-en="Accessibility">접근성</span>
+    <span>2026.08.01</span><span>·</span><span data-en="7 min read">7분 읽기</span>
+  </div>
+</div>
+
+<div class="section" style="padding-top:0;">
+  <article class="article-content">
+    <p class="article-lead" data-en="When you design for the web or an app, how a color looks matters, but whether it can be read matters more. A gorgeous palette with too little contrast between text and background tires everyone's eyes, and can make content unreadable outright for users with low vision. WCAG (Web Content Accessibility Guidelines) puts a number on exactly how much contrast is enough.">웹이나 앱을 디자인할 때 색이 예쁜 것만큼 중요한 게 '읽히는가'입니다. 아무리 세련된 배색이라도 글자와 배경의 명도 대비가 부족하면 눈이 피로해지고, 시력이 약한 사용자는 콘텐츠 자체를 읽지 못할 수도 있습니다. 이 기준을 정량적으로 제시한 것이 바로 WCAG(웹 콘텐츠 접근성 지침)의 명도 대비 기준입니다.</p>
+
+    <div class="article-toc">
+      <div class="article-toc-label" data-en="In This Article">목차</div>
+      <ol>
+        <li><a href="#why-contrast" data-en="Why contrast matters more than it seems">명도 대비가 생각보다 중요한 이유</a></li>
+        <li><a href="#standards" data-en="AA vs. AAA, the exact numbers">AA vs AAA, 정확한 수치</a></li>
+        <li><a href="#tool" data-en="Checking contrast fast with a tool">대비 체크 도구로 빠르게 검증하기</a></li>
+        <li><a href="#checklist" data-en="4 practical checklist items">실무 체크리스트 4가지</a></li>
+        <li><a href="#darkmode" data-en="What to watch for in dark mode">다크모드에서 특히 주의할 점</a></li>
+      </ol>
+    </div>
+
+    <h2 id="why-contrast" data-en="1. Why contrast matters more than it seems">1. 명도 대비가 생각보다 중요한 이유</h2>
+    <p data-en="Low contrast doesn't just look subtle — it forces every reader's eyes to work harder to separate text from background, and for users with low vision or color vision deficiencies, that gap can be the difference between reading a sentence and giving up on it. Accessibility here isn't a favor for a minority of users; it's a baseline that raises the experience for everyone.">대비가 낮으면 은은해 보이는 게 아니라, 모든 사용자의 눈이 글자와 배경을 구분하기 위해 더 애써야 한다는 뜻입니다. 저시력이나 색각 이상이 있는 사용자에게는 그 차이가 '읽을 수 있다'와 '포기한다'를 가르는 기준이 되기도 합니다. 접근성은 일부 사용자만을 위한 배려가 아니라, 모든 사용자의 경험을 끌어올리는 기본기입니다.</p>
+
+    <h2 id="standards" data-en="2. AA vs. AAA, the exact numbers">2. AA vs AAA, 정확한 수치</h2>
+    <p data-en="WCAG defines contrast as a numeric ratio. For normal text, AA requires at least 4.5:1 and AAA requires 7:1. For large text (18pt or larger, or bold 14pt+), the bar is a bit lower — 3:1 for AA and 4.5:1 for AAA. Non-text elements like button borders and icons only need to clear 3:1 under AA.">WCAG는 대비율을 숫자로 규정합니다. 일반 텍스트 기준으로 AA 등급은 최소 4.5:1, AAA 등급은 7:1 이상을 요구합니다. 18pt 이상의 큰 텍스트나 굵은 14pt 텍스트는 기준이 조금 완화되어 AA는 3:1, AAA는 4.5:1이면 통과입니다. 버튼 테두리나 아이콘처럼 텍스트가 아닌 요소는 AA 기준 3:1이 적용됩니다.</p>
+    <p data-en="The numbers look like a lot to memorize, but in practice, remembering one rule — body text needs at least 4.5:1 — covers most situations.">숫자만 보면 복잡해 보이지만, 실무에서는 "본문 텍스트는 4.5:1을 넘겨라"라는 한 가지 원칙만 기억해도 대부분의 상황에 대응할 수 있습니다.</p>
+    <div class="article-swatch-row">
+      <div class="as" style="background:#111827;color:#f9fafb;">Text 4.5:1</div>
+      <div class="as" style="background:#111827;color:#fbbf24;">Large 3:1</div>
+      <div class="as" style="background:#111827;color:#fff;">AAA 7:1</div>
+    </div>
+
+    <h2 id="tool" data-en="3. Checking contrast fast with a tool">3. 대비 체크 도구로 빠르게 검증하기</h2>
+    <p data-en="Calculating ratios by hand for every color pair isn't realistic in a real workflow — a contrast checker tool does it instantly. Enter the foreground and background HEX codes and it returns the ratio along with a pass/fail against AA and AAA, so you can validate a design before it ships instead of finding out after launch.">실전에서는 이 대비율을 매번 직접 계산하기보다 대비 체크 도구를 활용하는 게 훨씬 효율적입니다. 전경색과 배경색 HEX 코드를 입력하면 대비율이 즉시 계산되고, AA·AAA 통과 여부까지 한눈에 보여주기 때문에 디자인 시안을 확정하기 전에 빠르게 검증할 수 있습니다.</p>
+
+    <h2 id="checklist" data-en="4. 4 practical checklist items">4. 실무 체크리스트 4가지</h2>
+    <ul>
+      <li data-en="Text over a gradient or image — check contrast at both the lightest and darkest point the text can sit over, not just the average.">그라데이션이나 이미지 위에 텍스트를 올릴 때는 평균이 아니라 가장 밝은 지점과 가장 어두운 지점 양쪽 모두에서 대비를 확인하세요.</li>
+      <li data-en="Dark mode — verify light and dark mode separately. Inverting colors does not automatically preserve the ratio.">다크모드를 함께 지원한다면 라이트모드와 다크모드 각각의 대비를 별도로 검증해야 합니다. 색이 반전됐다고 대비율이 자동으로 유지되는 게 아닙니다.</li>
+      <li data-en="Disabled states — AA allows some exceptions for intentionally muted elements like disabled buttons, but keep at least some minimal distinction rather than dropping contrast entirely.">버튼의 비활성 상태처럼 의도적으로 흐리게 표현하는 요소는 AA 기준에서 예외로 허용되는 경우가 많지만, 완전히 무시하기보다는 최소한의 구분은 남겨두세요.</li>
+      <li data-en="Test with the actual final colors, not the ones from an early mockup — small tweaks late in a project are exactly when contrast quietly breaks.">초기 목업 색이 아니라 실제 최종 색으로 테스트하세요. 프로젝트 후반의 작은 색상 조정이야말로 대비가 조용히 깨지는 지점입니다.</li>
+    </ul>
+
+    <h2 id="darkmode" data-en="5. What to watch for in dark mode">5. 다크모드에서 특히 주의할 점</h2>
+    <p data-en="Dark mode doesn't just flip light and dark — pure white text on pure black background can actually cause a glare-like effect called halation for some readers, so many accessible dark themes intentionally use an off-white foreground and a dark-gray-rather-than-black background instead. Check contrast for both themes independently, and don't assume a color pair that works in light mode will automatically be fine once inverted.">다크모드는 단순히 밝기를 뒤집는 것이 아닙니다. 순수 검정 배경에 순수 흰색 텍스트를 올리면 오히려 일부 사용자에게 '헤일레이션'이라는 눈부심 효과를 일으킬 수 있어서, 많은 접근성 좋은 다크 테마는 흰색 대신 오프화이트 텍스트와 완전한 검정 대신 짙은 회색 배경을 의도적으로 사용합니다. 라이트모드와 다크모드의 대비를 각각 따로 확인하고, 라이트모드에서 통과한 조합이 반전됐다고 자동으로 괜찮을 거라 가정하지 마세요.</p>
+  </article>
+
+  <div class="article-share">
+    <a href="contrast-checker.html" class="btn-primary" data-en="Check Contrast Now →">지금 대비 체크하기 →</a>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<div class="section related-posts">
+  <div class="section-label" data-en="Keep Reading">이어서 읽기</div>
+  <div class="blog-grid">
+    <a href="blog-colorblind-accessibility-guide.html" class="blog-card fade-in" style="text-decoration:none;color:inherit;">
+      <div class="blog-card-cover" style="background:linear-gradient(135deg,#1e3a8a 0%,#3b82f6 50%,#93c5fd 100%);">👁️</div>
+      <div class="blog-card-body">
+        <div class="blog-card-meta"><span class="blog-tag" style="background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.2);" data-en="Accessibility">접근성</span><span>2026.08.05</span></div>
+        <h3 data-en="A Guide to Colorblind-Accessible Design">색맹 접근성 디자인 가이드</h3>
+        <p data-en="How to stop relying on color alone to carry information.">색만으로 정보를 전달하지 않는 법.</p>
+      </div>
+    </a>
+    <a href="blog-color-extraction-guide.html" class="blog-card fade-in" style="text-decoration:none;color:inherit;">
+      <div class="blog-card-cover" style="background:linear-gradient(135deg,#0f766e 0%,#2dd4bf 50%,#99f6e4 100%);">🖼️</div>
+      <div class="blog-card-body">
+        <div class="blog-card-meta"><span class="blog-tag" style="background:rgba(45,212,191,0.12);color:#2dd4bf;border:1px solid rgba(45,212,191,0.2);" data-en="Tool Guide">도구 가이드</span><span>2026.07.25</span></div>
+        <h3 data-en="How to Extract Colors from an Image">이미지에서 색 추출하는 법</h3>
+        <p data-en="Pulling exact HEX/RGB codes from a reference photo.">레퍼런스 이미지에서 정확한 HEX·RGB 코드 뽑아내기.</p>
+      </div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">Color</a>
+  <p>© 2026 Color. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="about.html" data-en="About">소개</a></li>
+    <li><a href="terms.html" data-en="Terms">이용약관</a></li>
+    <li><a href="privacy.html" data-en="Privacy Policy">개인정보처리방침</a></li>
+    <li><a href="index.html#contact" data-en="Contact">문의하기</a></li>
+  </ul>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
